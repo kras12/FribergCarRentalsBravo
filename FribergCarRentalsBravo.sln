@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo", "FribergCarRentalsBravo\FribergCarRentalsBravo.csproj", "{788E6809-309F-4B05-A459-C355736A0C59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FribergCarRentalsBravo", "FribergCarRentalsBravo\FribergCarRentalsBravo.csproj", "{788E6809-309F-4B05-A459-C355736A0C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo.DataAccess", "FribergCarRentalsBravo.Data\FribergCarRentalsBravo.DataAccess.csproj", "{19D2E3EF-E291-42F1-AB75-0EE47289E944}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FribergCarRentalsBravo.DataAccess", "FribergCarRentalsBravo.Data\FribergCarRentalsBravo.DataAccess.csproj", "{19D2E3EF-E291-42F1-AB75-0EE47289E944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo.Shared", "FribergCarRentalsBravo.Shared\FribergCarRentalsBravo.Shared.csproj", "{DA665D6E-B0AF-45AC-B708-66CDA96B7DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{19D2E3EF-E291-42F1-AB75-0EE47289E944}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19D2E3EF-E291-42F1-AB75-0EE47289E944}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19D2E3EF-E291-42F1-AB75-0EE47289E944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA665D6E-B0AF-45AC-B708-66CDA96B7DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA665D6E-B0AF-45AC-B708-66CDA96B7DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA665D6E-B0AF-45AC-B708-66CDA96B7DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA665D6E-B0AF-45AC-B708-66CDA96B7DF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

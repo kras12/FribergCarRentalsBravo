@@ -7,15 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Data\" />
     <Folder Include="Helpers\" />
     <Folder Include="Attributes\" />
     <Folder Include="Components\" />
-    <Folder Include="Data\" />
     <Folder Include="Models\Admin\" />
     <Folder Include="Models\Car\" />
     <Folder Include="Models\Customer\" />
     <Folder Include="Models\Order\" />
     <Folder Include="Sessions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FribergCarRentalsBravo.Data\FribergCarRentalsBravo.DataAccess.csproj" />
+    <ProjectReference Include="..\FribergCarRentalsBravo.Shared\FribergCarRentalsBravo.Shared.csproj" />
   </ItemGroup>
 
 </Project>
