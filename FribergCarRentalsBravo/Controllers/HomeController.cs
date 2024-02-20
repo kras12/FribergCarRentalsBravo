@@ -1,4 +1,5 @@
 using FribergCarRentalsBravo.Models;
+using FribergCarRentalsBravo.Models.Other;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
