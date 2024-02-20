@@ -1,4 +1,4 @@
-namespace FribergCarRentalsBravo.Models
+namespace FribergCarRentalsBravo.Models.Other
 {
     public class ErrorViewModel
     {

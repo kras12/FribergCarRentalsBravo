@@ -11,6 +11,10 @@
     <Folder Include="Attributes\" />
     <Folder Include="Components\" />
     <Folder Include="Data\" />
+    <Folder Include="Models\Admin\" />
+    <Folder Include="Models\Car\" />
+    <Folder Include="Models\Customer\" />
+    <Folder Include="Models\Order\" />
     <Folder Include="Sessions\" />
   </ItemGroup>
 
