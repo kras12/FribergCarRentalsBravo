@@ -6,8 +6,23 @@ namespace FribergCarRentalsBravo
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Add services to the container
+
+            // Controllers
             builder.Services.AddControllersWithViews();
+
+            // DB Context
+
+            // Repositories
+
+            // Sessions
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
@@ -25,6 +40,8 @@ namespace FribergCarRentalsBravo
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
