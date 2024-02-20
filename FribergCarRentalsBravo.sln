@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo", "FribergCarRentalsBravo\FribergCarRentalsBravo.csproj", "{788E6809-309F-4B05-A459-C355736A0C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo.Data", "FribergCarRentalsBravo.Data\FribergCarRentalsBravo.Data.csproj", "{19D2E3EF-E291-42F1-AB75-0EE47289E944}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FribergCarRentalsBravo.DataAccess", "FribergCarRentalsBravo.Data\FribergCarRentalsBravo.DataAccess.csproj", "{19D2E3EF-E291-42F1-AB75-0EE47289E944}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
