@@ -22,38 +22,13 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
         }
 
         #endregion
-
+        
         #region DBSets
 
-        public DbSet<CarEntity> Cars { get; set; }
+        public DbSet<CarCategory> CarCategories { get; set; }
 
         #endregion
 
-        #region Methods
 
-        /// <summary>
-        /// Configures the options.
-        /// </summary>
-        /// <param name="optionsBuilder"></param>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
-                optionsBuilder.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: true);
-            }
-        }
-
-        /// <summary>
-        /// Configures the database model.
-        /// </summary>
-        /// <param name="modelBuilder">The model builder.</param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
-
-        #endregion
     }
 }
