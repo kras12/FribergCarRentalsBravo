@@ -1,5 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
@@ -11,34 +12,34 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         {
             this.applicationDbContext = applicationDbContext;
         }
-        public Customer CreateCustomer(Customer customer)
+        public async Task<Customer> CreateCustomer(Customer customer)
         {
             applicationDbContext.Add(customer);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
             return customer;
         }
 
-        public void DeleteCustomer(Customer customer)
+        public async Task DeleteCustomer(Customer customer)
         {
             applicationDbContext.Remove(customer);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
         }
 
-        public Customer EditCustomer(Customer customer)
+        public async Task<Customer> EditCustomer(Customer customer)
         {
             applicationDbContext.Update(customer);
-            applicationDbContext.SaveChanges();
+            await applicationDbContext.SaveChangesAsync();
             return customer;
         }
 
-        public IEnumerable<Customer> GetAllCustomers()
+        public async Task<List<Customer>> GetAllCustomers()
         {
-            return applicationDbContext.Customers.OrderBy(c => c.CustomerId);
+            return await applicationDbContext.Customers.OrderBy(x => x.LastName).ToListAsync();
         }
 
-        public Customer GetCustomerById(int id)
+        public async Task<Customer> GetCustomerById(int id)
         {
-            throw new NotImplementedException();
+            return await applicationDbContext.Customers.FirstOrDefaultAsync(s => s.CustomerId == id);
         }
     }
 }

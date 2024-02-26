@@ -4,10 +4,10 @@ namespace FribergCarRentalsBravo.DataAccess.Entities.Customer
 {
     public interface ICustomer
     {
-        Customer GetCustomerById(int id);
-        IEnumerable<Customer> GetAllCustomers();
-        Customer CreateCustomer(Customer customer);
-        Customer EditCustomer(Customer customer);
-        void DeleteCustomer(Customer customer);
+        Task<Customer> GetCustomerById(int id);
+        Task<List<Customer>> GetAllCustomers();
+        Task<Customer> CreateCustomer(Customer customer);
+        Task<Customer> EditCustomer(Customer customer);
+        Task DeleteCustomer(Customer customer);
     }
 }

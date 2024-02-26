@@ -20,9 +20,9 @@ namespace FribergCarRentalsBravo.Controllers
         }
 
         // GET: CustomerController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View(customerRep.GetCustomerById(id));
+            return View(await customerRep.GetCustomerById(id));
         }
 
         // GET: CustomerController/Create
@@ -34,13 +34,13 @@ namespace FribergCarRentalsBravo.Controllers
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    customerRep.CreateCustomer(customer);
+                    await customerRep.CreateCustomer(customer);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -55,14 +55,14 @@ namespace FribergCarRentalsBravo.Controllers
         }
 
         // GET: CustomerController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null || customerRep.GetAllCustomers == null)
             {
                 return NotFound();
             }
 
-            var customer = customerRep.GetCustomerById(id);
+            Customer customer = await customerRep.GetCustomerById(id);
 
             if (customer == null)
             {
@@ -74,7 +74,7 @@ namespace FribergCarRentalsBravo.Controllers
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -85,7 +85,7 @@ namespace FribergCarRentalsBravo.Controllers
             {
                 try
                 {
-                    customerRep.EditCustomer(customer);
+                   await customerRep.EditCustomer(customer);
                 }
                 catch (Exception)
                 {
@@ -97,20 +97,20 @@ namespace FribergCarRentalsBravo.Controllers
         }
 
         // GET: CustomerController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             return View();
         }
 
         // POST: CustomerController/Delete/5
-        public ActionResult DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
             if (id == null || customerRep.GetAllCustomers == null)
             {
                 return NotFound();
             }
 
-            var customer = customerRep.GetCustomerById(id);
+            Customer customer = await customerRep.GetCustomerById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -120,14 +120,14 @@ namespace FribergCarRentalsBravo.Controllers
 
         [HttpPost, ActionName("DeleteCustomer")] 
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteCustomerConfirmed(int id)
+        public async Task<IActionResult> DeleteCustomerConfirmed(int id)
         {
-            var customer = customerRep.GetCustomerById(id);
-            if (ModelState.IsValid)
+            Customer customer = await customerRep.GetCustomerById(id);
+            if (customer != null)
             {
                 try
                 {
-                    customerRep.DeleteCustomer(customer);
+                    await customerRep.DeleteCustomer(customer);
                 }
                 catch (Exception)
                 {
