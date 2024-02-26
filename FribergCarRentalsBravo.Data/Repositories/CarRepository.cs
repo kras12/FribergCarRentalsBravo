@@ -85,7 +85,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task"/> object containing a collection of the resulting cars.</returns>
         public async Task<IEnumerable<Car>> FindAsync(Expression<Func<Car, bool>> predicate)
         {
-            return await _databaseContext.Cars.Include(x => x.Category).Where(predicate).AsNoTracking().ToListAsync();
+            return await _databaseContext.Cars.Include(x => x.Category).Include(x => x.Images).Where(predicate).AsNoTracking().ToListAsync();
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task"/> object containg a collection of all cars found.</returns>
         public async Task<IEnumerable<Car>> GetAllAsync()
         {
-            return await _databaseContext.Cars.Include(x => x.Category).AsNoTracking().ToListAsync();
+            return await _databaseContext.Cars.Include(x => x.Category).Include(x => x.Images).AsNoTracking().ToListAsync();
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>a <see cref="Task{TResult}"/> containing the car if found, or null if not found.</returns>
         public Task<Car?> GetByIdAsync(int id)
         {
-            return _databaseContext.Cars.Include(x => x.Category).AsNoTracking().SingleOrDefaultAsync(x => x.CarId == id);
+            return _databaseContext.Cars.Include(x => x.Category).Include(x => x.Images).AsNoTracking().SingleOrDefaultAsync(x => x.CarId == id);
         }
 
         /// <summary>

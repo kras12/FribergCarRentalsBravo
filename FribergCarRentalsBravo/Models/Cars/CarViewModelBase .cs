@@ -40,7 +40,6 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// A constructor.
         /// </summary>
-        /// <param name="category">The category for the car.</param>
         /// <param name="brand">The brand for the car.</param>
         /// <param name="color">The color for the car.</param>
         /// <param name="model">The model for the car.</param>
@@ -50,15 +49,10 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <param name="isActive">True if the car is active in the rental platform.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        protected CarViewModelBase(CarCategory category, string brand, string color, string model, int modelYear, 
+        protected CarViewModelBase(string brand, string color, string model, int modelYear, 
             string registrationNumber, decimal rentalCostPerDay, bool isActive)
         {
             #region Checks
-
-            if (category is null)
-            {
-                throw new ArgumentNullException(nameof(category), $"The value of parameter '{category}' can't be null");
-            }
 
             if (brand is null)
             {

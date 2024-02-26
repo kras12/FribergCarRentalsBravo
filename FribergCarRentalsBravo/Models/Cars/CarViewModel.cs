@@ -45,9 +45,14 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public CarViewModel(CarCategory category, string brand, int carId, string color, string model, int modelYear, 
             string registrationNumber, decimal rentalCostPerDay, List<CarImageViewModel> images, bool isActive)
-            : base(category, brand, color, model, modelYear, registrationNumber, rentalCostPerDay, isActive)
+            : base(brand, color, model, modelYear, registrationNumber, rentalCostPerDay, isActive)
         {
             #region Checks
+
+            if (category is null)
+            {
+                throw new ArgumentNullException(nameof(category), $"The value of parameter '{category}' can't be null");
+            }
 
             if (carId < 0)
             {

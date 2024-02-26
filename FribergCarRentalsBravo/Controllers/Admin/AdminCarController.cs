@@ -117,6 +117,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // POST: AdminCarController/Delete/5
+        [HttpPost("{id}")]
         [ActionName(nameof(Delete))]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -182,6 +183,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // GET: AdminCarController/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (id < 0)
@@ -195,7 +197,8 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
                 if (car is not null)
                 {
-                    EditCarViewModel viewModel = new EditCarViewModel(car);
+                    var carCategories = await _carCategoryRepository.GetAllAsync();
+                    EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
                     TempDataHelper.Set(TempData, PageSubTitleTempDataKey, viewModel.PageSubTitle!);
                     return View(viewModel);
                 }
@@ -205,7 +208,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // POST: AdminCarController/Edit/5
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditCarViewModel editCarViewModel)
         {
@@ -221,6 +224,9 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             {
                 if (DataTransferHelper.TryTransferData(editCarViewModel, out Car car))
                 {
+                    var selectedCategory = await _carCategoryRepository.GetByIdAsync(editCarViewModel.SelectedCategoryId);
+                    car.Category = selectedCategory;
+
                     car.Images.AddRange(carImages);
 
                     if (editCarViewModel.UploadImages is not null && editCarViewModel.UploadImages.Count > 0)
@@ -241,7 +247,8 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     }
 
                     await _carRepository.UpdateAsync(car);
-                    EditCarViewModel viewModel = new EditCarViewModel(car);
+                    var carCategories = await _carCategoryRepository.GetAllAsync();
+                    EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
                     viewModel.Messages.Add(UserMesssageHelper.CreateCarUpdateSuccessMessage(id));
                     return View(viewModel);
                 }
