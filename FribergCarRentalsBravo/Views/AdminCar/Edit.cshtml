@@ -5,17 +5,17 @@
     ViewData["Title"] = "Edit Car";
 }
 
-<h1>Edit</h1>
-@if (Model.HavePageSubTitle)
-{
-    <h2>@Model.PageSubTitle</h2>
-}
-else
-{
-    <h2>@($"#{Model.CarId} - {Model.CarInfo}")</h2>
-}
-<hr />
-<div class="row">
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Edit</h1>
+    @if (Model.HavePageSubTitle)
+    {
+        <h2>@Model.PageSubTitle</h2>
+    }
+    else
+    {
+        <h2>@($"#{Model.CarId} - {Model.CarInfo}")</h2>
+    }
+    <hr />
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="CarId" />
@@ -26,7 +26,7 @@ else
                 </label>
             </div>
             <div class="form-group">
-                <label asp-for="SelectedCategoryId" class="control-label"></label>
+                <label asp-for="SelectedCategoryId" class="control-label">Category</label>
                 <select asp-for="SelectedCategoryId" asp-items="@(new SelectList(Model.Categories, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCategoryId))"></select>
                 <span asp-validation-for="SelectedCategoryId" class="text-danger"></span>
             </div>
@@ -84,15 +84,15 @@ else
                     }
                 </div>
             }
-            <div class="form-group">
+            <div class="form-group d-flex justify-content-center">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="form-group d-flex justify-content-center">
+    <a asp-action="List">Back to List</a>
 </div>
 
 @section Scripts {
