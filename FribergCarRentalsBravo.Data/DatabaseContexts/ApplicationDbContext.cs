@@ -1,4 +1,5 @@
-﻿using FribergCarRentalsBravo.DataAccess.Entities;
+﻿using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
 {
     public class ApplicationDbContext : DbContext
     {
+        
         #region Constructors
 
         /// <summary>
@@ -22,10 +24,10 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
         }
 
         #endregion
-        
-        #region DBSets
 
-        public DbSet<CarCategory> CarCategories { get; set; }        
+        #region DBSets
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CarCategory> CarCategories { get; set; }
 
         #endregion
 
