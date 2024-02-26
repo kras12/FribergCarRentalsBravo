@@ -38,11 +38,25 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
         /// <summary>
         /// DBSet for car categories.
         /// </summary>
-        public DbSet<CarCategory> CarCategories { get; set; }        
+        public DbSet<CarCategory> CarCategories { get; set; }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Configures the conventions.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+
+            // Expliclity set the precision. The default is 18,2 but we choose to give a little more precision on the decimal side. 
+            // We will still be able to handle huge numbers. 
+            configurationBuilder.Properties<decimal>()
+                .HavePrecision(18, 4);
+        }
 
         /// <summary>
         /// Configures the options.
