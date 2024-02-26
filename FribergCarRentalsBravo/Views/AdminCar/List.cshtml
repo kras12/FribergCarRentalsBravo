@@ -21,19 +21,26 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Brand)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Color)
+                    @Html.DisplayNameFor(model => model.Models[0].CarId)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Models[0].IsActiveText)
+                </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Category.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Brand)
+                </th>
+                 <th>
                     @Html.DisplayNameFor(model => model.Models[0].Model)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Models[0].ModelYear)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Color)
+                </th>                
                 <th>
                     @Html.DisplayNameFor(model => model.Models[0].RegistrationNumber)
                 </th>
@@ -48,19 +55,25 @@ else
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => car.Brand)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.Color)
+                        @Html.DisplayFor(modelItem => car.CarId)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => car.IsActiveText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Category.CategoryName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Brand)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => car.Model)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => car.ModelYear)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Color)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => car.RegistrationNumber)
