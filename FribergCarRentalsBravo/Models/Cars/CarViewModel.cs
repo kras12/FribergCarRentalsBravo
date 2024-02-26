@@ -18,57 +18,31 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// A constructor.
         /// </summary>
         /// <param name="car">The car to model.</param>
-        public CarViewModel(Car car) :
-            this(car.Category, car.Brand, car.CarId, car.Color, car.Model, car.ModelYear, 
-                car.RegistrationNumber, car.RentalCostPerDay, 
-                car.Images.Select(x => new CarImageViewModel(x)).ToList(), car.IsActive) 
-        {
-
-        }
-
-        /// <summary>
-        /// A constructor.
-        /// </summary>
-        /// <param name="category">The category for the car.</param>
-        /// <param name="brand">The brand for the car.</param>
-        /// <param name="carId">The ID for the car.</param>
-        /// <param name="color">The color for the car.</param>
-        /// <param name="model">The model for the car.</param>
-        /// <param name="modelYear">The model year for the car.</param>
-        /// <param name="propulsionSystem">The propulsion system for the car.</param>
-        /// <param name="registrationNumber">The registration number for the car.</param>
-        /// <param name="rentalCostPerDay">The rental cost per day.</param>
-        /// <param name="rentalStatus">The rental status for the car.</param>
-        /// <param name="images">The images for the car.</param>
-        /// <param name="isActive">True if the car is active in the rental platform.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public CarViewModel(CarCategory category, string brand, int carId, string color, string model, int modelYear, 
-            string registrationNumber, decimal rentalCostPerDay, List<CarImageViewModel> images, bool isActive)
-            : base(brand, color, model, modelYear, registrationNumber, rentalCostPerDay, isActive)
+        public CarViewModel(Car car)
+            : base(car.Brand, car.Color, car.Model, car.ModelYear, car.RegistrationNumber, car.RentalCostPerDay, car.IsActive)
         {
             #region Checks
 
-            if (category is null)
+            if (car.Category is null)
             {
-                throw new ArgumentNullException(nameof(category), $"The value of parameter '{category}' can't be null");
+                throw new ArgumentNullException(nameof(car.Category), $"The value of property '{nameof(car.Category)}' can't be null");
             }
 
-            if (carId < 0)
+            if (car.CarId < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(carId), $"The value of parameter '{carId}' can't be negative.");
+                throw new ArgumentNullException(nameof(car.CarId), $"The value of property '{nameof(car.CarId)}' can't be null");
             }
 
-            if (images is null)
+            if (car.Images is null)
             {
-                throw new ArgumentNullException(nameof(images), $"The value of parameter '{images}' can't be null.");
+                throw new ArgumentNullException(nameof(car.Images), $"The value of property '{nameof(car.Images)}' can't be null");
             }
 
             #endregion
 
-            Category = new CarCategoryViewModel(category);
-            CarId = carId;
-            Images = images;
+            Category = new CarCategoryViewModel(car.Category);
+            CarId = car.CarId;
+            Images = car.Images.Select(x => new CarImageViewModel(x)).ToList();
         }
 
         #endregion
