@@ -23,6 +23,7 @@ namespace FribergCarRentalsBravo
 
             // Repositories
             builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
+            builder.Services.AddTransient<ICarRepository, CarRepository>();
 
             // Sessions
             builder.Services.AddDistributedMemoryCache();
