@@ -14,9 +14,10 @@ namespace FribergCarRentalsBravo.Controllers
         }
 
         // GET: CustomerController
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var customers = await customerRep.GetAllCustomers();
+            return View(customers);
         }
 
         // GET: CustomerController/Details/5
@@ -99,17 +100,6 @@ namespace FribergCarRentalsBravo.Controllers
         // GET: CustomerController/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            return View();
-        }
-
-        // POST: CustomerController/Delete/5
-        public async Task<IActionResult> DeleteCustomer(int id)
-        {
-            if (id == null || customerRep.GetAllCustomers == null)
-            {
-                return NotFound();
-            }
-
             Customer customer = await customerRep.GetCustomerById(id);
             if (customer == null)
             {
@@ -118,24 +108,50 @@ namespace FribergCarRentalsBravo.Controllers
             return View(customer);
         }
 
-        [HttpPost, ActionName("DeleteCustomer")] 
+        // POST: CustomerController/Delete/5             
+
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteCustomerConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Customer customer = await customerRep.GetCustomerById(id);
-            if (customer != null)
+            var customer = await customerRep.GetCustomerById(id);
+            if (customer == null)
             {
-                try
-                {
-                    await customerRep.DeleteCustomer(customer);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
+                return NotFound();
+            }
+
+            try
+            {
+                await customerRep.DeleteCustomer(customer);
                 return RedirectToAction(nameof(Index));
             }
-            return View(customer);
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
+                return View(customer);
+            }
         }
     }
 }
+
+
+
+//public async Task<IActionResult> DeleteCustomer(int id)
+//{
+//    var customer = await customerRep.GetCustomerById(id);
+//    if (customer == null)
+//    {
+//        return NotFound();
+//    }
+
+//    try
+//    {
+//        await customerRep.DeleteCustomer(customer);
+//        return RedirectToAction(nameof(Index));
+//    }
+//    catch (Exception)
+//    {
+//        ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
+//        return View(customer);
+//    }
+//}

@@ -27,8 +27,6 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
 
         #region DBSets
 
-        public DbSet<CarEntity> Cars { get; set; }
-
         #endregion
 
         #region Methods
