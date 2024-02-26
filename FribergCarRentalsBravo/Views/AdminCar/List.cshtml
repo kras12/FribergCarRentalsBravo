@@ -1,0 +1,81 @@
+﻿@using FribergCarRentals.Models.Other
+@using FribergCarRentalsBravo.Models.Cars
+@model ListViewModel<CarViewModel>
+
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<h1>Cars</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@if (Model.Count <= 0)
+{
+    <p class="text-align-center">No cars found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Color)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].IsActiveText)
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].Model)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].ModelYear)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].RegistrationNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Models)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Brand)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Color)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.IsActiveText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.Model)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.ModelYear)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.RegistrationNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => car.RentalCostPerDay)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@car.CarId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@car.CarId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@car.CarId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

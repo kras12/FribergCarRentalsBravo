@@ -91,6 +91,17 @@ namespace FribergCarRentalsBravo.Models.Cars
         public List<CarImageViewModel> Images { get; } = new();
 
         /// <summary>
+        /// A text that shows whether the car is active. 
+        /// </summary>
+        public string IsActiveText
+        {
+            get
+            {
+                return IsActive ? "Active" : "Inactive";
+            }
+        }
+
+        /// <summary>
         /// The rental cost per day.
         /// </summary>
         [DisplayName("Cost per day")]
