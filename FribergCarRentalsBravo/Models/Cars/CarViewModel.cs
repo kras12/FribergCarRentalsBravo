@@ -73,7 +73,7 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// The ID for the car.
         /// </summary>
-        [DisplayName("Car ID")]
+        [DisplayName("ID")]
         [BindNever]
         public int CarId { get; }
 
@@ -93,6 +93,7 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// A text that shows whether the car is active. 
         /// </summary>
+        [DisplayName("Is Active")]
         public string IsActiveText
         {
             get

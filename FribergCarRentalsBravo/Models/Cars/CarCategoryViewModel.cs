@@ -41,7 +41,7 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// The filename for the category.
         /// </summary>
-        [DisplayName("Category Name")]
+        [DisplayName("Category")]
         [BindNever]
         public string CategoryName { get; } = "";
 
