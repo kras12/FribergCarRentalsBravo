@@ -10,8 +10,7 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Customer> Customers { get; set; }
-
+        
         #region Constructors
 
         /// <summary>
@@ -24,9 +23,11 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
         }
 
         #endregion
-        
+
         #region DBSets
-        public DbSet<CarCategory> CarCategories { get; set; }        
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CarEntity> Cars { get; set; }
 
         #endregion
 
