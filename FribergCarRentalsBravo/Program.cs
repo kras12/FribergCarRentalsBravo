@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.Shared.SharedClasses;
+using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 
 namespace FribergCarRentalsBravo
 {

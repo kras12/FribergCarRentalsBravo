@@ -1,4 +1,5 @@
 ﻿using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

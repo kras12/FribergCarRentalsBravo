@@ -1,6 +1,4 @@
-﻿using FribergCarRentalsBravo;
-
-namespace FribergCarRentalsBravo.DataAccess.Entities.Customer
+﻿namespace FribergCarRentalsBravo.DataAccess.Entities.Customer
 {
     public interface ICustomer
     {
