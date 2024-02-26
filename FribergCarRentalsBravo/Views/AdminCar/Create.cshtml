@@ -20,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SelectedCategoryId" class="control-label"></label>
-                <select asp-for="SelectedCategoryId" asp-items="@(new SelectList(Model.Categories, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCategoryId))" />
+                <select asp-for="SelectedCategoryId" asp-items="@(new SelectList(Model.Categories, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCategoryId))"></select>
                 <span asp-validation-for="SelectedCategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -50,7 +50,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="RentalCostPerDay" class="control-label"></label>
-                <input asp-for="RentalCostPerDay" class="form-control" />
+                <input type="number" asp-for="RentalCostPerDay" class="form-control" />
                 <span asp-validation-for="RentalCostPerDay" class="text-danger"></span>
             </div>
             <div class="form-group">
