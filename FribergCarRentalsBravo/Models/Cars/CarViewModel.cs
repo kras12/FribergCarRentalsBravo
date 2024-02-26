@@ -61,6 +61,7 @@ namespace FribergCarRentalsBravo.Models.Cars
 
             #endregion
 
+            Category = new CarCategoryViewModel(category);
             CarId = carId;
             Images = images;
         }
@@ -75,6 +76,12 @@ namespace FribergCarRentalsBravo.Models.Cars
         [DisplayName("Car ID")]
         [BindNever]
         public int CarId { get; }
+
+        /// <summary>
+        /// The category for the car.
+        /// </summary>
+        [DisplayName("Category")]
+        public virtual CarCategoryViewModel Category { get; set; }
 
         /// <summary>
         /// A collection of images for the car.

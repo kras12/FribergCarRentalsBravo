@@ -24,28 +24,28 @@ namespace FribergCarRentalsBravo.Models.Cars
         }
 
         /// <summary>
-        /// A constructor.
+        ///  A constructor.
         /// </summary>
-        /// <param name="category">The category for the car.</param>
-        /// <param name="brand">The brand for the car.</param>
-        /// <param name="color">The color for the car.</param>
-        /// <param name="model">The model for the car.</param>
-        /// <param name="modelYear">The model year for the car.</param>
-        /// <param name="registrationNumber">The registration number for the car.</param>
-        /// <param name="rentalCostPerDay">The rental cost per day.</param>
-        /// <param name="isActive">True if the car is active in the rental platform.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public CreateCarViewModel(CarCategory category, string brand, string color, string model, int modelYear, 
-            string registrationNumber, decimal rentalCostPerDay, bool isActive) 
-            : base(category, brand, color, model, modelYear, registrationNumber, rentalCostPerDay, isActive)
+        /// <param name="categories">A collection of available car categories to choose from.</param>
+        public CreateCarViewModel(List<CarCategory> categories) : base()
         {
-
+            Categories = categories.Select(x => new CarCategoryViewModel(x)).ToList();
+            SelectedCategoryId = Categories.First().CategoryId ?? 0;
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// A collection of available car categories to choose from.
+        /// </summary>
+        public List<CarCategoryViewModel> Categories { get; set; } = new();
+
+        /// <summary>
+        /// The ID of the selected category.
+        /// </summary>
+        public int SelectedCategoryId { get; set; } 
 
         /// <summary>
         /// The images to upload

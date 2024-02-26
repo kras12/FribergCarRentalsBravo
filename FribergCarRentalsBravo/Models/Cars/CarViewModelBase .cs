@@ -92,7 +92,6 @@ namespace FribergCarRentalsBravo.Models.Cars
 
             #endregion
 
-            Category = category;
             Brand = brand;
             Color = color;
             Model = model;
@@ -157,12 +156,6 @@ namespace FribergCarRentalsBravo.Models.Cars
         [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
         [Range(MinCarModelYear, MaxCarModelYear)]        
         public virtual int ModelYear { get; set; }
-
-        /// <summary>
-        /// The category for the car.
-        /// </summary>
-        [DisplayName("Category")]
-        public virtual CarCategory Category { get; set; }
 
         /// <summary>
         /// The registration number for the car.
