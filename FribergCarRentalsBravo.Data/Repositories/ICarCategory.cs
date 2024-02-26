@@ -2,7 +2,7 @@
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
-    public interface ICarCategoryRepository
+    public interface ICarCategory
     {
         Task<CarCategory> GetByIdAsync(int id);
         Task<List<CarCategory>> GetAllAsync();

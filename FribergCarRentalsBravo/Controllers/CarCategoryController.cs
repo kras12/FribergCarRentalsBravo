@@ -13,9 +13,9 @@ namespace FribergCarRentalsBravo.Controllers
 {
     public class CarCategoryController : Controller
     {
-        private readonly ICarCategoryRepository carCategoryRepo;
+        private readonly ICarCategory carCategoryRepo;
 
-        public CarCategoryController(ICarCategoryRepository carCategoryRepo)
+        public CarCategoryController(ICarCategory carCategoryRepo)
         {
             this.carCategoryRepo = carCategoryRepo;
         }

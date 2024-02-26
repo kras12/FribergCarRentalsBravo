@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.Data
 {
-    public class CarCategoryRepository : ICarCategoryRepository
+    public class CarCategoryRepository : ICarCategory
     {
         private ApplicationDbContext applicationDbContext;
 
