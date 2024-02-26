@@ -7,15 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
-using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 
 namespace FribergCarRentalsBravo.Controllers
 {
     public class CarCategoryController : Controller
     {
-        private readonly ICarCategory carCategoryRepo;
+        private readonly ICarCategoryRepository carCategoryRepo;
 
-        public CarCategoryController(ICarCategory carCategoryRepo)
+        public CarCategoryController(ICarCategoryRepository carCategoryRepo)
         {
             this.carCategoryRepo = carCategoryRepo;
         }

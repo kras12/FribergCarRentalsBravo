@@ -1,8 +1,8 @@
 ﻿using FribergCarRentalsBravo.DataAccess.Entities;
 
-namespace FribergCarRentalsBravo.Data
+namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
-    public interface ICarCategory
+    public interface ICarCategoryRepository
     {
         Task<CarCategory> GetByIdAsync(int id);
         Task<List<CarCategory>> GetAllAsync();

@@ -1,10 +1,11 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.Data
 {
-    public class CarCategoryRepository : ICarCategory
+    public class CarCategoryRepository : ICarCategoryRepository
     {
         private ApplicationDbContext applicationDbContext;
 
