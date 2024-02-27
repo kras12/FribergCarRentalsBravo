@@ -22,6 +22,7 @@ namespace FribergCarRentalsBravo
                 options.UseSqlServer(builder.Configuration.GetConnectionString(AppSettingsHelper.ApplicationDbContextConnectionStringKey)));
 
             // Repositories
+            builder.Services.AddTransient<IAdminRepository, AdminRepository>();
             builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
             builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
             builder.Services.AddTransient<ICarRepository, CarRepository>();

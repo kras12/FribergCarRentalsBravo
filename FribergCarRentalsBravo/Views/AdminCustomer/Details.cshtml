@@ -1,4 +1,4 @@
-﻿@model Customer
+﻿@model FribergCarRentalsBravo.DataAccess.Entities.Customer
 
 @{
     ViewData["Title"] = "Details";
@@ -44,5 +44,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
 </div>
