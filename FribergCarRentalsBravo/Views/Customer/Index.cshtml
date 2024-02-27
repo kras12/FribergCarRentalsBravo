@@ -7,14 +7,11 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create" asp-controller="Customer">Skapa ny kund</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -34,9 +31,6 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
@@ -49,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                    <a asp-action="Edit" asp-controller="Customer" asp-route-id="@item.CustomerId">Ändra</a> |
-                    <a asp-action="Details" asp-controller="Customer" asp-route-id="@item.CustomerId">Detaljer</a> |
-                    <a asp-action="Delete" asp-controller="Customer" asp-route-id="@item.CustomerId">Ta bort</a>
+                <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
             </td>
         </tr>
 }
