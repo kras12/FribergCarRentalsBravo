@@ -1,6 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.Entities;
 
-namespace FribergCarRentalsBravo.Data
+namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
     public interface ICarCategory
     {

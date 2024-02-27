@@ -133,25 +133,3 @@ namespace FribergCarRentalsBravo.Controllers
         }
     }
 }
-
-
-
-//public async Task<IActionResult> DeleteCustomer(int id)
-//{
-//    var customer = await customerRep.GetCustomerById(id);
-//    if (customer == null)
-//    {
-//        return NotFound();
-//    }
-
-//    try
-//    {
-//        await customerRep.DeleteCustomer(customer);
-//        return RedirectToAction(nameof(Index));
-//    }
-//    catch (Exception)
-//    {
-//        ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
-//        return View(customer);
-//    }
-//}

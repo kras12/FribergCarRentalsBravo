@@ -17,14 +17,17 @@ namespace FribergCarRentalsBravo
 
             // Controllers
             builder.Services.AddControllersWithViews();
-            
-            // DB Context
 
-            // Repositories
+            // DB Context
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString(AppSettingsHelper.ApplicationDbContextConnectionStringKey)));
+
+            // Repositories
             builder.Services.AddTransient<ICustomer, CustomerRepository>();
             builder.Services.AddTransient<ICarCategory, CarCategoryRepository>();
+            builder.Services.AddTransient<ICarRepository, CarRepository>();
+
+
             // Sessions
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>

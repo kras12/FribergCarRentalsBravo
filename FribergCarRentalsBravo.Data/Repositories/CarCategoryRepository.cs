@@ -1,5 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.Data

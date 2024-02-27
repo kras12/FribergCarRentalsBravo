@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
-using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 
 namespace FribergCarRentalsBravo.Controllers
 {
