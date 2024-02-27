@@ -49,6 +49,9 @@
                             @if (UserSessionHandler.IsCustomerLoggedIn(ViewContext.HttpContext.Session))
                             {
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Account</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
                                 </li>
                             }
