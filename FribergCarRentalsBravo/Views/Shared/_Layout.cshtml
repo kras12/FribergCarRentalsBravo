@@ -37,6 +37,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="">Admin Orders</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Logout">Logout</a>
+                            </li>
                         }
                         else
                         {
@@ -45,11 +48,16 @@
                             </li>                            
                             @if (UserSessionHandler.IsCustomerLoggedIn(ViewContext.HttpContext.Session))
                             {
-                                
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
+                                </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Authenticate">Register/Login</a>
-                            </li>
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Authenticate">Register/Login</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
