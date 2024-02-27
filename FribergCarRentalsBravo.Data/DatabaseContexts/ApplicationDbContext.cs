@@ -1,4 +1,5 @@
-﻿using FribergCarRentalsBravo.DataAccess.Entities;
+﻿using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,14 +23,46 @@ namespace FribergCarRentalsBravo.DataAccess.DatabaseContexts
         }
 
         #endregion
-        
+
         #region DBSets
 
-        public DbSet<CarCategory> CarCategories { get; set; }        
+        /// <summary>
+        /// DBSet for car categories.
+        /// </summary>
+        public DbSet<CarCategory> CarCategories { get; set; }
+
+        /// <summary>
+        /// DBSet for cars.
+        /// </summary>
+        public DbSet<Car> Cars { get; set; }
+
+        /// <summary>
+        /// DBSet for customers
+        /// </summary>
+        public DbSet<Customer> Customers { get; set; }
+
+        /// <summary>
+        /// DBSet for car images.
+        /// </summary>
+        public DbSet<CarImage> Images { get; set; }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Configures the conventions.
+        /// </summary>
+        /// <param name="configurationBuilder">The configuration builder.</param>
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
+
+            // Expliclity set the precision. The default is 18,2 but we choose to give a little more precision on the decimal side. 
+            // We will still be able to handle huge numbers. 
+            configurationBuilder.Properties<decimal>()
+                .HavePrecision(18, 4);
+        }
 
         /// <summary>
         /// Configures the options.
