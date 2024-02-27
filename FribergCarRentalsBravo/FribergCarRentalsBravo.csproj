@@ -7,18 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Admin\**" />
-    <Content Remove="Views\Admin\**" />
-    <EmbeddedResource Remove="Views\Admin\**" />
-    <None Remove="Views\Admin\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Attributes\" />
     <Folder Include="Components\" />
     <Folder Include="Data\" />
-    <Folder Include="Models\Admin\" />
-    <Folder Include="Models\Customer\" />
     <Folder Include="Models\Order\" />
   </ItemGroup>
 
