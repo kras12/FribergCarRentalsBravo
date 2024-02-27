@@ -40,6 +40,26 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             return await applicationDbContext.Admin.FirstOrDefaultAsync(a => a.AdminId == id);
         }
 
+        /// <summary>
+        /// Attempts to fetch an admin with matching email and password.
+        /// </summary>
+        /// <remarks>Returned entities will not be tracked by EF Core.</remarks>
+        /// <param name="email">The email for the admin.</param>
+        /// <param name="password">The password for the admin.</param>
+        /// <returns>A <see cref="Task"/> object containing the admin if found or null if not found.</returns>
+        public async Task<Admin?> GetMatchingAdminAsync(string email, string password)
+        {
+            var admin = await applicationDbContext.Admin.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email && x.Password == password);
+
+            if (admin is not null)
+            {
+                admin.Password = "";
+                return admin;
+            }
+
+            return null;
+        }
+
         #endregion
     }
 }

@@ -29,6 +29,15 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task"/> object containg the admin.</returns>
         public Task<Admin> GetAdminByIdAsync(int id);
 
+        /// <summary>
+        /// Attempts to fetch an admin with matching email and password.
+        /// </summary>
+        /// <remarks>Returned entities will not be tracked by EF Core.</remarks>
+        /// <param name="email">The email for the admin.</param>
+        /// <param name="password">The password for the admin.</param>
+        /// <returns>A <see cref="Task"/> object containing the admin if found or null if not found.</returns>
+        public Task<Admin?> GetMatchingAdminAsync(string email, string password);
+
         #endregion
     }
 }
