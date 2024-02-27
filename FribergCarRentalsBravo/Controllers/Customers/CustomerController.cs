@@ -122,7 +122,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             return View(await customerRep.GetCustomerById(id));
@@ -133,7 +133,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
             }
 
             if (id == null || customerRep.GetAllCustomers == null)
@@ -157,7 +157,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
             }
 
             if (id != customer.CustomerId)
