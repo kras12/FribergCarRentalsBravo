@@ -33,16 +33,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="">Admin Home</a>
+                            <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="AdminCar" asp-action="List">Admin Cars</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item">                            
                             <a class="nav-link text-dark" asp-area="" asp-controller="AdminCarCategory" asp-action="Index">Admin Car Categories</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="">Admin Customers</a>
+                            <a class="nav-link text-dark" asp-controller="AdminCustomer">Admin Customers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="">Admin Orders</a>

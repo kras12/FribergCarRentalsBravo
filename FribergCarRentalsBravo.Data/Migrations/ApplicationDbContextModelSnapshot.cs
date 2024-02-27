@@ -21,6 +21,27 @@ namespace FribergCarRentalsBravo.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.Admin", b =>
+                {
+                    b.Property<int>("AdminId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AdminId");
+
+                    b.ToTable("Admin");
+                });
+
             modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.Car", b =>
                 {
                     b.Property<int>("CarId")
@@ -104,7 +125,7 @@ namespace FribergCarRentalsBravo.DataAccess.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.Customer.Customer", b =>
+            modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.Customer", b =>
                 {
                     b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
