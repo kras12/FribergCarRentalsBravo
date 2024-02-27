@@ -102,6 +102,25 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // GET: AdminController
+        public async Task<IActionResult> Index()
+        {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Index));
+            }
+
+            var userData = UserSessionHandler.GetUserData(HttpContext.Session);
+            var admin = await adminRep.GetAdminByIdAsync(userData.UserId);
+
+            if (admin is not null)
+            {
+                return View(admin);
+            }
+
+            throw new Exception("Failed to find the admin in the database.");
+        }
+
+        // GET: AdminController
         public ActionResult Login()
         {
             if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
