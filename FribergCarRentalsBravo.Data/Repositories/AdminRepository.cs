@@ -28,14 +28,14 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         #endregion
 
         #region Methods
-        public async Task<Admin> EditAsync(Admin admin)
+        public async Task<AdminUser> EditAsync(AdminUser admin)
         {
             applicationDbContext.Update(admin);
             await applicationDbContext.SaveChangesAsync();
             return admin;
         }
 
-        public async Task<Admin?> GetAdminByIdAsync(int id)
+        public async Task<AdminUser?> GetAdminByIdAsync(int id)
         {
             return await applicationDbContext.Admin.FirstOrDefaultAsync(a => a.AdminId == id);
         }
@@ -47,7 +47,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <param name="email">The email for the admin.</param>
         /// <param name="password">The password for the admin.</param>
         /// <returns>A <see cref="Task"/> object containing the admin if found or null if not found.</returns>
-        public async Task<Admin?> GetMatchingAdminAsync(string email, string password)
+        public async Task<AdminUser?> GetMatchingAdminAsync(string email, string password)
         {
             var admin = await applicationDbContext.Admin.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email && x.Password == password);
 

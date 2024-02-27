@@ -1,33 +1,39 @@
-﻿using FribergCarRentalsBravo.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
+using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.Helpers;
 using FribergCarRentalsBravo.Sessions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
-namespace FribergCarRentalsBravo.Controllers.Admins
+namespace FribergCarRentalsBravo.Controllers.Admin
 {
-    public class AdminCustomerController : Controller
+    public class AdminCarCategoryController : Controller
     {
         #region Fields
 
-        public ICustomerRepository customerRep { get; }
+        private readonly ICarCategoryRepository carCategoryRepo;
 
         #endregion
 
-        #region Constructors
+        #region Constructors        
 
-        public AdminCustomerController(ICustomerRepository customerRep)
+        public AdminCarCategoryController(ICarCategoryRepository carCategoryRepo)
         {
-            this.customerRep = customerRep;
+            this.carCategoryRepo = carCategoryRepo;
         }
 
         #endregion
 
         #region Actions
 
-        // GET: CustomerController
+        // GET: CarCategory
         public async Task<IActionResult> Index()
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -35,11 +41,10 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return RedirectToLogin(nameof(Index));
             }
 
-            var customers = await customerRep.GetAllCustomers();
-            return View(customers);
+            return View(await carCategoryRepo.GetAllAsync());
         }
 
-        // GET: CustomerController/Details/5
+        // GET: CarCategory/Details/5
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -47,11 +52,23 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return RedirectToLogin(nameof(Details));
             }
 
-            return View(await customerRep.GetCustomerById(id));
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var carCategory = await carCategoryRepo.GetByIdAsync(id);
+
+            if (carCategory == null)
+            {
+                return NotFound();
+            }
+
+            return View(carCategory);
         }
 
-        // GET: CustomerController/Create
-        public IActionResult Create()
+        // GET: CarCategory/Create
+        public async Task<IActionResult> Create()
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
@@ -61,10 +78,12 @@ namespace FribergCarRentalsBravo.Controllers.Admins
             return View();
         }
 
-        // POST: CustomerController/Create
+        // POST: CarCategory/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create([Bind("CarCategoryId,Name")] CarCategory carCategory)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
@@ -73,16 +92,14 @@ namespace FribergCarRentalsBravo.Controllers.Admins
 
             if (ModelState.IsValid)
             {
-                await customerRep.CreateCustomer(customer);
+                await carCategoryRepo.CreateNewCarCategoryAsync(carCategory);
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View();
-            }
+
+            return View(carCategory);
         }
 
-        // GET: CustomerController/Edit/5
+        // GET: CarCategory/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -90,51 +107,45 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id == null || customerRep.GetAllCustomers == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
-
-            if (customer == null)
+            var carCategory = await carCategoryRepo.GetByIdAsync(id);
+            if (carCategory == null)
             {
                 return NotFound();
             }
-            return View(customer);
+            return View(carCategory);
         }
 
-        // POST: CustomerController/Edit/5
+        // POST: CarCategory/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CarCategoryId,Name")] CarCategory carCategory)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id != customer.CustomerId)
+            if (id != carCategory.CarCategoryId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await customerRep.EditCustomer(customer);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
+                carCategoryRepo.UpdateCarCategoryrAsync(carCategory);
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(carCategory);
         }
 
-        // GET: CustomerController/Delete/5
+        // GET: CarCategory/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -142,41 +153,37 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return RedirectToLogin(nameof(Delete));
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            return View(customer);
+
+            var carCategory = await carCategoryRepo.GetByIdAsync(id);
+            if (carCategory == null)
+            {
+                return NotFound();
+            }
+
+            return View(carCategory);
         }
 
-        // POST: CustomerController/Delete/5             
-
+        // POST: CarCategory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Delete));
+                return RedirectToLogin(nameof(DeleteConfirmed));
             }
 
-            var customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            var carCategory = await carCategoryRepo.GetByIdAsync(id);
+            if (carCategory != null)
             {
-                return NotFound();
+                await carCategoryRepo.DeleteCarCategoryAsync(carCategory);
             }
 
-            try
-            {
-                await customerRep.DeleteCustomer(customer);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
-                return View(customer);
-            }
+            return RedirectToAction(nameof(Index));
         }
 
         #endregion
@@ -187,14 +194,14 @@ namespace FribergCarRentalsBravo.Controllers.Admins
         /// Redirects to the login page and request a redirect back afterwards. 
         /// </summary>
         /// <param name="action">The action to redirect to.</param>
-        /// <param name="id">An optional ID for the customer.</param>
+        /// <param name="id">An optional ID for the category.</param>
         /// <returns><see cref="IActionResult"/>.</returns>
         private IActionResult RedirectToLogin(string action, int? id = null)
         {
             RouteValueDictionary? routeValues = id is not null ? new RouteValueDictionary(new { id = id }) : null;
 
             TempDataHelper.Set(TempData, AdminController.RedirectToPageTempDataKey, new RedirectToActionData(
-                    action, ControllerHelper.GetControllerName<AdminCustomerController>(), routeValues: routeValues));
+                    action, ControllerHelper.GetControllerName<AdminCarCategoryController>(), routeValues: routeValues));
 
             return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
         }

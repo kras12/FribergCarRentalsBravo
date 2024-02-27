@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace FribergCarRentalsBravo.DataAccess.Entities
 {
-    public class Admin
+    public class AdminUser
     {
         #region Properties
+
+        [Key]
         public int AdminId { get; set; }
         [Required]
         [EmailAddress]

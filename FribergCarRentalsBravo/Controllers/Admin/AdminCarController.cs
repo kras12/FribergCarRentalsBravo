@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace FribergCarRentalsBravo.Controllers.Admins
+namespace FribergCarRentalsBravo.Controllers.Admin
 {
     [Route($"{CurrentControllerRoutePart}/[action]")]
     public class AdminCarController : Controller

@@ -8,7 +8,7 @@ using FribergCarRentalsBravo.Models.Admin;
 using FribergCarRentalsBravo.Sessions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FribergCarRentalsBravo.Controllers.Admins
+namespace FribergCarRentalsBravo.Controllers.Admin
 {
     public class AdminController : Controller
     {
@@ -41,6 +41,20 @@ namespace FribergCarRentalsBravo.Controllers.Admins
 
         #region Actions
 
+        // GET: AdminController/Details/5
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Index));
+            }
+
+            return View(await adminRep.GetAdminByIdAsync(id));
+        }
+
+        // GET: AdminController/Edit/5
+        [HttpGet]
         public async Task<IActionResult> EditAsync(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -48,11 +62,6 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return RedirectToLogin(nameof(EditAsync));
             }
 
-            if (id == null || adminRep.GetAdminByIdAsync == null)
-            {
-                return NotFound();
-            }
-
             var admin = await adminRep.GetAdminByIdAsync(id);
 
             if (admin == null)
@@ -60,22 +69,36 @@ namespace FribergCarRentalsBravo.Controllers.Admins
                 return NotFound();
             }
             return View(admin);
-
         }
 
-        public async Task<IActionResult> DetailsAsync(int id)
+        // POST: AdminController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, AdminUser admin)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Index));
+                return RedirectToLogin(nameof(EditAsync));
             }
 
-            var admin = await adminRep.GetAdminByIdAsync(id);
-            if (admin == null)
+            if (id != admin.AdminId)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
-            return View(admin);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await adminRep.EditAsync(admin);
+                }
+                catch (Exception)
+                {
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
         }
 
         // GET: AdminController
@@ -144,7 +167,7 @@ namespace FribergCarRentalsBravo.Controllers.Admins
         /// </summary>
         /// <param name="admin">The admin to login.</param>
         [NonAction]
-        private void LoginAdmin(Admin admin)
+        private void LoginAdmin(AdminUser admin)
         {
             UserSessionHandler.SetUserData(HttpContext.Session,
                     new UserSessionData(admin.AdminId, admin.Email, UserRole.Admin));
