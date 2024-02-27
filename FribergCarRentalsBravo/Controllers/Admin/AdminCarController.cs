@@ -5,6 +5,7 @@ using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
 using FribergCarRentalsBravo.Helpers;
 using FribergCarRentalsBravo.Models.Cars;
+using FribergCarRentalsBravo.Sessions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -78,6 +79,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // GET: AdminCarController/Create
         public async Task<IActionResult> Create()
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Create));
+            }
+
             CreateCarViewModel viewmodel = new CreateCarViewModel(await _carCategoryRepository.GetAllAsync());
             
             return View(viewmodel);
@@ -88,6 +94,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateCarViewModel createCarViewModel)
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Create));
+            }
+
             if (ModelState.Count > 0 && ModelState.IsValid)
             {
                 if (!DataTransferHelper.TryTransferData(createCarViewModel, out Car car))
@@ -123,6 +134,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Delete));
+            }
+
             if (id < 0)
             {
                 throw new Exception($"Invalid ID: {id}");
@@ -157,6 +173,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Details));
+            }
+
             if (id < 0)
             {
                 throw new Exception($"Invalid ID: {id}");
@@ -186,6 +207,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Edit));
+            }
+
             if (id < 0)
             {
                 throw new Exception($"Invalid ID: {id}");
@@ -212,6 +238,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditCarViewModel editCarViewModel)
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Edit));
+            }
+
             if (id <= 0 || id != editCarViewModel.CarId)
             {
                 throw new Exception($"Invalid ID or ID mismatch - QueryParameter: {id} - ViewModel: {editCarViewModel.CarId}");
@@ -268,6 +299,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // GET: AdminCarController/List
         public async Task<IActionResult> List()
         {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(List));
+            }
+
             ListViewModel<CarViewModel> carListViewModel = new((await _carRepository.GetAllAsync()).Select(x => new CarViewModel(x)));
             SaveRedirectBackInstructionsForDeleteCarAction(nameof(List));
 
@@ -278,9 +314,26 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             return View(carListViewModel);
         }
+
         #endregion
 
         #region OtherMethods
+
+        /// <summary>
+        /// Redirects to the login page and request a redirect back afterwards. 
+        /// </summary>
+        /// <param name="action">The action to redirect to.</param>
+        /// <param name="id">An optional ID for the car.</param>
+        /// <returns><see cref="IActionResult"/>.</returns>
+        private IActionResult RedirectToLogin(string action, int? id = null)
+        {
+            RouteValueDictionary? routeValues = id is not null ? new RouteValueDictionary(new { id = id }) : null;
+
+            TempDataHelper.Set(TempData, AdminController.RedirectToPageTempDataKey, new RedirectToActionData(
+                    action, ControllerHelper.GetControllerName<AdminCarController>(), routeValues: routeValues));
+
+            return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
+        }
 
         /// <summary>
         /// Saves data for redirecting back to an action after a car has been deleted. 
@@ -289,7 +342,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         private void SaveRedirectBackInstructionsForDeleteCarAction(string redirectToAction)
         {
             TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
-                    redirectToAction, "AdminCar"));
+                    redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
         }
 
         #endregion
