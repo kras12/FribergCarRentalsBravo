@@ -43,6 +43,18 @@ namespace FribergCarRentalsBravo.Controllers.Customers
 
         #region Actions
 
+        // GET: CustomerController
+        [HttpGet]
+        public ActionResult Authenticate()
+        {
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return TempDataOrHomeRedirect();
+            }
+
+            return View(new RegisterOrLoginCustomerViewModel());
+        }
+
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
