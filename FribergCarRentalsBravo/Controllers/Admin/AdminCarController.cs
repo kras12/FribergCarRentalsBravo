@@ -53,7 +53,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         /// <summary>
         /// The injected car category repository.
         /// </summary>
-        private readonly ICarCategory _carCategoryRepository;
+        private readonly ICarCategoryRepository _carCategoryRepository;
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         /// </summary>
         /// <param name="carRepository">The injected car repository.</param>
         /// <param name="carCategoryRepository">The injected car category repository.</param>
-        public AdminCarController(ICarRepository carRepository, ICarCategory carCategoryRepository)
+        public AdminCarController(ICarRepository carRepository, ICarCategoryRepository carCategoryRepository)
         {
             _carRepository = carRepository;
             this._carCategoryRepository = carCategoryRepository;

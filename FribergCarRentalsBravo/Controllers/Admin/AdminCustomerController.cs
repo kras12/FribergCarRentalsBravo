@@ -1,16 +1,17 @@
-﻿using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+﻿using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FribergCarRentalsBravo.Controllers
+namespace FribergCarRentalsBravo.Controllers.Admin
 {
-    public class CustomerController : Controller
+    public class AdminCustomerController : Controller
     {
-        public ICustomer customerRep { get; }
+        public ICustomerRepository customerRep { get; }
 
-        public CustomerController(ICustomer customerRep)
+        public AdminCustomerController(ICustomerRepository customerRep)
         {
-            this.customerRep = customerRep;            
+            this.customerRep = customerRep;
         }
 
         // GET: CustomerController
@@ -86,7 +87,7 @@ namespace FribergCarRentalsBravo.Controllers
             {
                 try
                 {
-                   await customerRep.EditCustomer(customer);
+                    await customerRep.EditCustomer(customer);
                 }
                 catch (Exception)
                 {

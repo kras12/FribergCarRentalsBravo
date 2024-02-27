@@ -1,6 +1,8 @@
-﻿namespace FribergCarRentalsBravo.DataAccess.Entities.Customer
+﻿using FribergCarRentalsBravo.DataAccess.Entities;
+
+namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
-    public interface ICustomer
+    public interface ICustomerRepository
     {
         Task<Customer> GetCustomerById(int id);
         Task<List<Customer>> GetAllCustomers();
