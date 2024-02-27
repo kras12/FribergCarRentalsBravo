@@ -88,48 +88,33 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { RegisterCustomerViewModel = registerCustomerViewModel });
         }
 
-        // GET: CustomerController/Delete/5
+        // POST: CustomerController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Delete));
+                return RedirectToLogin(nameof(Index));
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (id <= 0 || UserSessionHandler.GetUserData(HttpContext.Session).UserId != id)
             {
-                return NotFound();
-            }
-            return View(customer);
-        }
-
-        // POST: CustomerController/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(DeleteConfirmed));
+                throw new Exception($"Invalid ID: {id}");
             }
 
-            var customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
-            }
+                var customer = await customerRep.GetCustomerById(id);
 
-            try
-            {
-                await customerRep.DeleteCustomer(customer);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
-                return View(customer);
-            }
+                if (customer != null)
+                {
+                    await customerRep.DeleteCustomer(customer);
+                    return Logout();
+                }
+            }            
+
+            throw new Exception($"Failed to delete the customer with id: {id}");
         }
 
         // GET: CustomerController/Details/5
@@ -203,8 +188,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Index));
             }
 
-            var customers = await customerRep.GetAllCustomers();
-            return View(customers);
+            return View(await customerRep.GetCustomerById(UserSessionHandler.GetUserData(HttpContext.Session).UserId));
         }
 
         // Post: CustomerController
