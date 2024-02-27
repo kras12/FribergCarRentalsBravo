@@ -1,0 +1,24 @@
+﻿@using FribergCarRentalsBravo.Models.Customers
+@model RegisterOrLoginCustomerViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Logged out</h1>
+<p class="text-align-center">You must login to continue. If you don't have an account you can create one below.</p>
+<div class="grid-container grid-container__auto-columns">
+    <div>
+        <partial name="_Register.cshtml" for="RegisterCustomerViewModel" />
+    </div>
+    <div>
+        <partial name="_Login.cshtml" for="LoginCustomerViewModel" />
+    </div>
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
