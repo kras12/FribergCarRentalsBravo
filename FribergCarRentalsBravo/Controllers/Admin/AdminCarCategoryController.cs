@@ -9,13 +9,13 @@ using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
 
-namespace FribergCarRentalsBravo.Controllers
+namespace FribergCarRentalsBravo.Controllers.Admin
 {
-    public class CarCategoryController : Controller
+    public class AdminCarCategoryController : Controller
     {
-        private readonly ICarCategory carCategoryRepo;
+        private readonly ICarCategoryRepository carCategoryRepo;
 
-        public CarCategoryController(ICarCategory carCategoryRepo)
+        public AdminCarCategoryController(ICarCategoryRepository carCategoryRepo)
         {
             this.carCategoryRepo = carCategoryRepo;
         }
@@ -35,7 +35,7 @@ namespace FribergCarRentalsBravo.Controllers
             }
 
             var carCategory = await carCategoryRepo.GetByIdAsync(id);
-      
+
             if (carCategory == null)
             {
                 return NotFound();
@@ -95,9 +95,9 @@ namespace FribergCarRentalsBravo.Controllers
             }
 
             if (ModelState.IsValid)
-            { 
-               carCategoryRepo.UpdateCarCategoryrAsync(carCategory);
-               return RedirectToAction(nameof(Index));
+            {
+                carCategoryRepo.UpdateCarCategoryrAsync(carCategory);
+                return RedirectToAction(nameof(Index));
             }
             return View(carCategory);
         }

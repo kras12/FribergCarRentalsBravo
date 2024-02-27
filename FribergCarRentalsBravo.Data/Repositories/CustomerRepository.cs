@@ -1,10 +1,10 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
-using FribergCarRentalsBravo.DataAccess.Entities.Customer;
+using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
-    public class CustomerRepository : ICustomer
+    public class CustomerRepository : ICustomerRepository
     {
         private readonly ApplicationDbContext applicationDbContext;
 
