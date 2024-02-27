@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FribergCarRentalsBravo.DataAccess.Entities.Customer
+namespace FribergCarRentalsBravo.DataAccess.Entities
 {
     public class Customer
     {
