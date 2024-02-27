@@ -19,7 +19,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// </summary>
         /// <param name="admin">The admin to update.</param>
         /// <returns>A <see cref="Task"/> object.</returns>
-        public Task<Admin> EditAsync(Admin admin);
+        public Task<AdminUser> EditAsync(AdminUser admin);
 
         /// <summary>
         /// Gets the admin by ID.
@@ -27,7 +27,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <remarks>Returned admin will not be tracked by EF Core.</remarks>
         /// <param name="id">The ID of the admin.</param>
         /// <returns>A <see cref="Task"/> object containg the admin.</returns>
-        public Task<Admin> GetAdminByIdAsync(int id);
+        public Task<AdminUser> GetAdminByIdAsync(int id);
 
         #endregion
     }

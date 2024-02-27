@@ -28,14 +28,14 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         #endregion
 
         #region Methods
-        public async Task<Admin> EditAsync(Admin admin)
+        public async Task<AdminUser> EditAsync(AdminUser admin)
         {
             applicationDbContext.Update(admin);
             await applicationDbContext.SaveChangesAsync();
             return admin;
         }
 
-        public async Task<Admin?> GetAdminByIdAsync(int id)
+        public async Task<AdminUser?> GetAdminByIdAsync(int id)
         {
             return await applicationDbContext.Admin.FirstOrDefaultAsync(a => a.AdminId == id);
         }
