@@ -76,15 +76,16 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 {
                     // The key needs to be the name of the view model (instead of an empty string) because the error is shown in a partial view. 
                     ModelState.AddModelError(nameof(RegisterCustomerViewModel), "An account already exists with that email.");
-                    return View(registerCustomerViewModel);
                 }
-
-                await customerRep.CreateCustomer(customer);
-                LoginCustomer(customer);
-                return TempDataOrHomeRedirect();
+                else
+                {
+                    await customerRep.CreateCustomer(customer);
+                    LoginCustomer(customer);
+                    return TempDataOrHomeRedirect();
+                }                
             }
 
-            return View(registerCustomerViewModel);
+            return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { RegisterCustomerViewModel = registerCustomerViewModel });
         }
 
         // GET: CustomerController/Delete/5
@@ -225,7 +226,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                     // TODO - IS this valid for this project?
                     // The key needs to be the name of the view model (insted of empty string) because the error is shown in a partial view. 
                     ModelState.AddModelError(nameof(LoginCustomerViewModel), "No account matched the entered email/password.");
-                    return View(loginCustomerViewModel);
                 }
                 else
                 {
@@ -234,7 +234,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 }
             }
 
-            return View(loginCustomerViewModel);
+            return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { LoginCustomerViewModel = loginCustomerViewModel });
         }
 
         // GET: CustomerController
