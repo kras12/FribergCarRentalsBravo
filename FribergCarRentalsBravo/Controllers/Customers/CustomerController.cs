@@ -238,7 +238,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         }
 
         // GET: CustomerController
-        //[Route("Logout")]
+        [HttpGet]
         public ActionResult Logout()
         {
             if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
@@ -246,7 +246,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 UserSessionHandler.RemoveUserData(HttpContext.Session);
             }
 
-            return TempDataOrHomeRedirect();
+            return RedirectToAction(nameof(HomeController.Index), ControllerHelper.GetControllerName<HomeController>());
         }
         #endregion
 
