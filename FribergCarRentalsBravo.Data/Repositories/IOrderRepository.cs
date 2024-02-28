@@ -1,3 +1,4 @@
+
 ﻿using FribergCarRentalsBravo.DataAccess.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,10 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
     public interface IOrderRepository
     {
-        /// <summary>
-        /// Adds an order to the database.
-        /// </summary>
-        /// <param name="order">The order to add.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
-        public Task AddAsync(Order order);
+        Task<Order> CreateOrderAsync(Order Order);
+        Task DeleteOrderAsync(Order order);
+        Task<Order> EditOrderAsync(Order order);
+        Task<List<Order>> GetAllOrdersAsync();
+        Task<Order> GetOrderByIdAsync(int id);
     }
 }

@@ -151,7 +151,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 if (customer is not null && car is not null)
                 {
                     var order = new Order(DateTime.Now, car, customer, createOrderViewModel.PickupDate, createOrderViewModel.ReturnDate, car.RentalCostPerDay);
-                    await _orderRepository.AddAsync(order);
+                    await _orderRepository.CreateOrderAsync(order);
                     TempDataHelper.Set(TempData, IsNewOrderTempDataKey, true);
                     return RedirectToAction(nameof(Details), new { id = order.OrderId });
                 }

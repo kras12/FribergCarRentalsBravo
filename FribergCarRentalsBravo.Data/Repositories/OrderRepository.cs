@@ -1,5 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,34 +11,41 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
     public class OrderRepository : IOrderRepository
     {
-        #region Fields
-
         private readonly ApplicationDbContext applicationDbContext;
-
-        #endregion
-
-        #region Constructors
 
         public OrderRepository(ApplicationDbContext applicationDbContext)
         {
             this.applicationDbContext = applicationDbContext;
         }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Adds an order to the database.
-        /// </summary>
-        /// <param name="order">The order to add.</param>
-        /// <returns>A <see cref="Task"/>.</returns>
-        public async Task AddAsync(Order order)
+        public async Task<Order> CreateOrderAsync(Order order)
         {
-            await applicationDbContext.Orders.AddAsync(order);
+            applicationDbContext.Add(order);
+            await applicationDbContext.SaveChangesAsync();
+            return order;
+        }
+
+        public async Task DeleteOrderAsync(Order order)
+        {
+            applicationDbContext.Remove(order);
             await applicationDbContext.SaveChangesAsync();
         }
 
-        #endregion
+        public async Task<Order> EditOrderAsync(Order order)
+        {
+            applicationDbContext.Update(order);
+            await applicationDbContext.SaveChangesAsync();
+            return order;
+        }
+
+        public async Task<List<Order>> GetAllOrdersAsync()
+        {
+            return await applicationDbContext.Orders.OrderBy(x => x.PickupDate).ToListAsync();
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int id)
+        {
+            return await applicationDbContext.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
+        }
+
     }
 }
