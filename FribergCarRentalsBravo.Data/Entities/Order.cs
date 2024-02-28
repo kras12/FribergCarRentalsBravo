@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FribergCarRentalsBravo.DataAccess.Entities
 {
-    internal class Order
+    public class Order
     {
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
