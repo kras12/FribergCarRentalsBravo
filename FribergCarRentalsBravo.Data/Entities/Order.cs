@@ -37,6 +37,7 @@ namespace FribergCarRentalsBravo.DataAccess.Entities
         public DateTime PickupDate { get; set; }
         public DateTime ReturnDate { get; set; }
         public decimal CostPerDay { get; set; }
+        public bool IsCanceled { get; set; }
 
         #endregion
     }

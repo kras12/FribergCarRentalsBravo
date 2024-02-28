@@ -132,7 +132,30 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task{TResult}"/> containing a collection of matching cars.</returns>
         public async Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, CarCategory? category = null)
         {
-            return await _databaseContext.Cars
+            if (category is not null)
+            {
+                return await _databaseContext.Cars
+                .Include(car => car.Category)
+                .Include(car => car.Images)
+                .GroupJoin(
+                    _databaseContext.Orders,
+                    car => car.CarId,
+                    order => order.Car.CarId,
+                    (car, orders) => new
+                    {
+                        car,
+                        orders
+                    }
+                )
+                .Where(orderGroup => (!orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate)) && orderGroup.car.Category == category)
+                .Select(orderGroup => orderGroup.car)
+                .ToListAsync();
+            }
+            else
+            {
+                return await _databaseContext.Cars
+                .Include(car => car.Category)
+                .Include(car => car.Images)
                 .GroupJoin(
                     _databaseContext.Orders,
                     car => car.CarId,
@@ -146,6 +169,8 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
                 .Where(orderGroup => !orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate))
                 .Select(orderGroup => orderGroup.car)
                 .ToListAsync();
+            }
+            
         }
 
         /// <summary>

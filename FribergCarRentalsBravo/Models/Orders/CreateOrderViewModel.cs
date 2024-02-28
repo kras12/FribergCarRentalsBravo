@@ -5,12 +5,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing.Drawing2D;
 
-namespace FribergCarRentals.Models.Order
+namespace FribergCarRentals.Models.Orders
 {
     /// <summary>
     /// A view model class that handles data related to order creation. 
     /// </summary>
-    public class CreateOrderViewModel : ViewModelBase
+    public class CreateOrderViewModel : BookCarViewModel
     {
         #region Constructors
 
@@ -21,6 +21,8 @@ namespace FribergCarRentals.Models.Order
         {
 
         }
+
+
 
         /// <summary>
         /// A constructor. 
@@ -47,9 +49,7 @@ namespace FribergCarRentals.Models.Order
 
             #endregion
 
-            CustomerId = customerId;
             CarId = car.CarId;
-            CarDescription = $"{car.Brand} {car.Model} {car.ModelYear}";
             PickupDate = pickupDate;
             ReturnDate = returnDate;
         }
@@ -59,42 +59,12 @@ namespace FribergCarRentals.Models.Order
         #region Properties
 
         /// <summary>
-        /// Description of the car.
-        /// </summary>
-        [BindNever]
-        public string CarDescription { get; } = "";
-
-        /// <summary>
         /// The ID of the car for the order.
         /// </summary>
         [DisplayName("Car ID")]
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "The value must be a positive number larger than 1.")]
         public int CarId { get; set; }
-
-        /// <summary>
-        /// The ID of the customer for the order.
-        /// </summary>
-        [DisplayName("Customer ID")]
-        [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "The value must be a positive number larger than 1.")]
-        public int CustomerId { get; set; }
-
-        /// <summary>
-        /// The pickup date for the car.
-        /// </summary>
-        [DisplayName("Pickup Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
-        [Required]
-        public DateTime PickupDate { get; set; }
-
-        /// <summary>
-        /// The return date for the car.
-        /// </summary>
-        [DisplayName("Return Date")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
-        [Required]
-        public DateTime ReturnDate { get; set; }
 
         #endregion
     }

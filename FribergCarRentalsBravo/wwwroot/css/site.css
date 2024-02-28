@@ -1,3 +1,15 @@
+/*==================================================*/
+/* Global Variables                                 */
+/*==================================================*/
+:root {
+
+    /* The default box shadow */
+  --default-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+
+    /* The background color for filled boxes */
+    --filled-box-background-color: #ddd;
+}
+
 html {
   font-size: 14px;
 }
@@ -19,4 +31,76 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+/*==================================================*/
+/* Filled containers                                */
+/*==================================================*/
+
+
+/* Filled container */
+.filled-container
+{
+  background-color: var(--filled-box-background-color);
+  box-shadow: var(--default-box-shadow);  
+}
+
+
+/*==================================================*/
+/* Tiled image gallery (Grid - Autocolumn)          */
+/*==================================================*/
+
+/* Tiled image gallery */
+.tiled-image-gallery
+{
+    display: grid;
+    grid-auto-rows: 300px;
+    grid-gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Tiled image gallery - Auto rows */
+.tiled-image-gallery.tiled-image-gallery__auto-rows
+{
+    grid-auto-rows: auto;
+}
+
+/* Tiled image gallery - Figure */
+.tiled-image-gallery figure
+{
+    border-radius: 10px;
+    box-shadow: var(--default-box-shadow);
+    display: flex;
+    height: 100%;
+    margin: 0px;
+    padding: 10px;
+}
+
+/* Tiled image gallery - Figure caption */
+.tiled-image-gallery figcaption
+{
+    text-align: center;
+}
+
+/* Tiled image gallery - Grid gap */
+.tiled-image-gallery.tiled-image-gallery__grid-gap__0
+{
+    grid-gap: 0px;
+}
+
+/* Tiled image gallery - Image */
+.tiled-image-gallery img
+{
+    /*border-radius: 10px;*/
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+}
+
+/* Tiled image gallery - Image size */
+.tiled-image-gallery.tiled-image-gallery__image-size_medium
+{
+    grid-template-columns: repeat(auto-fit, minmax(180px, 400px));
 }

@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing.Drawing2D;
 
-namespace FribergCarRentals.Models.Order
+namespace FribergCarRentals.Models.Orders
 {
     /// <summary>
     /// A view model class that handles data related to order creation. 
@@ -56,11 +56,12 @@ namespace FribergCarRentals.Models.Order
             #endregion
 
             AvailableCars = availableCars is not null ? availableCars.Select(x => new CarViewModel(x)).ToList() : new();
-            AvailableCarCategoryFilters = availableCarCategoryFilters.Select(x => new CarCategoryViewModel(x)).Prepend(new CarCategoryViewModel(0, AllCarCategoriesText)).ToList();
             HavePerformedCarSearch = havePerformedCarSearch;
-            PickupDateFilter = pickupDateFilter;
-            ReturnDateFilter = returnDateFilter;
+            PickupDate = pickupDateFilter;
+            ReturnDate = returnDateFilter;
             SelectedCarCategoryFilter = carCategoryFilter is not null ? carCategoryFilter.Value : 0;
+
+            SetAvailableCarCategoryFilters(availableCarCategoryFilters);
         }
 
         #endregion
@@ -77,7 +78,15 @@ namespace FribergCarRentals.Models.Order
         /// A collection of car categories that can be used as filters when searching for cars to rent.
         /// </summary>
         [BindNever]
-        public List<CarCategoryViewModel> AvailableCarCategoryFilters { get; } = new();
+        public List<CarCategoryViewModel> AvailableCarCategoryFilters { get; set; } = new();
+
+        /// <summary>
+        /// The ID of the car for the order.
+        /// </summary>
+        [DisplayName("Car ID")]
+        [Required]
+        [Range(0, int.MaxValue, ErrorMessage = "The value must be a positive number.")]
+        public int CarId { get; set; }
 
         /// <summary>
         /// Returns true if the user have performed a car search. 
@@ -99,7 +108,7 @@ namespace FribergCarRentals.Models.Order
         [DisplayName("Pickup Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
         [Required]
-        public DateTime? PickupDateFilter { get; set; } = null;
+        public DateTime? PickupDate { get; set; } = null;
 
         /// <summary>
         /// The return date filter to use when searching for cars.
@@ -107,7 +116,20 @@ namespace FribergCarRentals.Models.Order
         [DisplayName("Return Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
         [Required]
-        public DateTime? ReturnDateFilter { get; set; } = null;
+        public DateTime? ReturnDate { get; set; } = null;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Sets the car category filters that can be used as filters when searching for cars to rent.
+        /// </summary>
+        /// <param name="availableCarCategoryFilters">The categories to set.</param>
+        public void SetAvailableCarCategoryFilters(List<CarCategory> availableCarCategoryFilters)
+        {
+            AvailableCarCategoryFilters = availableCarCategoryFilters.Select(x => new CarCategoryViewModel(x)).Prepend(new CarCategoryViewModel(0, AllCarCategoriesText)).ToList();
+        }
 
         #endregion
     }
