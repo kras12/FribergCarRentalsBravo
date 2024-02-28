@@ -4,9 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Customer</h4>
+<h1>Edit your details</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -41,7 +39,10 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete your account?');">
+        <input type="hidden" name="id" value="@Model.CustomerId" asp-for="CustomerId" />
+        <button type="submit" class="btn btn-danger">Delete your account</button>
+    </form>
 </div>
 
 @section Scripts {

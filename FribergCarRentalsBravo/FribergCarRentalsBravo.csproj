@@ -10,11 +10,7 @@
     <Folder Include="Attributes\" />
     <Folder Include="Components\" />
     <Folder Include="Data\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Models\Admin\" />
-    <Folder Include="Models\Customer\" />
     <Folder Include="Models\Order\" />
-    <Folder Include="Sessions\" />
   </ItemGroup>
 
   <ItemGroup>

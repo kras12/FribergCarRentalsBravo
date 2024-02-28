@@ -362,7 +362,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /FribergCarRentalsBravo/wwwroot/images
-/FribergCarRentalsBravo.Data/Migrations
-/.gitignore
-/.gitignore
-/.gitignore

@@ -19,6 +19,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             return customer;
         }
 
+        public Task<bool> CustomerExists(string email)
+        {
+            return applicationDbContext.Customers.AnyAsync(x => x.Email == email);
+        }
+
         public async Task DeleteCustomer(Customer customer)
         {
             applicationDbContext.Remove(customer);
@@ -40,6 +45,19 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         public async Task<Customer> GetCustomerById(int id)
         {
             return await applicationDbContext.Customers.FirstOrDefaultAsync(s => s.CustomerId == id);
+        }
+
+        public async Task<Customer?> GetMatchingCustomerAsync(string email, string password)
+        {
+            var customer = await applicationDbContext.Customers.AsNoTracking().Where(x => x.Email == email && x.Password == password).SingleOrDefaultAsync();
+
+            if (customer is not null)
+            {
+                customer.Password = "";
+                return customer;
+            }
+
+            return null;
         }
     }
 }
