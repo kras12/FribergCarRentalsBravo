@@ -1,0 +1,102 @@
+﻿@using FribergCarRentals.Models.Order
+@using FribergCarRentalsBravo.Models.Cars
+@model BookCarViewModel
+
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<div class="d-flex flex-column gap-2 align-items-center">
+    <h1>Book Car</h1>
+    <div class="d-flex flex-row gap-2 align-items-center">
+        <form asp-action="Book" class="vertical-form">
+            <div class="d-flex flex-row gap-3 align-items-center">
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="error-text"></div>
+                </div>
+                <div class="form-group d-flex flex-column">
+                    <label asp-for="SelectedCarCategoryFilter"></label>
+                    <select type="date" asp-for="SelectedCarCategoryFilter"
+                        asp-items="@(new SelectList(Model.AvailableCarCategoryFilters, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCarCategoryFilter))"></select>
+                    <span asp-validation-for="SelectedCarCategoryFilter" class="error-text"></span>
+                </div>
+                <div class="form-group d-flex flex-column">
+                    <label asp-for="PickupDateFilter"></label>
+                    <input type="date" asp-for="PickupDateFilter" />
+                    <span asp-validation-for="PickupDateFilter" class="error-text"></span>
+                </div>
+                <div class="form-group d-flex flex-column">
+                    <label asp-for="ReturnDateFilter"></label>
+                    <input type="date" asp-for="ReturnDateFilter" />
+                    <span asp-validation-for="ReturnDateFilter" class="error-text"></span>
+                </div>
+                <div class="form-group d-flex flex-column align-self-end">
+                    <button class="btn btn-primary" type="submit">Find</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="vertical-flex-container flex-container__row-gap__2-rem">
+        @if (Model.AvailableCars.Count > 0)
+        {
+            @foreach (var car in Model.AvailableCars)
+            {
+                <div id="@car.CarId" class="vertical-flex-container filled-container flex-container__padding__1-rem flex-container__row-gap__1-rem">
+                    <h2>@($"{car.CarInfo}")</h2>
+                    <div class="horizontal-flex-container flex-container__justify-content__center flex-container__column-gap__0-5-rem">
+                        <form asp-action="Create" asp-controller="CustomerOrder" method="post">
+                            <input type="hidden" name="@nameof(car.CarId)" value="@car.CarId" asp-for="@car.CarId" />
+                            <button class="function-button" type="submit">Book Car</button>
+                        </form>
+                    </div>
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => car.Brand)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => car.Brand)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => car.Model)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => car.Model)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => car.ModelYear)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => car.ModelYear)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => car.Color)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => car.Color)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => car.Category)
+                        </dt>
+                        <dd>
+                            @car.Category.CategoryName;
+                        </dd>
+                    </dl>
+                    <div class="tiled-image-gallery">
+                        @foreach (var image in car.Images)
+                        {
+                            <figure>
+                                <div class="vertical-flex-container">
+                                    <img src="@image.Url" />
+                                </div>
+                            </figure>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else if (Model.HavePerformedCarSearch)
+        {
+            <p class="text-align-center">No cars found.</p>
+        }
+    </div>
+</div>

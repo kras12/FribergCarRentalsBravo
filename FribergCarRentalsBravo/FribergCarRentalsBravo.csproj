@@ -10,7 +10,6 @@
     <Folder Include="Attributes\" />
     <Folder Include="Components\" />
     <Folder Include="Data\" />
-    <Folder Include="Models\Order\" />
   </ItemGroup>
 
   <ItemGroup>
