@@ -216,7 +216,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                     LoginCustomer(customer);
                     return TempDataOrHomeRedirect();
                 }
-            return View(customer);
             }
 
             return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { LoginCustomerViewModel = loginCustomerViewModel });
