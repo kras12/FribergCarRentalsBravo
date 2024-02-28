@@ -1,26 +1,18 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.Customer
+﻿@model FribergCarRentalsBravo.DataAccess.Entities.AdminUser
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit your details</h1>
+<h1>Edit</h1>
+
+<h4>Admin</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CustomerId" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="AdminId" />
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
@@ -39,10 +31,7 @@
 </div>
 
 <div>
-    <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete your account?');">
-        <input type="hidden" name="id" value="@Model.CustomerId" asp-for="CustomerId" />
-        <button type="submit" class="btn btn-danger">Delete your account</button>
-    </form>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -8,63 +8,134 @@ using Microsoft.EntityFrameworkCore;
 using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
+using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.Helpers;
+using FribergCarRentalsBravo.Sessions;
+using FribergCarRentalsBravo.Models.Customers;
 
 namespace FribergCarRentalsBravo.Controllers.Customers
 {
     public class CustomerController : Controller
     {
+        #region Constants
+
+        /// <summary>
+        /// The key for the redirection data for the page to redirect to after logins. 
+        /// </summary>
+        public const string RedirectToPageTempDataKey = "CustomerLoginRedirectToPage";
+
+        #endregion
+
+        #region Fields
+
         public ICustomerRepository customerRep { get; }
+
+        #endregion
+
+        #region Constructors
 
         public CustomerController(ICustomerRepository customerRep)
         {
             this.customerRep = customerRep;
         }
 
+        #endregion
+
+        #region Actions
+
         // GET: CustomerController
-        public async Task<ActionResult> Index()
+        [HttpGet]
+        public ActionResult Authenticate()
         {
-            var customers = await customerRep.GetAllCustomers();
-            return View(customers);
-        }
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return TempDataOrHomeRedirect();
+            }
 
-        // GET: CustomerController/Details/5
-        public async Task<IActionResult> Details(int id)
-        {
-            return View(await customerRep.GetCustomerById(id));
-        }
-
-        // GET: CustomerController/Create
-        public ActionResult Create()
-        {
-            return View();
+            return View(new RegisterOrLoginCustomerViewModel());
         }
 
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create(RegisterCustomerViewModel registerCustomerViewModel)
         {
-            try
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                if (ModelState.IsValid)
+                return TempDataOrHomeRedirect();
+            }
+
+            if (ModelState.Count > 0 && ModelState.IsValid)
+            {
+                if (!DataTransferHelper.TryTransferData(registerCustomerViewModel, out Customer customer))
                 {
-                    await customerRep.CreateCustomer(customer);
-                    return RedirectToAction(nameof(Index));
+                    throw new Exception("Failed to transfer data from the view model to the entity.");
+                }
+
+                if (await customerRep.CustomerExists(customer.Email))
+                {
+                    // The key needs to be the name of the view model (instead of an empty string) because the error is shown in a partial view. 
+                    ModelState.AddModelError(nameof(RegisterCustomerViewModel), "An account already exists with that email.");
                 }
                 else
                 {
-                    return View();
-                }
+                    await customerRep.CreateCustomer(customer);
+                    LoginCustomer(customer);
+                    return TempDataOrHomeRedirect();
+                }                
             }
-            catch
+
+            return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { RegisterCustomerViewModel = registerCustomerViewModel });
+        }
+
+        // POST: CustomerController/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return View();
+                return RedirectToLogin(nameof(Index));
             }
+
+            if (id <= 0 || UserSessionHandler.GetUserData(HttpContext.Session).UserId != id)
+            {
+                throw new Exception($"Invalid ID: {id}");
+            }
+
+            if (ModelState.Count > 0 && ModelState.IsValid)
+            {
+                var customer = await customerRep.GetCustomerById(id);
+
+                if (customer != null)
+                {
+                    await customerRep.DeleteCustomer(customer);
+                    return Logout();
+                }
+            }            
+
+            throw new Exception($"Failed to delete the customer with id: {id}");
+        }
+
+        // GET: CustomerController/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Details), id);
+            }
+
+            return View(await customerRep.GetCustomerById(id));
         }
 
         // GET: CustomerController/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Edit), id);
+            }
+
             if (id == null || customerRep.GetAllCustomers == null)
             {
                 return NotFound();
@@ -84,6 +155,11 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Customer customer)
         {
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Edit), id);
+            }
+
             if (id != customer.CustomerId)
             {
                 return NotFound();
@@ -104,39 +180,105 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             return View();
         }
 
-        // GET: CustomerController/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        // GET: CustomerController
+        public async Task<IActionResult> Index()
         {
-            Customer customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return NotFound();
+                return RedirectToLogin(nameof(Index));
             }
-            return View(customer);
+
+            return View(await customerRep.GetCustomerById(UserSessionHandler.GetUserData(HttpContext.Session).UserId));
         }
 
-        // POST: CustomerController/Delete/5             
-
-        [HttpPost, ActionName("Delete")]
+        // Post: CustomerController
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> Login(LoginCustomerViewModel loginCustomerViewModel)
         {
-            var customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return NotFound();
+                return TempDataOrHomeRedirect();
             }
 
-            try
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                await customerRep.DeleteCustomer(customer);
-                return RedirectToAction(nameof(Index));
+                var customer = await customerRep.GetMatchingCustomerAsync(loginCustomerViewModel.Email, loginCustomerViewModel.Password);
+
+                if (customer is null)
+                {
+                    // TODO - IS this valid for this project?
+                    // The key needs to be the name of the view model (insted of empty string) because the error is shown in a partial view. 
+                    ModelState.AddModelError(nameof(LoginCustomerViewModel), "No account matched the entered email/password.");
+                }
+                else
+                {
+                    LoginCustomer(customer);
+                    return TempDataOrHomeRedirect();
+                }
+            return View(customer);
             }
-            catch (Exception)
-            {
-                ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
-                return View(customer);
-            }
+
+            return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { LoginCustomerViewModel = loginCustomerViewModel });
         }
+
+        // GET: CustomerController
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                UserSessionHandler.RemoveUserData(HttpContext.Session);
+            }
+
+            return RedirectToAction(nameof(HomeController.Index), ControllerHelper.GetControllerName<HomeController>());
+        }
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Saves the customer user data in the session storage. 
+        /// </summary>
+        /// <param name="customer">The customer to login.</param>
+        [NonAction]
+        private void LoginCustomer(Customer customer)
+        {
+            UserSessionHandler.SetUserData(HttpContext.Session,
+                    new UserSessionData(customer.CustomerId, customer.Email, UserRole.Customer));
+        }
+
+        /// <summary>
+        /// Redirects to the login page and request a redirect back afterwards. 
+        /// </summary>
+        /// <param name="action">The action to redirect to.</param>
+        /// <param name="id">An optional ID for the customer.</param>
+        /// <returns><see cref="IActionResult"/>.</returns>
+        private IActionResult RedirectToLogin(string action, int? id = null)
+        {
+            RouteValueDictionary? routeValues = id is not null ? new RouteValueDictionary(new { id = id }) : null;
+
+            TempDataHelper.Set(TempData, RedirectToPageTempDataKey, new RedirectToActionData(
+                    action, ControllerHelper.GetControllerName<CustomerController>(), routeValues: routeValues));
+
+            return RedirectToAction(nameof(Login), ControllerHelper.GetControllerName<CustomerController>());
+        }
+
+        /// <summary>
+        /// Redirects the customer to the page stored in the temp storage if such data exists, else redirects the customer to the homepage. 
+        /// </summary>
+        /// <returns><see cref="IActionResult"/>.</returns>
+        [NonAction]
+        private ActionResult TempDataOrHomeRedirect()
+        {
+            if (TempDataHelper.TryGet<RedirectToActionData>(TempData, RedirectToPageTempDataKey, out var data))
+            {
+                return RedirectToAction(data.Action, data.Controller, data.RouteValues);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
     }
 }

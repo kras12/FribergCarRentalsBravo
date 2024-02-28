@@ -1,4 +1,5 @@
-﻿@model IEnumerable<FribergCarRentalsBravo.DataAccess.Entities.Customer>
+﻿@using FribergCarRentalsBravo.DataAccess.Entities
+@model IEnumerable<Customer>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +8,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create" asp-controller="Customer">Skapa ny kund</a>
+    <a asp-action="Create" asp-controller="AdminCustomer">Skapa ny kund</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +50,9 @@
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                    <a asp-action="Edit" asp-controller="Customer" asp-route-id="@item.CustomerId">Ändra</a> |
-                    <a asp-action="Details" asp-controller="Customer" asp-route-id="@item.CustomerId">Detaljer</a> |
-                    <a asp-action="Delete" asp-controller="Customer" asp-route-id="@item.CustomerId">Ta bort</a>
+                    <a asp-action="Edit" asp-controller="AdminCustomer" asp-route-id="@item.CustomerId">Ändra</a> |
+                    <a asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@item.CustomerId">Detaljer</a> |
+                    <a asp-action="Delete" asp-controller="AdminCustomer" asp-route-id="@item.CustomerId">Ta bort</a>
             </td>
         </tr>
 }
