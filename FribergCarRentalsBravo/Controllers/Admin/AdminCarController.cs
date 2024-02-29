@@ -348,35 +348,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
                     redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
-        }
-
-
-
-
-
-
-
-        /// <summary>
-        /// Filters cars booked between two set dates and lists them. 
-        /// </summary>
-        /// <param name="startDate">Date of the period start</param>
-        /// <param name="endDate">Date of the period end</param>
-        //public async Task<IActionResult> StageListAsync(DateTime? startDate, DateTime? endDate)
-        //{
-        //    var cars = from c in _carRepository.GetAllAsync()
-        //               join o in orderRepository.GetType on c.CarId equals o.Car.CarId
-        //               select c;
-
-        //    if (startDate != null && endDate != null)
-        //    {
-        //        cars = cars.Where(c => c.Orders.Any(o => o.StartDate <= endDate && o.EndDate >= startDate));
-        //    }
-
-        //    var carViewModels = cars.Select(c => new CarViewModel(c));
-
-        //    return View(await carViewModels.ToListAsync());
-        //}
-
+        }                   
 
         #endregion
     }
