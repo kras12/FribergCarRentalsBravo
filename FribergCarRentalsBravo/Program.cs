@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.Shared.SharedClasses;
 using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 
 namespace FribergCarRentalsBravo
 {
@@ -17,11 +18,17 @@ namespace FribergCarRentalsBravo
             builder.Services.AddControllersWithViews();
 
             // DB Context
-
-            // Repositories
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString(AppSettingsHelper.ApplicationDbContextConnectionStringKey)));
-            builder.Services.AddTransient<ICarCategory, CarCategoryRepository>();
+
+            // Repositories
+            builder.Services.AddTransient<IAdminRepository, AdminRepository>();
+            builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+            builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
+            builder.Services.AddTransient<ICarRepository, CarRepository>();
+            builder.Services.AddTransient<IOrderRepository, OrderRepository>();
+
+
             // Sessions
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>

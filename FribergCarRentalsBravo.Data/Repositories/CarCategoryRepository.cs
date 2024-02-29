@@ -1,10 +1,11 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.Data
 {
-    public class CarCategoryRepository : ICarCategory
+    public class CarCategoryRepository : ICarCategoryRepository
     {
         private ApplicationDbContext applicationDbContext;
 
@@ -30,7 +31,7 @@ namespace FribergCarRentalsBravo.Data
             return await applicationDbContext.CarCategories.OrderBy(x => x.CarCategoryId).ToListAsync();
         }
 
-        public async Task<CarCategory> GetByIdAsync(int id)
+        public async Task<CarCategory?> GetByIdAsync(int id)
         {
             return await applicationDbContext.CarCategories.FirstOrDefaultAsync(x => x.CarCategoryId == id);
         }

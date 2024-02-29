@@ -2,7 +2,14 @@
 {
     public class CarCategory
     {
+       
+
+        #region Properties
+
         public int CarCategoryId { get; set; }
-        public string Name { get; set; }
+
+        public string Name { get; set; } = "";
+
+        #endregion
     }
 }
