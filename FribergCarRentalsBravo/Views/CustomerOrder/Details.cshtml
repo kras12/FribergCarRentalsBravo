@@ -1,0 +1,133 @@
+﻿@using FribergCarRentalsBravo.Models.Orders
+@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+
+<div class="d-flex flex-column gap-4 align-items-center">
+    @if (Model.IsNewOrder)
+    {
+        <h1>Thank you for your order!</h1>
+        <p class="text-align-center">Details of your order can be found below.</p>
+    }
+    else
+    {
+        <h1>@($"Order - #{Model.CarOrderId}")</h1>
+    }
+    <div class="horizontal-flex-container flex-container__justify-content__center flex-container__column-gap__0-5-rem">
+        @{ 
+            // TODO -  Implement button to order list 
+        }
+        @* <a asp-action="List" class="button navigational-button">View Orders</a> *@
+        @if (Model.IsCancelable)
+        {
+            <form asp-action="Cancel" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                <input type="hidden" name="id" asp-for="CarOrderId" />
+                <button type="submit" class="btn btn-danger">Cancel Order</button>
+            </form>
+        }
+    </div>
+    @{
+        // TODO -  Create message to confirm delete?
+    }
+    <div class="d-flex flex-column gap-2 align-items-center container-fluid filled-container">
+        <div class="d-flex flex-column gap-2 align-items-center">
+            @if (Model.IsCancelled)
+            {
+                <h2 class="text-danger">Cancelled</h2>
+            }
+            <h3>Order Details</h3>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.CarOrderId)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.CarOrderId)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Customer.CustomerId)
+                </dt>
+                <dd>
+                        @Html.DisplayFor(model => model.Customer.CustomerId)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Customer.FullName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Customer.FullName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrderSum)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderSum)
+                </dd>
+            </dl>
+        </div>
+        <div class="d-flex flex-column gap-2 align-items-center">
+            <h3>Booked Car</h3>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Car.Brand)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Car.Brand)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Car.Model)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Car.Model)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Car.ModelYear)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Car.ModelYear)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Car.Color)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Car.Color)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Car.RegistrationNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Car.RegistrationNumber)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.CarPickupDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.CarPickupDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.CarReturnDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.CarReturnDate)
+                </dd>
+            </dl>
+            <div class="tiled-image-gallery">
+                @foreach (var image in Model.Car.Images)
+                {
+                    <figure>
+                        <div class="d-flex flex-column">
+                            <img src="@image.Url" />
+                        </div>
+                    </figure>
+                }
+            </div>
+        </div>
+    </div>
+</div>

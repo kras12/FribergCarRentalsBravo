@@ -207,7 +207,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
 
                 if (customer is null)
                 {
-                    // TODO - IS this valid for this project?
                     // The key needs to be the name of the view model (insted of empty string) because the error is shown in a partial view. 
                     ModelState.AddModelError(nameof(LoginCustomerViewModel), "No account matched the entered email/password.");
                 }
