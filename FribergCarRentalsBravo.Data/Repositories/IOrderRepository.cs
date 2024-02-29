@@ -14,6 +14,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         Task DeleteOrderAsync(Order order);
         Task<Order> EditOrderAsync(Order order);
         Task<List<Order>> GetAllOrdersAsync();
-        Task<Order> GetOrderByIdAsync(int id);
+        Task<Order?> GetOrderByIdAsync(int id);
+        public Task<bool> TryCancelOrderAsync(int id);
     }
 }

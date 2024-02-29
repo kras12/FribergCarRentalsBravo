@@ -126,14 +126,51 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <summary>
         /// Returns all the cars that matches the specified category and that are available to be rented out within the desired timespan. 
         /// </summary>
-        /// <param name="category">The category of the car.</param>
-        /// <param name="fromDate">The start date of the rental period.</param>
-        /// <param name="toDate">The stop date of the rental period.</param>
+        /// <param name="pickupDate">The pickup date for the car.</param>
         /// <remarks>Returned cars will not be tracked by EF Core.</remarks>
+        /// <param name="category">The category of the car.</param>
         /// <returns>A <see cref="Task{TResult}"/> containing a collection of matching cars.</returns>
-        public async Task<IEnumerable<Car>> GetRentableCarsAsync(CarCategory category, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, CarCategory? category = null)
         {
-            throw new NotImplementedException();
+            if (category is not null)
+            {
+                return await _databaseContext.Cars
+                .Include(car => car.Category)
+                .Include(car => car.Images)
+                .GroupJoin(
+                    _databaseContext.Orders,
+                    car => car.CarId,
+                    order => order.Car.CarId,
+                    (car, orders) => new
+                    {
+                        car,
+                        orders
+                    }
+                )
+                .Where(orderGroup => (!orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate)) && orderGroup.car.Category == category)
+                .Select(orderGroup => orderGroup.car)
+                .ToListAsync();
+            }
+            else
+            {
+                return await _databaseContext.Cars
+                .Include(car => car.Category)
+                .Include(car => car.Images)
+                .GroupJoin(
+                    _databaseContext.Orders,
+                    car => car.CarId,
+                    order => order.Car.CarId,
+                    (car, orders) => new
+                    {
+                        car,
+                        orders
+                    }
+                )
+                .Where(orderGroup => !orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate))
+                .Select(orderGroup => orderGroup.car)
+                .ToListAsync();
+            }
+            
         }
 
         /// <summary>
