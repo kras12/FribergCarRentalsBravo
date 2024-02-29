@@ -8,5 +8,6 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
     public interface IOrderRepository
     {
+    
     }
 }
