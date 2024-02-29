@@ -1,0 +1,96 @@
+﻿@using FribergCarRentalsBravo.Models.Admin
+@model PendingCarsViewModel
+
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<div class="d-flex flex-column gap-4 align-items-center">
+    <h1>Book Car</h1>
+    <div class="d-flex flex-row gap-2 align-items-center">
+        <form asp-action="PendingCars" class="vertical-form">
+            <div class="d-flex flex-row gap-3 align-items-center">
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="error-text"></div>
+                </div>
+                <div class="form-group d-flex flex-column">
+                    <label asp-for="StartDateFilter"></label>
+                    <input type="date" asp-for="StartDateFilter" />
+                    <span asp-validation-for="StartDateFilter" class="error-text"></span>
+                </div>
+                <div class="form-group d-flex flex-column">
+                    <label asp-for="EndDateFilter"></label>
+                    <input type="date" asp-for="EndDateFilter" />
+                    <span asp-validation-for="EndDateFilter" class="error-text"></span>
+                </div>
+                <div class="form-group d-flex flex-column align-self-end">
+                    <button class="btn btn-primary" type="submit">Find</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div></div>
+    <div class="d-flex flex-column gap-4 align-items-center">
+        @if (Model.Orders.Count > 0)
+        {
+            @foreach (var order in Model.Orders)
+            {
+                <div id="@order.Car.CarId" class="d-flex flex-column gap-2 align-items-center filled-container">
+                    <h2>@($"{order.Car.CarInfo}")</h2>
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.CarPickupDate)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => order.CarPickupDate)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.Car.Brand)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => order.Car.Brand)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.Car.Model)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => order.Car.Model)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.Car.ModelYear)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => order.Car.ModelYear)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.Car.Color)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => order.Car.Color)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => order.Car.Category)
+                        </dt>
+                        <dd>
+                            @order.Car.Category.CategoryName
+                        </dd>
+                    </dl>
+                    <div class="tiled-image-gallery">
+                        @foreach (var image in order.Car.Images)
+                        {
+                            <figure>
+                                <div class="vertical-flex-container">
+                                    <img src="@image.Url" />
+                                </div>
+                            </figure>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else if (Model.HavePerformedCarSearch)
+        {
+            <p class="text-align-center">No cars found.</p>
+        }
+    </div>
+</div>
