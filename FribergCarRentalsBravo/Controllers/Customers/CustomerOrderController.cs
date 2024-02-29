@@ -4,6 +4,7 @@ using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
 using FribergCarRentalsBravo.Helpers;
+using FribergCarRentalsBravo.Models.Admin;
 using FribergCarRentalsBravo.Models.Cars;
 using FribergCarRentalsBravo.Models.Orders;
 using FribergCarRentalsBravo.Sessions;

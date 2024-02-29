@@ -11,6 +11,8 @@ using FribergCarRentalsBravo.DataAccess.Repositories;
 using FribergCarRentalsBravo.Sessions;
 using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.Helpers;
+using FribergCarRentals.Models.Orders;
+using FribergCarRentalsBravo.Models.Admin;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
@@ -183,6 +185,49 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: CustomerOrderController/PendingCars
+        public async Task<IActionResult> PendingCars()
+        {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(PendingCars));
+            }
+
+            return View(new PendingCarsViewModel(havePerformedCarSearch: false));
+        }
+
+        // POST: CustomerOrderController/PendingCars
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PendingCars(PendingCarsViewModel pendingCarsViewModel)
+        {
+            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(PendingCars));
+            }
+
+            if (ModelState.Count > 0 && ModelState.IsValid)
+            {
+                if (pendingCarsViewModel.EndDateFilter!.Value.Date < pendingCarsViewModel.StartDateFilter!.Value.Date)
+                {
+                    ModelState.AddModelError($"{nameof(BookCarViewModel.ReturnDate)}",
+                        "The return date can't occur before the pickup date.");
+                }
+                else
+                {
+                    var orders = (await orderRepo.GetPendingPickups(pendingCarsViewModel.StartDateFilter.Value, pendingCarsViewModel.EndDateFilter.Value)).ToList();
+
+                    return View(new PendingCarsViewModel(
+                        havePerformedCarSearch: true,
+                        orders: orders,
+                        startDateFilter: pendingCarsViewModel.StartDateFilter,
+                        endDateFilter: pendingCarsViewModel.EndDateFilter));
+                }
+            }
+
+            return View(pendingCarsViewModel);
+        }      
 
         #region OtherMethods
 

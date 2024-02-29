@@ -63,7 +63,6 @@ namespace FribergCarRentalsBravo.Models.Orders
         /// <summary>
         /// The car pickup date.
         /// </summary>
-        /// <remarks>The date is saved in the database with the time component stripped off.</remarks>
         [DisplayName("Pickup Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
         [BindNever]
@@ -72,7 +71,6 @@ namespace FribergCarRentalsBravo.Models.Orders
         /// <summary>
         /// The car return date.
         /// </summary>
-        /// <remarks>The date is saved in the database with the time component stripped off.</remarks>
         [DisplayName("Return Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DateFormatString)]
         [BindNever]
