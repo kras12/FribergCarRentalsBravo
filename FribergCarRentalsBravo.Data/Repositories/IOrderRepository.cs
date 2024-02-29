@@ -16,5 +16,13 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order?> GetOrderByIdAsync(int id);
         public Task<bool> TryCancelOrderAsync(int id);
+
+        /// <summary>
+        /// Returns all orders having cars that are due to get picked up within the specified interval.
+        /// </summary>
+        /// <param name="startDate">The start of the date interval.</param>
+        /// <param name="endDate">The end of the date interval.</param>
+        /// <returns></returns>
+        public Task<IEnumerable<Order>> GetPendingPickups(DateTime startDate, DateTime endDate);
     }
 }
