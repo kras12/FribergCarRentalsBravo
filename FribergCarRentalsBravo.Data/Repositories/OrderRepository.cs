@@ -63,5 +63,16 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
             return false;
         }
+
+        /// <summary>
+        /// Returns all orders having cars that are due to get picked up within the specified interval.
+        /// </summary>
+        /// <param name="startDate">The start of the date interval.</param>
+        /// <param name="endDate">The end of the date interval.</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Order>> GetPendingPickups(DateTime startDate, DateTime endDate)
+        {
+            return await applicationDbContext.Orders.Where(x => x.PickupDate >= startDate && x.PickupDate <= endDate).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
+        }
     }
 }

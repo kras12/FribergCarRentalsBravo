@@ -169,8 +169,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
                 .Where(orderGroup => !orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate))
                 .Select(orderGroup => orderGroup.car)
                 .ToListAsync();
-            }
-            
+            }            
         }
 
         /// <summary>
