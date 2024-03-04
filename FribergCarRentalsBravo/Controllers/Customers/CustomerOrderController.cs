@@ -15,6 +15,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FribergCarRentalsBravo.Controllers.Customers
 {
+    [Route($"Customer/Order/[action]")]
     public class CustomerOrderController : Controller
     {
         #region Constants
@@ -144,6 +145,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         }
 
         // GET: CustomerOrderController/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
@@ -235,27 +237,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             }
 
             throw new Exception($"Failed to create an order for the car with id: {bookCarViewModel.CarId} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
-        }
-
-        // GET: CustomerOrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CustomerOrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         #endregion
