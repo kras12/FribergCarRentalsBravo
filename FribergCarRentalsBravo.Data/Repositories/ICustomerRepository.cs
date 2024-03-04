@@ -10,6 +10,8 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         Task DeleteCustomer(Customer customer);
 
+        Task DeleteCustomerByIdAsync(int id);
+
         Task<Customer> EditCustomer(Customer customer);
 
         Task<List<Customer>> GetAllCustomers();

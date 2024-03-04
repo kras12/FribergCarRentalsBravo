@@ -1,15 +1,13 @@
-﻿@using FribergCarRentalsBravo.DataAccess.Entities
-@model Customer
+﻿@using FribergCarRentalsBravo.Models.Customers
+@model RegisterCustomerViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Customer";
 }
 
-<h1>Create</h1>
-
-<h4>Customer</h4>
-<hr />
-<div class="row">
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Create Customer</h1>
+    <hr />
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -38,11 +36,12 @@
             </div>
         </form>
     </div>
+    <div>
+        <a asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
+    </div>
 </div>
 
-<div>
-    <a asp-action="Index" asp-controller="AdminCustomer">Tillbaka till Index</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

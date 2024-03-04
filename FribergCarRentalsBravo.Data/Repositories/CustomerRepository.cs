@@ -30,8 +30,20 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             await applicationDbContext.SaveChangesAsync();
         }
 
+        public Task DeleteCustomerByIdAsync(int id)
+        {
+            var customer = new Customer() { CustomerId = id };
+            applicationDbContext.Customers.Remove(customer);
+            return applicationDbContext.SaveChangesAsync();
+        }
+
         public async Task<Customer> EditCustomer(Customer customer)
         {
+            if (customer.Password is null)
+            {
+                customer.Password = await applicationDbContext.Customers.Where(x => x.CustomerId == customer.CustomerId).Select(x => x.Password).SingleAsync();
+            }
+
             applicationDbContext.Update(customer);
             await applicationDbContext.SaveChangesAsync();
             return customer;
