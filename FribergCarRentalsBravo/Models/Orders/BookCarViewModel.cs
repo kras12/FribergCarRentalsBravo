@@ -81,14 +81,6 @@ namespace FribergCarRentals.Models.Orders
         public List<CarCategoryViewModel> AvailableCarCategoryFilters { get; set; } = new();
 
         /// <summary>
-        /// The ID of the car for the order.
-        /// </summary>
-        [DisplayName("Car ID")]
-        [Required]
-        [Range(0, int.MaxValue, ErrorMessage = "The value must be a positive number.")]
-        public int CarId { get; set; }
-
-        /// <summary>
         /// Returns true if the user have performed a car search. 
         /// </summary>
         public bool HavePerformedCarSearch { get; }
@@ -99,6 +91,7 @@ namespace FribergCarRentals.Models.Orders
         /// <remarks>
         /// An ID of zero represents no filter. 
         /// </remarks>
+        [DisplayName("Category")]
         [Required]
         public int SelectedCarCategoryFilter { get; set; }
 

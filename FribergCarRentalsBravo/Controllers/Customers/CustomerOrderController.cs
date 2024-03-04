@@ -91,7 +91,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             return View(new BookCarViewModel(availableCarCategoryFilters: (await _carCategoryRepository.GetAllAsync()).ToList(), havePerformedCarSearch: false));
         }
 
-        // POST: CustomerOrderController/BookAsync
+        // POST: CustomerOrderController/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(BookCarViewModel bookCarViewModel)
@@ -175,37 +175,32 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Cancel), id);
             }
 
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
+            if (await _orderRepository.TryCancelOrderAsync(id))
             {
-                if (await _orderRepository.TryCancelOrderAsync(id))
+                TempDataHelper.Set(TempData, CanceledOrderIdTempDataKey, id);
+
+                if (TempDataHelper.TryGet(TempData, CanceledOrderRedirectToPageTempDataKey, out RedirectToActionData? data))
                 {
-                    TempDataHelper.Set(TempData, CanceledOrderIdTempDataKey, id);
-
-                    if (TempDataHelper.TryGet(TempData, CanceledOrderRedirectToPageTempDataKey, out RedirectToActionData? data))
-                    {
-                        return RedirectToAction(data.Action, data.Controller, data.RouteValues);
-                    }
-                    else
-                    {
-                        return RedirectToAction(nameof(Details), new { id = id });
-                    }
+                    return RedirectToAction(data.Action, data.Controller, data.RouteValues);
                 }
-
-                throw new Exception($"Failed to cancel order with id: {id} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId}");
+                else
+                {
+                    return RedirectToAction(nameof(Details), new { id = id });
+                }
             }
 
-            throw new Exception($"Model validation failed: CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
+            throw new Exception($"Failed to cancel order with id: {id} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId}");
         }
 
-        // POST: CustomerOrderController/Book
+        // POST: CustomerOrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BookCarViewModel bookCarViewModel)
+        public async Task<IActionResult> Create(CreateOrderViewModel bookCarViewModel)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {

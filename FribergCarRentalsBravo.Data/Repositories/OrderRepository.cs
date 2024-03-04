@@ -20,6 +20,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         public async Task<Order> CreateOrderAsync(Order order)
         {
+            if (!order.Car.IsActive)
+            {
+                throw new Exception("Can't create an order for an inactive car.");
+            }
+
             applicationDbContext.Attach(order.Car);
             applicationDbContext.Attach(order.Customer);
             applicationDbContext.Add(order);
