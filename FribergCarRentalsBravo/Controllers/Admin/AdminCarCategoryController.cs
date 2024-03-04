@@ -129,7 +129,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // POST: CarCategory/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditCarCategoryViewModel editCarCategoryViewModel)
         {
@@ -137,7 +137,6 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             {
                 return RedirectToLogin(nameof(Edit));
             }
-
 
             if (ModelState.Count > 0 && ModelState.IsValid)
             {
@@ -147,7 +146,8 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 }
 
                 await carCategoryRepo.UpdateCarCategoryAsync(carCategory);
-                return RedirectToAction(nameof(Index));
+                // TODO - Add user message
+                return View(editCarCategoryViewModel);
             }
 
             return View(editCarCategoryViewModel);
