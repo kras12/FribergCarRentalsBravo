@@ -1,35 +1,51 @@
-﻿@model IEnumerable<FribergCarRentalsBravo.DataAccess.Entities.CarCategory>
+﻿@using FribergCarRentals.Models.Other
+@using FribergCarRentalsBravo.Models.Cars
+@model ListViewModel<CarCategoryViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Car Categories";
 }
 
-<h1>Index</h1>
+<h1>Car Categories</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create Category</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CarCategoryId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CarCategoryId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarCategoryId">Delete</a>
-            </td>
-        </tr>
+@if (Model.Count <= 0)
+{
+    <p class="text-align-center">No categories found.</p>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Models[0].CategoryName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Models)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => category.CategoryName)
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            <a asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a>
+                            <a asp-action="Details" asp-route-id="@category.CategoryId">Details</a>
+                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                <input type="hidden" name="id" value="@category.CategoryId" asp-for="@category.CategoryId" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

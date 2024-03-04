@@ -1,4 +1,5 @@
-﻿using FribergCarRentalsBravo.Data;
+﻿using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.Helpers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -9,7 +10,7 @@ namespace FribergCarRentalsBravo.Models.Cars
     /// <summary>
     /// A view model class that handles data for a car category. 
     /// </summary>
-    public class CarCategoryViewModel
+    public class CarCategoryViewModel : ViewModelBase
     {
         #region Constructors
 
@@ -18,7 +19,7 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// </summary>
         /// <param name="category">The car category to model.</param>
         public CarCategoryViewModel(CarCategory category)
-            : this(category.CarCategoryId, category.Name)
+            : this(category.CarCategoryId, category.CategoryName)
         {
 
         }
