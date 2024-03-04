@@ -216,20 +216,17 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
-            {
-                var car = await _carRepository.GetByIdAsync(id);
+            var car = await _carRepository.GetByIdAsync(id);
 
-                if (car is not null)
-                {
-                    var carCategories = await _carCategoryRepository.GetAllAsync();
-                    EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
-                    TempDataHelper.Set(TempData, PageSubTitleTempDataKey, viewModel.PageSubTitle!);
-                    return View(viewModel);
-                }
+            if (car is not null)
+            {
+                var carCategories = await _carCategoryRepository.GetAllAsync();
+                EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
+                TempDataHelper.Set(TempData, PageSubTitleTempDataKey, viewModel.PageSubTitle!);
+                return View(viewModel);
             }
 
-            throw new Exception($"Failed to show the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
+            throw new Exception($"Failed to find the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
         }
 
         // POST: AdminCarController/Edit/5
