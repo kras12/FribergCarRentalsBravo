@@ -14,7 +14,7 @@ namespace FribergCarRentalsBravo.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var orders = await orderRep.GetAllTodaysOrdersAsync();
+            var orders = await orderRep.GetAllTodaysPickupsAsync();
             return View(orders);
         }
     }
