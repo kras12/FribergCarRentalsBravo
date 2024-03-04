@@ -147,7 +147,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             if (car is null)
             {
-                throw new Exception($"No car cound with ID '{id}'.");
+                throw new Exception($"No car found with ID '{id}'.");
             }
 
             if (car!.Images.Count > 0)
@@ -182,21 +182,18 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
+            var car = await _carRepository.GetByIdAsync(id);
+
+            if (car is not null)
             {
-                var car = await _carRepository.GetByIdAsync(id);
+                CarViewModel viewModel = new CarViewModel(car);
 
-                if (car is not null)
+                if (TempDataHelper.TryGet(TempData, CreatedCarIdTempDataKey, out int carId))
                 {
-                    CarViewModel viewModel = new CarViewModel(car);
-
-                    if (TempDataHelper.TryGet(TempData, CreatedCarIdTempDataKey, out int carId))
-                    {
-                        viewModel.Messages.Add(UserMesssageHelper.CreateCarCreationSuccessMessage(carId));
-                    }
-
-                    return View(viewModel);
+                    viewModel.Messages.Add(UserMesssageHelper.CreateCarCreationSuccessMessage(carId));
                 }
+
+                return View(viewModel);
             }
 
             throw new Exception($"Failed to show the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
