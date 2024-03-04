@@ -45,6 +45,8 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// The ID of the selected category.
         /// </summary>
+        [Required]
+        [Range(1, int.MaxValue)]
         public int SelectedCategoryId { get; set; } 
 
         /// <summary>
