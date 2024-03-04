@@ -1,31 +1,44 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.Order
+﻿@using FribergCarRentals.Models.Orders
+@model EditOrderViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Order";
 }
 
-<h1>Edit</h1>
-
-<h4>Order</h4>
-<hr />
-<div class="row">
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Edit Order</h1>
+    <hr />
     <div class="col-md-4">
+        <dl>
+            <div class="d-flex flex-row gap-2">
+                <dt>
+                    Order ID:
+                </dt>
+                <dd>
+                    @(Model.OrderId)
+                </dd>
+            </div>
+            <div class="d-flex flex-row gap-2">
+                <dt>
+                    Order Date:
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.OrderDate)
+                </dd>
+            </div>
+        </dl>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />
-            <div class="form-group">
-                <label asp-for="OrderDate" class="control-label"></label>
-                <input asp-for="OrderDate" class="form-control" />
-                <span asp-validation-for="OrderDate" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="OrderDate" />
             <div class="form-group">
                 <label asp-for="PickupDate" class="control-label"></label>
-                <input asp-for="PickupDate" class="form-control" />
+                <input type="date" asp-for="PickupDate" class="form-control" />
                 <span asp-validation-for="PickupDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReturnDate" class="control-label"></label>
-                <input asp-for="ReturnDate" class="form-control" />
+                <input type="date" asp-for="ReturnDate" class="form-control" />
                 <span asp-validation-for="ReturnDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -33,15 +46,14 @@
                 <input type="number" asp-for="CostPerDay" class="form-control" />
                 <span asp-validation-for="CostPerDay" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group d-flex justify-content-center">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

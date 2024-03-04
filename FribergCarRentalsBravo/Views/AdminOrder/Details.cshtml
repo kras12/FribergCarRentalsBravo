@@ -1,15 +1,14 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.Order
+﻿@using FribergCarRentalsBravo.Models.Orders
+@model OrderViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Order";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Order</h4>
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Order</h1>
     <hr />
-    <dl class="row">
+    <dl class="row filled-container">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OrderDate)
         </dt>
@@ -17,26 +16,26 @@
             @Html.DisplayFor(model => model.OrderDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PickupDate)
+            @Html.DisplayNameFor(model => model.CarPickupDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PickupDate)
+            @Html.DisplayFor(model => model.CarPickupDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReturnDate)
+            @Html.DisplayNameFor(model => model.CarReturnDate)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReturnDate)
+            @Html.DisplayFor(model => model.CarReturnDate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CostPerDay)
+            @Html.DisplayNameFor(model => model.RentalCostPerDay)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CostPerDay)
+            @Html.DisplayFor(model => model.RentalCostPerDay)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.OrderId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.CarOrderId">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
