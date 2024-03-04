@@ -84,6 +84,8 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task"/> object.</returns>
         public Task UpdateAsync(Car car);
 
+        Task<int> GetAmountOfCarsAsync();
+
         #endregion
     }
 }

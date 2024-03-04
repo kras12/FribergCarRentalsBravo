@@ -64,6 +64,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             return false;
         }
 
+        public async Task<int> GetAmountOfOrdersAsync()
+        {
+            return applicationDbContext.Orders.Count();
+        }
+
         /// <summary>
         /// Returns all orders having cars that are due to get picked up within the specified interval.
         /// </summary>
@@ -74,5 +79,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         {
             return await applicationDbContext.Orders.Where(x => x.PickupDate >= startDate && x.PickupDate <= endDate).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
         }
+
+        public async Task<IEnumerable<Order>> GetAllTodaysPickupsAsync()
+        {
+            return await applicationDbContext.Orders.Where(x => x.PickupDate == DateTime.Today && x.IsCanceled == false).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
+        }
+
     }
 }
