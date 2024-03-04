@@ -18,6 +18,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         /// The key for the redirection data for the page to redirect to after logins. 
         /// </summary>
         public const string RedirectToPageTempDataKey = "AdminLoginRedirectToPage";
+        
 
         #endregion
 
@@ -27,14 +28,26 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         /// The injected admin repository.
         /// </summary>
         public IAdminRepository adminRep { get; }
+        private readonly ICustomerRepository customerRep;
+        private readonly ICarRepository carRep;
+        private readonly ICarCategoryRepository carCategoryRep;
+        private readonly IOrderRepository orderRep;
 
         #endregion
 
         #region Constructors
 
-        public AdminController(IAdminRepository adminRep)
+        public AdminController(IAdminRepository adminRep, 
+                              ICustomerRepository customerRep, 
+                              ICarRepository carRep,
+                              ICarCategoryRepository carCategoryRep,
+                              IOrderRepository orderRep)
         {
             this.adminRep = adminRep;
+            this.customerRep = customerRep;
+            this.carRep = carRep;
+            this.carCategoryRep = carCategoryRep;
+            this.orderRep = orderRep;
         }
 
         #endregion
@@ -114,6 +127,18 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             if (admin is not null)
             {
+                var customerAmount = await customerRep.GetAmountOfCustomersAsync();
+                ViewBag.CustomerAmount = customerAmount.ToString();
+
+                var carAmount = await carRep.GetAmountOfCarsAsync();
+                ViewBag.CarAmount = carAmount.ToString();
+
+                var carCategoryAmount = await carCategoryRep.GetAmountOfCarCategoriesAsync();
+                ViewBag.CarCategoryAmount = carCategoryAmount.ToString();
+
+                var orderAmount = await orderRep.GetAmountOfOrdersAsync();
+                ViewBag.OrderAmount = orderAmount.ToString();
+
                 return View(admin);
             }
 

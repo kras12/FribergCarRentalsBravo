@@ -71,5 +71,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
             return null;
         }
+
+        public async Task<int> GetAmountOfCustomersAsync()
+        {
+            return applicationDbContext.Customers.Count();
+        }
+
     }
 }

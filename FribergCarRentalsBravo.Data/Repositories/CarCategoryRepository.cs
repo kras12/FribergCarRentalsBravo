@@ -48,5 +48,10 @@ namespace FribergCarRentalsBravo.Data
             applicationDbContext.Attach(carCategory).State = EntityState.Modified;
             await applicationDbContext.SaveChangesAsync();
         }
+
+        public async Task<int> GetAmountOfCarCategoriesAsync()
+        {
+            return applicationDbContext.CarCategories.Count();
+        }
     }
 }

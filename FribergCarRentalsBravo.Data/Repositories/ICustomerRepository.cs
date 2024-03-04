@@ -19,5 +19,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         Task<Customer> GetCustomerById(int id);
 
         public Task<Customer?> GetMatchingCustomerAsync(string email, string password);
+
+        Task<int> GetAmountOfCustomersAsync();
     }
 }
