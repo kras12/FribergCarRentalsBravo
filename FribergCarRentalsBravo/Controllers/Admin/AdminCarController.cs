@@ -296,16 +296,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             return View(editCarViewModel);
         }
 
-        // GET: AdminCarController/List
-        public async Task<IActionResult> List()
+        // GET: AdminCarController
+        public async Task<IActionResult> Index()
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(List));
+                return RedirectToLogin(nameof(Index));
             }
 
             ListViewModel<CarViewModel> carListViewModel = new((await _carRepository.GetAllAsync()).Select(x => new CarViewModel(x)));
-            SaveRedirectBackInstructionsForDeleteCarAction(nameof(List));
+            SaveRedirectBackInstructionsForDeleteCarAction(nameof(Index));
 
             if (TempDataHelper.TryGet(TempData, DeletedCarIdTempDataKey, out int deletedCarId))
             {
