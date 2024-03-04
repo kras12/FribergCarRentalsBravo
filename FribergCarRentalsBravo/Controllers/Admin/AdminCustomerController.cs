@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
+    [Route($"Admin/Customers/[action]")]
     public class AdminCustomerController : Controller
     {
         #region Constants
@@ -51,6 +52,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // GET: CustomerController/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -98,6 +100,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // GET: CustomerController/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -122,7 +125,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         }
 
         // POST: CustomerController/Edit/5
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditCustomerViewModel editCustomerViewModel)
         {
