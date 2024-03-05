@@ -11,44 +11,44 @@
 </div>
 
 <div class="d-flex flex-column gap-2 align-items-center">
-    <h2>Statistics</h2>
-    <h3>Total amount of:</h3>
+    <h2 style="border-bottom: 0.2em solid; border-bottom-color: #fdc53e; margin-bottom: 0">Statistics</h2>
+    <h3 style="border-top: 0.2em solid; border-top-color: #df540f">Total amount of:</h3>
 
     <div style="margin-bottom: 1em" class="d-flex flex-row gap-5">
         <div style="text-align:center">
-            <div style="border:solid; border-width: 2px; padding:1em; width: 15em; height: 6em">
+            <div class="div-statistics-left">
                 <h5 style="text-align:center">Registered customers</h5>
                 <p style="text-align:center; font-size:x-large">@ViewBag.CustomerAmount</p>
             </div>
-            <a asp-controller="AdminCustomer" asp-action="Index">-Go to list of all customers-</a>
+            <a class="route-links-table" asp-controller="AdminCustomer" asp-action="Index">-List of all customers-</a>
         </div>
         <div style="text-align:center">
-            <div style="border:solid; border-width: 2px; padding:1em; width: 15em; height: 6em">
+            <div class="div-statistics-right">
                 <h5 style="text-align:center">Cars in the fleet</h5>
                 <p style="text-align:center; font-size:x-large">@ViewBag.CarAmount</p>
             </div>
-            <a asp-controller="AdminCar" asp-action="Index">-Go to list of all cars-</a>
+            <a class="route-links-table" asp-controller="AdminCar" asp-action="Index">-List of all cars-</a>
         </div>
     </div>
     <div class="d-flex flex-row gap-5">
         <div style="text-align:center">
-            <div style="border:solid; border-width: 2px; padding:1em; width: 15em; height: 6em">
+            <div class="div-statistics-left">
                 <h5 style="text-align:center">Car categories</h5>
                 <p style="text-align:center; font-size:x-large">@ViewBag.CarCategoryAmount</p>
             </div>
-            <a asp-controller="AdminCarCategory" asp-action="Index">-Go to list of all car categories-</a>
+            <a class="route-links-table" asp-controller="AdminCarCategory" asp-action="Index">-List of all car categories-</a>
         </div>
         <div style="text-align:center">
-            <div style="border:solid; border-width: 2px; padding:1em; width: 15em; height: 6em">
+            <div class="div-statistics-right">
                 <h5 style="text-align:center">Orders in the system</h5>
                 <p style="text-align:center; font-size:x-large">@ViewBag.OrderAmount</p>
             </div>
-            <a asp-controller="AdminOrder" asp-action="Index">-Go to list of all orders-</a>
+            <a class="route-links-table" asp-controller="AdminOrder" asp-action="Index">-List of all orders-</a>
         </div>
     </div>
 </div>
 
 <div class="d-flex flex-column gap-2 align-items-center">
-<h2 style="margin-top: 2em">Todays Pickups</h2>
+<h2 style="margin-top: 1em">Todays Pickups</h2>
 </div>
 @await Component.InvokeAsync("TodaysPickupsList")
