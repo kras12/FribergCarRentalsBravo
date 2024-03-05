@@ -203,7 +203,36 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             }
 
             return View(new CustomerViewModel(customer));
-        }   
+        }
+
+        // Post: CustomerController
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginCustomerViewModel loginCustomerViewModel)
+        {
+            if (UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return TempDataOrHomeRedirect();
+            }
+
+            if (ModelState.Count > 0 && ModelState.IsValid)
+            {
+                var customer = await customerRep.GetMatchingCustomerAsync(loginCustomerViewModel.Email, loginCustomerViewModel.Password);
+
+                if (customer is null)
+                {
+                    // The key needs to be the name of the view model (insted of empty string) because the error is shown in a partial view. 
+                    ModelState.AddModelError(nameof(LoginCustomerViewModel), "No account matched the entered email/password.");
+                }
+                else
+                {
+                    LoginCustomer(customer);
+                    return TempDataOrHomeRedirect();
+                }
+            }
+
+            return View(nameof(Authenticate), new RegisterOrLoginCustomerViewModel() { LoginCustomerViewModel = loginCustomerViewModel });
+        }
 
         // GET: CustomerController
         [HttpGet]
