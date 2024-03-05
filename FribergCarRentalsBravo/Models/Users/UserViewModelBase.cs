@@ -1,4 +1,5 @@
 ﻿using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Attributes;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel;
@@ -67,6 +68,7 @@ namespace FribergCarRentalsBravo.Models.Users
         [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
+        [ServerSideRegularExpression(EmailRegexPattern, ErrorMessage = EmailInputValidationMessage)]
         public virtual string Email { get; set; } = "";
 
         /// <summary>
@@ -75,6 +77,7 @@ namespace FribergCarRentalsBravo.Models.Users
         [DisplayName("First Name")]
         [Required]
         [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
+        [ServerSideRegularExpression(LettersAndSpacesRegexPattern, ErrorMessage = OnlyLettersAndSpacesValidationMessage)]
         public virtual string FirstName { get; set; } = "";
 
         /// <summary>
@@ -96,6 +99,7 @@ namespace FribergCarRentalsBravo.Models.Users
         [DisplayName("Last Name")]
         [Required]
         [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
+        [ServerSideRegularExpression(LettersAndSpacesRegexPattern, ErrorMessage = OnlyLettersAndSpacesValidationMessage)]
         public virtual string LastName { get; set; } = "";
 
         #endregion

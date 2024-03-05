@@ -7,7 +7,7 @@
 <div class="d-flex flex-column gap-2 align-items-center">
     <h1>Admin Panel</h1>
     <h2>Welcome to the admin panel '@(Model.Email)'!</h2>
-    <p class="text-align:center">You can use the navigation at the top of the page to browse your cars, customers and orders. More actions can be found in respective section.</p>
+    <p class="text-align-center">You can use the navigation at the top of the page to browse your cars, customers and orders. More actions can be found in respective section.</p>
 </div>
 
 <div class="d-flex flex-column gap-2 align-items-center">
@@ -27,7 +27,7 @@
                 <h5 style="text-align:center">Cars in the fleet</h5>
                 <p style="text-align:center; font-size:x-large">@ViewBag.CarAmount</p>
             </div>
-            <a asp-controller="AdminCar" asp-action="List">-Go to list of all cars-</a>
+            <a asp-controller="AdminCar" asp-action="Index">-Go to list of all cars-</a>
         </div>
     </div>
     <div class="d-flex flex-row gap-5">

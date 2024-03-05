@@ -40,6 +40,7 @@ namespace FribergCarRentalsBravo.Models.Orders
             IsNewOrder = isNewOrder;
             CarPickupDate = carOrder.PickupDate;
             CarReturnDate = carOrder.ReturnDate;
+            RentalCostPerDay = carOrder.CostPerDay;
         }
 
         #endregion
