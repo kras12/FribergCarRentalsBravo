@@ -1,11 +1,13 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.Customer
+﻿@using FribergCarRentalsBravo.Models.Customers
+@model EditCustomerViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit your details</h1>
-<hr />
+    <h1>Edit Customer</h1>
+    <hr />
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">

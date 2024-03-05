@@ -21,6 +21,20 @@ namespace FribergCarRentalsBravo.Controllers.Admin
     [Route($"Admin/Orders/[action]")]
     public class AdminOrderController : Controller
     {
+        #region Constants
+
+        /// <summary>
+        /// The key for the ID of the order that was deleted.
+        /// </summary>
+        public const string DeletedOrderIdTempDataKey = "AdminDeletedOrderId";
+
+        /// <summary>
+        /// The key for the deleted car category redirect data stored in temp storage.
+        /// </summary>
+        public const string RedirectToPageAfterDeleteTempDataKey = "AdminDeletedOrderRedirectToPage";
+
+        #endregion
+
         #region Fields
 
         private readonly IOrderRepository orderRepo;
@@ -44,7 +58,14 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(new ListViewModel<OrderViewModel>((await orderRepo.GetAllOrdersAsync()).Select(x => new OrderViewModel(x)).ToList()));
+            ListViewModel<OrderViewModel> viewModel = new ((await orderRepo.GetAllOrdersAsync()).Select(x => new OrderViewModel(x)).ToList());
+
+            if (TempDataHelper.TryGet(TempData, DeletedOrderIdTempDataKey, out int deletedCategoryId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateOrderDeletionSuccessMessage(deletedCategoryId));
+            }
+
+            return View(viewModel);
         }
 
         // GET: AdminOrder/Details/5
@@ -100,12 +121,14 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditOrderViewModel editOrderViewModel)
+        public async Task<IActionResult> Edit(EditOrderViewModel editOrderViewModel, int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Index));
             }
+
+            EditOrderViewModel viewModel = new EditOrderViewModel();
 
             if (ModelState.Count > 0 && ModelState.IsValid)
             {
@@ -131,13 +154,12 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     order.PickupDate = editOrderViewModel.PickupDate.Value;
                     order.ReturnDate = editOrderViewModel.ReturnDate.Value;
                     order.CostPerDay = editOrderViewModel.CostPerDay;
-                    await orderRepo.EditOrderAsync(order);
-                    //TODO - Add user message
-                    return View(editOrderViewModel);
+                    await orderRepo.EditOrderAsync(order);                    
+                    viewModel.Messages.Add(UserMesssageHelper.CreateOrderUpdateSuccessMessage(id));
+                    return View(viewModel);
                 }
             }
-
-            return View(editOrderViewModel);
+            return View(viewModel);
         }
 
         // POST: AdminOrder/Delete/5
@@ -163,7 +185,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             await orderRepo.DeleteOrderAsync(order);
-            return RedirectToAction(nameof(Index));
+            TempDataHelper.Set(TempData, DeletedOrderIdTempDataKey, id);
+
+            if (TempDataHelper.TryGet(TempData, RedirectToPageAfterDeleteTempDataKey, out RedirectToActionData? data))
+            {
+                return RedirectToAction(data.Action, data.Controller, data.RouteValues);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }       
         }
 
         // GET: CustomerOrderController/PendingCars
@@ -225,6 +256,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     action, ControllerHelper.GetControllerName<AdminOrderController>(), routeValues: routeValues));
 
             return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
+        }
+
+        /// <summary>
+        /// Saves data for redirecting back to an action after an order has been deleted. 
+        /// </summary>
+        /// <param name="redirectToAction">The action to redirect to.</param>
+        private void SaveRedirectBackInstructionsForDeleteOrderAction(string redirectToAction)
+        {
+            TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
+                    redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
         }
 
         #endregion

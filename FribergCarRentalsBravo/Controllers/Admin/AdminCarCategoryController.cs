@@ -14,12 +14,32 @@ using FribergCarRentalsBravo.Sessions;
 using FribergCarRentalsBravo.Models.Cars;
 using FribergCarRentals.Models.Other;
 using System.Diagnostics;
+using System.Runtime.ConstrainedExecution;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
     [Route($"Admin/Cars/Categories/[action]")]
     public class AdminCarCategoryController : Controller
     {
+        #region Constants
+
+        /// <summary>
+        /// The key for the ID of the car category that was created.
+        /// </summary> 
+        public const string CreatedCategoryIdTempDataKey = "AdminCreatedCategoryId";
+
+        /// <summary>
+        /// The key for the ID of the car category that was deleted.
+        /// </summary>
+        public const string DeletedCategoryIdTempDataKey = "AdminDeletedCategoryId";
+
+        /// <summary>
+        /// The key for the deleted car category redirect data stored in temp storage.
+        /// </summary>
+        public const string RedirectToPageAfterDeleteTempDataKey = "AdminDeletedCategoryRedirectToPage";
+
+        #endregion
+
         #region Fields
 
         private readonly ICarCategoryRepository carCategoryRepo;
@@ -45,7 +65,20 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(new ListViewModel<CarCategoryViewModel>((await carCategoryRepo.GetAllAsync()).Select(x => new CarCategoryViewModel(x)).ToList()));
+            ListViewModel<CarCategoryViewModel> viewModel = new ((await carCategoryRepo.GetAllAsync()).Select(x => new CarCategoryViewModel(x)).ToList());
+
+            if (TempDataHelper.TryGet(TempData, CreatedCategoryIdTempDataKey, out int categoryId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateCarCategoryCreationSuccessMessage(categoryId));
+                return View(viewModel);
+            }
+
+            if (TempDataHelper.TryGet(TempData, DeletedCategoryIdTempDataKey, out int deletedCategoryId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateCarDeletionSuccessMessage(deletedCategoryId));
+            }
+
+            return View(viewModel);
         }
 
         // GET: CarCategory/Details/5
@@ -103,6 +136,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 }
 
                 await carCategoryRepo.CreateNewCarCategoryAsync(carCategory);
+                TempDataHelper.Set(TempData, CreatedCategoryIdTempDataKey, carCategory.CarCategoryId);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -131,7 +165,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditCarCategoryViewModel editCarCategoryViewModel)
+        public async Task<IActionResult> Edit(EditCarCategoryViewModel editCarCategoryViewModel, int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
@@ -146,8 +180,9 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 }
 
                 await carCategoryRepo.UpdateCarCategoryAsync(carCategory);
-                // TODO - Add user message
-                return View(editCarCategoryViewModel);
+                EditCarCategoryViewModel viewModel = new EditCarCategoryViewModel(carCategory);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCarCategoryUpdateSuccessMessage(id));
+                return View(viewModel);
             }
 
             return View(editCarCategoryViewModel);
@@ -169,7 +204,17 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             await carCategoryRepo.DeleteCarCategoryByIdAsync(id);
-            return RedirectToAction(nameof(Index));
+            TempDataHelper.Set(TempData, DeletedCategoryIdTempDataKey, id);
+
+            if (TempDataHelper.TryGet(TempData, RedirectToPageAfterDeleteTempDataKey, out RedirectToActionData? data))
+            {
+                return RedirectToAction(data.Action, data.Controller, data.RouteValues);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         #endregion
@@ -190,6 +235,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     action, ControllerHelper.GetControllerName<AdminCarCategoryController>(), routeValues: routeValues));
 
             return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
+        }
+
+        /// <summary>
+        /// Saves data for redirecting back to an action after a car category has been deleted. 
+        /// </summary>
+        /// <param name="redirectToAction">The action to redirect to.</param>
+        private void SaveRedirectBackInstructionsForDeleteCarAction(string redirectToAction)
+        {
+            TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
+                    redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
         }
 
         #endregion

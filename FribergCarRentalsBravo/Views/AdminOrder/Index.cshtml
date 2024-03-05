@@ -7,7 +7,7 @@
 }
 
 <h1>Orders</h1>
-
+<partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
 @if (Model.Count <= 0)
 {
     <p class="text-align-center">No orders found.</p>
@@ -74,7 +74,7 @@ else
                         <div class="d-flex gap-1">
                             <a asp-action="Edit" asp-route-id="@order.CarOrderId">Edit</a>
                             <a asp-action="Details" asp-route-id="@order.CarOrderId">Details</a>
-                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this order?');">
                                 <input type="hidden" name="id" value="@order.CarOrderId" asp-for="@order.CarOrderId" />
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>

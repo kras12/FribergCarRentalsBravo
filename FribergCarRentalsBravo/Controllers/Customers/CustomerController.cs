@@ -142,42 +142,39 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             }
 
             Customer customer = await customerRep.GetCustomerById(id);
+            EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
 
             if (customer == null)
             {
                 return NotFound();
             }
-            return View(customer);
+            return View(viewModel);
         }
 
         // POST: CustomerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(int id, EditCustomerViewModel editCustomerViewModel)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Edit), id);
             }
 
-            if (id != customer.CustomerId)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
+                if (!DataTransferHelper.TryTransferData(editCustomerViewModel, out Customer customer))
+                {
+                    throw new Exception("Failed to transfer data from view model to entity.");
+                }
+
+                await customerRep.EditCustomer(customer);
+                EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerUpdateSuccessMessage(id));
+                return View(viewModel);
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await customerRep.EditCustomer(customer);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
+            return View(editCustomerViewModel);
         }
 
         // GET: CustomerController
