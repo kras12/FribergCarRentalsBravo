@@ -4,10 +4,17 @@
 :root {
 
     /* The default box shadow */
-  --default-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+    --default-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
 
     /* The background color for filled boxes */
     --filled-box-background-color: #ddd;
+
+    --image-slider-button-color: black;
+    --image-slider-button-hover-color: grey;
+    --image-slider-nav-dot-color: black;
+    --image-slider-nav-dot-hover-color: grey;
+    --image-slider-slide-caption-color: white;
+    --image-slider-slide-caption-background-color: black;
 }
 
 html {
@@ -56,6 +63,137 @@ body {
     flex-direction: column;
     row-gap: 0.25rem;
 }  
+
+/*==================================================*/
+/* Images                                           */
+/*==================================================*/  
+
+/* Image */
+img
+{
+    object-fit: scale-down;
+}
+
+/* Image - Cover image */
+img.cover-image
+{
+    border-radius: 10px;
+    box-shadow: var(--default-box-shadow);
+}
+
+/*==================================================*/
+/* Image Slideshow                                  */
+/*==================================================*/
+
+/* Slideshow container */
+.image-slideshow-container
+{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    row-gap: 0.5rem;
+}
+
+/* Slideshow container - Image */
+.image-slideshow-container image
+{
+    max-height: 50vh;
+}
+
+/* Slideshow container - Image animation */
+.image-slideshow-container .image-fade 
+{
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+/* Slideshow container - Image animation - Keyframes */
+@keyframes fade 
+{
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+/* Slideshow container - Image slide */
+.image-slideshow-container .image-slide
+{
+    border-radius: 10px;
+    box-shadow: var(--default-box-shadow);
+    display: none;
+}
+
+/* Slideshow container - Image slide - Active */
+.image-slideshow-container .image-slide.active
+{
+    display: block;
+}
+
+
+/* Slideshow container - Image slide - Caption */
+.image-slideshow-container .image-slide .image-slide-caption
+{
+    background-color: var(--image-slider-slide-caption-background-color);
+	text-align: center;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	color: var(--image-slider-slide-caption-color);
+}
+
+
+/* Slideshow container - Image slide - Buttons */
+.image-slideshow-container :is(.previous-slider-button, .next-slider-button)
+{
+    color: var(--image-slider-button-color);
+    font-size: larger;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: -2.9rem;
+    padding: 1rem;
+    position: absolute;
+    top: 50%;
+    transition: 0.6s ease;
+    user-select: none;
+    width: auto;
+}
+
+/* Slideshow container - Image slide - Buttons - Hover */
+.image-slideshow-container :is(.previous-slider-button, .next-slider-button):hover
+{
+   background-color: var(--image-slider-button-hover-color);
+}
+
+/* Slideshow container - Image slide - Next button */
+.image-slideshow-container :is(.next-slider-button)
+{
+  right: 0;
+}
+
+/* Slideshow container - Navigation dots */
+.image-slideshow-container .navigation-dot 
+{
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  background-color: var(--image-slider-nav-dot-color);
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+/* Slideshow container - Navigation dots - Hover */
+.image-slideshow-container :is(.navigation-dot.active, .navigation-dot:hover)
+{
+    background-color: #717171;
+    background-color: var(--image-slider-nav-dot-hover-color);
+}
 
 /*==================================================*/
 /* Tiled image gallery (Grid - Autocolumn)          */
@@ -114,4 +252,20 @@ body {
 .tiled-image-gallery.tiled-image-gallery__image-size_medium
 {
     grid-template-columns: repeat(auto-fit, minmax(180px, 400px));
+}
+
+/*==================================================*/
+/* Universal modifiers                              */
+/*==================================================*/
+
+/* Full width */
+.full-width
+{
+  width: 100%;
+}
+
+/* Max height */
+.max-height__50vh
+{
+    max-height: 50vh;
 }

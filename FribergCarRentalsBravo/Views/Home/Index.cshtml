@@ -1,8 +1,26 @@
-﻿@{
+﻿@using FribergCarRentals.Models.Other
+@using FribergCarRentalsBravo.Components
+@using FribergCarRentalsBravo.Models.Other
+@model ListViewModel<SlideShowImageViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<header>
+    <h1 class="text-center">Browse our cars</h1>
+</header>
+@* <div class="vertical-flex-container flex-container__justify-content__center flex-container__align-items-center flex-container__row-gap__1-rem"> *@
+<div class="d-flex flex-column justify-content-center align-items-center">
+
+    @(await Component.InvokeAsync<CarImageSlideShow>(new
+    {
+        images = Model.Models
+    }))
+    <div>
+        <p class="text-align-center no-margin">We have a fine selection of cars that you can rent right away.</p>
+    </div>
+    
+    <a class="btn btn-primary" asp-action="Book" asp-controller="CustomerOrder">Find your car</a>
 </div>
+
