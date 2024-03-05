@@ -1,15 +1,28 @@
-﻿using FribergCarRentalsBravo.Data;
+﻿using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentalsBravo.DataAccess.Repositories;
 using FribergCarRentalsBravo.Helpers;
+using FribergCarRentalsBravo.Models.Cars;
+using FribergCarRentalsBravo.Models.Customers;
 using FribergCarRentalsBravo.Sessions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
+    [Route($"Admin/Customers/[action]")]
     public class AdminCustomerController : Controller
     {
+        #region Constants
+
+        /// <summary>
+        /// The key for the ID of the customer that was created.
+        /// </summary>
+        public const string CreatedCustomerIdTempDataKey = "AdminCreatedCustomerId";
+
+        #endregion
+
         #region Fields
 
         public ICustomerRepository customerRep { get; }
@@ -35,11 +48,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            var customers = await customerRep.GetAllCustomers();
-            return View(customers);
+            return View(new ListViewModel<CustomerViewModel>((await customerRep.GetAllCustomers()).Select(x => new CustomerViewModel(x)).ToList()));
         }
 
         // GET: CustomerController/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -64,25 +77,30 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // POST: CustomerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create(RegisterCustomerViewModel registerCustomerViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Create));
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
+                if (!DataTransferHelper.TryTransferData(registerCustomerViewModel, out Customer customer))
+                {
+                    throw new Exception("Failed to transfer data from the view model to the entity");
+                }
+
                 await customerRep.CreateCustomer(customer);
-                return RedirectToAction(nameof(Index));
+                TempDataHelper.Set(TempData, CreatedCustomerIdTempDataKey, customer.CustomerId);
+                return RedirectToAction(nameof(Details), new { id = customer.CustomerId });
             }
-            else
-            {
-                return View();
-            }
+
+            return View(registerCustomerViewModel);
         }
 
         // GET: CustomerController/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -90,51 +108,50 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id == null || customerRep.GetAllCustomers == null)
+            if (id <= 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
             Customer customer = await customerRep.GetCustomerById(id);
 
-            if (customer == null)
+            if (customer is not null)
             {
-                return NotFound();
+                EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
+                return View(viewModel);
             }
-            return View(customer);
+
+            throw new Exception($"Failed to find the customer with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
         }
 
         // POST: CustomerController/Edit/5
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(EditCustomerViewModel editCustomerViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id != customer.CustomerId)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
+                if (!DataTransferHelper.TryTransferData(editCustomerViewModel, out Customer customer))
+                {
+                    throw new Exception("Failed to transfer data from view model to entity.");
+                }
+
+                await customerRep.EditCustomer(customer);
+                // TODO - Create message
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await customerRep.EditCustomer(customer);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
+            return View(editCustomerViewModel);
         }
 
-        // GET: CustomerController/Delete/5
+        // POST: CustomerController/Delete/5             
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -142,41 +159,13 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Delete));
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
+            if (id <= 0)
             {
-                return NotFound();
-            }
-            return View(customer);
-        }
-
-        // POST: CustomerController/Delete/5             
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Delete));
+                throw new Exception($"Invalid ID: {id}");
             }
 
-            var customer = await customerRep.GetCustomerById(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                await customerRep.DeleteCustomer(customer);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception)
-            {
-                ModelState.AddModelError(string.Empty, "Det gick inte att ta bort kunden. Försök igen senare.");
-                return View(customer);
-            }
+            await customerRep.DeleteCustomerByIdAsync(id);
+            return RedirectToAction(nameof(Index));
         }
 
         #endregion

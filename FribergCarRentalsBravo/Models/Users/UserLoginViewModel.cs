@@ -1,4 +1,5 @@
 ﻿using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Attributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -57,6 +58,7 @@ namespace FribergCarRentalsBravo.Models.Users
         [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
+        [ServerSideRegularExpression(EmailRegexPattern, ErrorMessage = EmailInputValidationMessage)]
         public string Email { get; set; } = "";
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace FribergCarRentalsBravo.Models.Users
         [DisplayName("Password")]
         [Required(AllowEmptyStrings = false)]
         [DataType(DataType.Password)]
+        [StringLength(maximumLength: MaxPasswordLength, MinimumLength = MinPasswordLength, ErrorMessage = PasswordLengthValidationMessage)]
         public string Password { get; set; } = "";
 
         #endregion
