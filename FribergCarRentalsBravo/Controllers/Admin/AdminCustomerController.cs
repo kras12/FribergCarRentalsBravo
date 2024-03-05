@@ -60,7 +60,14 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Details));
             }
 
-            return View(await customerRep.GetCustomerById(id));
+            var customer = await customerRep.GetCustomerById(id);
+
+            if (customer == null)
+            {
+                throw new Exception($"Failed to find customer with id '{id}'.");
+            }
+
+            return View(new CustomerViewModel(customer));
         }
 
         // GET: CustomerController/Create
@@ -143,6 +150,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
                 await customerRep.EditCustomer(customer);
                 // TODO - Create message
+                return View(editCustomerViewModel);
             }
 
             return View(editCustomerViewModel);
