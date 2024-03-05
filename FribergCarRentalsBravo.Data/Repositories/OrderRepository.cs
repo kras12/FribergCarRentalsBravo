@@ -89,6 +89,12 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         {
             return await applicationDbContext.Orders.Where(x => x.PickupDate == DateTime.Today && x.IsCanceled == false).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
         }
-
+        public async Task<List<Order>> GetCustomerOrdersAsync(int customerId)
+        {
+            return await applicationDbContext.Orders.
+                Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images)
+                .Where(x => x.Customer.CustomerId == customerId).
+                ToListAsync();
+        }
     }
 }
