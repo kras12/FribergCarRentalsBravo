@@ -198,6 +198,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             await _databaseContext.SaveChangesAsync();
         }
 
+        public async Task<int> GetAmountOfCarsAsync()
+        {
+            return _databaseContext.Cars.Count();
+        }
+
         /// <summary>
         /// Sets the necessary EF Core tracking state for enum properties in the car entity. 
         /// This is needed to instruct the framework that the status entities already exists in the database.
