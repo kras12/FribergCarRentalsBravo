@@ -5,12 +5,11 @@
     ViewData["Title"] = "Back Office";
 }
 
-<h1>Hello @(Model.FirstName)!</h1>
-
-<div>
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Hello @(Model.FirstName)!</h1>
     <p>You can see your account details below.</p>
     <hr />
-    <dl class="row">
+    <dl class="d-flex flex-row flex-wrap">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
@@ -30,12 +29,12 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
-</div>
-<div class="d-flex flex-column gap-2">
-    <a asp-action="Edit" asp-route-id="@Model.CustomerId">Edit Info</a>
-    <a asp-action="Index" asp-controller="CustomerOrder">Orders</a>
-    <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete your account?');">
-        <input type="hidden" name="id" value="@Model.CustomerId" asp-for="CustomerId" />
-        <button type="submit" class="btn btn-danger">Delete your account</button>
-    </form>
+    <div class="d-flex flex-row gap-2 ">
+        <a asp-action="Edit" asp-route-id="@Model.CustomerId">Edit Info</a>
+        <a asp-action="Index" asp-controller="CustomerOrder">Orders</a>
+        <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete your account?');">
+            <input type="hidden" name="id" value="@Model.CustomerId" asp-for="CustomerId" />
+            <button type="submit" class="btn btn-danger">Delete your account</button>
+        </form>
+    </div>
 </div>

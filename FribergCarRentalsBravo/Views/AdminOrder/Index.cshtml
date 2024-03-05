@@ -6,83 +6,83 @@
     ViewData["Title"] = "Orders";
 }
 
-<h1>Orders</h1>
-
-@if (Model.Count <= 0)
-{
-    <p class="text-align-center">No orders found.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].OrderDate)
-                </th>
-                <th>
-                    Customer
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Car.CarInfo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].CarPickupDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].CarReturnDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].OrderSum)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model.Models)
-            {
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Orders</h1>
+    @if (Model.Count <= 0)
+    {
+        <p class="text-align-center">No orders found.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => order.OrderDate)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@order.Customer.CustomerId">
-                            @Html.DisplayFor(modelItem => order.Customer.FullName)
-                        </a>
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-controller="AdminCar" asp-route-id="@order.Car.CarId">
-                            @Html.DisplayFor(modelItem => order.Car.CarInfo)
-                        </a>                        
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => order.CarPickupDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => order.CarReturnDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => order.RentalCostPerDay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => order.OrderSum)
-                    </td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            <a asp-action="Edit" asp-route-id="@order.CarOrderId">Edit</a>
-                            <a asp-action="Details" asp-route-id="@order.CarOrderId">Details</a>
-                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this customer?');">
-                                <input type="hidden" name="id" value="@order.CarOrderId" asp-for="@order.CarOrderId" />
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].OrderDate)
+                    </th>
+                    <th>
+                        Customer
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].Car.CarInfo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].CarPickupDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].CarReturnDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].OrderSum)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Models)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.OrderDate)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@order.Customer.CustomerId">
+                                @Html.DisplayFor(modelItem => order.Customer.FullName)
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-controller="AdminCar" asp-route-id="@order.Car.CarId">
+                                @Html.DisplayFor(modelItem => order.Car.CarInfo)
+                            </a>                        
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.CarPickupDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.CarReturnDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.RentalCostPerDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.OrderSum)
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a asp-action="Edit" asp-route-id="@order.CarOrderId">Edit</a>
+                                <a asp-action="Details" asp-route-id="@order.CarOrderId">Details</a>
+                                <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this customer?');">
+                                    <input type="hidden" name="id" value="@order.CarOrderId" asp-for="@order.CarOrderId" />
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
