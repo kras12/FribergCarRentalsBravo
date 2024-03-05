@@ -15,6 +15,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FribergCarRentalsBravo.Controllers.Customers
 {
+    [Route($"Customer/Order/[action]")]
     public class CustomerOrderController : Controller
     {
         #region Constants
@@ -91,7 +92,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             return View(new BookCarViewModel(availableCarCategoryFilters: (await _carCategoryRepository.GetAllAsync()).ToList(), havePerformedCarSearch: false));
         }
 
-        // POST: CustomerOrderController/BookAsync
+        // POST: CustomerOrderController/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(BookCarViewModel bookCarViewModel)
@@ -144,6 +145,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         }
 
         // GET: CustomerOrderController/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
@@ -175,37 +177,32 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Cancel), id);
             }
 
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
+            if (await _orderRepository.TryCancelOrderAsync(id))
             {
-                if (await _orderRepository.TryCancelOrderAsync(id))
+                TempDataHelper.Set(TempData, CanceledOrderIdTempDataKey, id);
+
+                if (TempDataHelper.TryGet(TempData, CanceledOrderRedirectToPageTempDataKey, out RedirectToActionData? data))
                 {
-                    TempDataHelper.Set(TempData, CanceledOrderIdTempDataKey, id);
-
-                    if (TempDataHelper.TryGet(TempData, CanceledOrderRedirectToPageTempDataKey, out RedirectToActionData? data))
-                    {
-                        return RedirectToAction(data.Action, data.Controller, data.RouteValues);
-                    }
-                    else
-                    {
-                        return RedirectToAction(nameof(Details), new { id = id });
-                    }
+                    return RedirectToAction(data.Action, data.Controller, data.RouteValues);
                 }
-
-                throw new Exception($"Failed to cancel order with id: {id} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId}");
+                else
+                {
+                    return RedirectToAction(nameof(Details), new { id = id });
+                }
             }
 
-            throw new Exception($"Model validation failed: CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
+            throw new Exception($"Failed to cancel order with id: {id} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId}");
         }
 
-        // POST: CustomerOrderController/Book
+        // POST: CustomerOrderController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BookCarViewModel bookCarViewModel)
+        public async Task<IActionResult> Create(CreateOrderViewModel bookCarViewModel)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
@@ -240,27 +237,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             }
 
             throw new Exception($"Failed to create an order for the car with id: {bookCarViewModel.CarId} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
-        }
-
-        // GET: CustomerOrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: CustomerOrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         #endregion

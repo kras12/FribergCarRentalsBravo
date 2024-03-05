@@ -129,12 +129,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToAction(nameof(Details), new { id = car.CarId });
             }
 
-            return View();
+            createCarViewModel.Categories = (await _carCategoryRepository.GetAllAsync()).Select(x => new CarCategoryViewModel(x)).ToList();
+            return View(createCarViewModel);
         }
 
         // POST: AdminCarController/Delete/5
-        [HttpPost("{id}")]
-        [ActionName(nameof(Delete))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -144,34 +143,34 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Delete));
             }
 
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
+            var car = await _carRepository.GetByIdAsync(id);
+
+            if (car is null)
             {
-                var car = await _carRepository.GetByIdAsync(id);
-
-                if (car!.Images.Count > 0)
-                {
-                    ImageHelper.DeleteImagesFromDisk(car!.Images.Select(x => x.FileName));
-                }
-
-                await _carRepository.DeleteAsync(id);
-                TempDataHelper.Set(TempData, DeletedCarIdTempDataKey, id);
-
-                if (TempDataHelper.TryGet(TempData, RedirectToPageAfterDeleteTempDataKey, out RedirectToActionData? data))
-                {
-                    return RedirectToAction(data.Action, data.Controller, data.RouteValues);
-                }
-                else
-                {
-                    return RedirectToAction(nameof(List));
-                }
+                throw new Exception($"No car found with ID '{id}'.");
             }
 
-            throw new Exception($"Failed to delete the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
+            if (car!.Images.Count > 0)
+            {
+                ImageHelper.DeleteImagesFromDisk(car!.Images.Select(x => x.FileName));
+            }
+
+            await _carRepository.DeleteAsync(id);
+            TempDataHelper.Set(TempData, DeletedCarIdTempDataKey, id);
+
+            if (TempDataHelper.TryGet(TempData, RedirectToPageAfterDeleteTempDataKey, out RedirectToActionData? data))
+            {
+                return RedirectToAction(data.Action, data.Controller, data.RouteValues);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: AdminCarController/Details/5
@@ -188,21 +187,18 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
+            var car = await _carRepository.GetByIdAsync(id);
+
+            if (car is not null)
             {
-                var car = await _carRepository.GetByIdAsync(id);
+                CarViewModel viewModel = new CarViewModel(car);
 
-                if (car is not null)
+                if (TempDataHelper.TryGet(TempData, CreatedCarIdTempDataKey, out int carId))
                 {
-                    CarViewModel viewModel = new CarViewModel(car);
-
-                    if (TempDataHelper.TryGet(TempData, CreatedCarIdTempDataKey, out int carId))
-                    {
-                        viewModel.Messages.Add(UserMesssageHelper.CreateCarCreationSuccessMessage(carId));
-                    }
-
-                    return View(viewModel);
+                    viewModel.Messages.Add(UserMesssageHelper.CreateCarCreationSuccessMessage(carId));
                 }
+
+                return View(viewModel);
             }
 
             throw new Exception($"Failed to show the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
@@ -222,20 +218,17 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            if (ModelState.Count > 0 && ModelState.IsValid)
-            {
-                var car = await _carRepository.GetByIdAsync(id);
+            var car = await _carRepository.GetByIdAsync(id);
 
-                if (car is not null)
-                {
-                    var carCategories = await _carCategoryRepository.GetAllAsync();
-                    EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
-                    TempDataHelper.Set(TempData, PageSubTitleTempDataKey, viewModel.PageSubTitle!);
-                    return View(viewModel);
-                }
+            if (car is not null)
+            {
+                var carCategories = await _carCategoryRepository.GetAllAsync();
+                EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
+                TempDataHelper.Set(TempData, PageSubTitleTempDataKey, viewModel.PageSubTitle!);
+                return View(viewModel);
             }
 
-            throw new Exception($"Failed to show the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
+            throw new Exception($"Failed to find the car with id: {id} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
         }
 
         // POST: AdminCarController/Edit/5
@@ -258,36 +251,38 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                if (DataTransferHelper.TryTransferData(editCarViewModel, out Car car))
+                if (!DataTransferHelper.TryTransferData(editCarViewModel, out Car car))
                 {
-                    var selectedCategory = await _carCategoryRepository.GetByIdAsync(editCarViewModel.SelectedCategoryId);
-                    car.Category = selectedCategory;
-
-                    car.Images.AddRange(carImages);
-
-                    if (editCarViewModel.UploadImages is not null && editCarViewModel.UploadImages.Count > 0)
-                    {
-                        var savedImageFileNames = await ImageHelper.SaveUploadedImagesToDisk(editCarViewModel.UploadImages!);
-                        car.Images.AddRange(savedImageFileNames.Select(x => new CarImage(x, car)));
-                    }
-
-                    if (editCarViewModel.DeleteImages is not null && editCarViewModel.DeleteImages.Count > 0)
-                    {
-                        var imagesToDelete = car.Images.IntersectBy(editCarViewModel.DeleteImages, x => x.ImageId).ToList();
-
-                        if (imagesToDelete.Count > 0)
-                        {
-                            ImageHelper.DeleteImagesFromDisk(imagesToDelete.Select(x => x.FileName));
-                            imagesToDelete.ForEach(x => car.Images.Remove(x));
-                        }
-                    }
-
-                    await _carRepository.UpdateAsync(car);
-                    var carCategories = await _carCategoryRepository.GetAllAsync();
-                    EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
-                    viewModel.Messages.Add(UserMesssageHelper.CreateCarUpdateSuccessMessage(id));
-                    return View(viewModel);
+                    throw new Exception("Failed to transfer data from view model to entity.");
                 }
+
+                var selectedCategory = await _carCategoryRepository.GetByIdAsync(editCarViewModel.SelectedCategoryId);
+                car.Category = selectedCategory;
+
+                car.Images.AddRange(carImages);
+
+                if (editCarViewModel.UploadImages is not null && editCarViewModel.UploadImages.Count > 0)
+                {
+                    var savedImageFileNames = await ImageHelper.SaveUploadedImagesToDisk(editCarViewModel.UploadImages!);
+                    car.Images.AddRange(savedImageFileNames.Select(x => new CarImage(x, car)));
+                }
+
+                if (editCarViewModel.DeleteImages is not null && editCarViewModel.DeleteImages.Count > 0)
+                {
+                    var imagesToDelete = car.Images.IntersectBy(editCarViewModel.DeleteImages, x => x.ImageId).ToList();
+
+                    if (imagesToDelete.Count > 0)
+                    {
+                        ImageHelper.DeleteImagesFromDisk(imagesToDelete.Select(x => x.FileName));
+                        imagesToDelete.ForEach(x => car.Images.Remove(x));
+                    }
+                }
+
+                await _carRepository.UpdateAsync(car);
+                var carCategories = await _carCategoryRepository.GetAllAsync();
+                EditCarViewModel viewModel = new EditCarViewModel(car, carCategories);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCarUpdateSuccessMessage(id));
+                return View(viewModel);
             }
 
             editCarViewModel.Images = carImages.Select(x => new CarImageViewModel(x)).ToList();
@@ -301,16 +296,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             return View(editCarViewModel);
         }
 
-        // GET: AdminCarController/List
-        public async Task<IActionResult> List()
+        // GET: AdminCarController
+        public async Task<IActionResult> Index()
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(List));
+                return RedirectToLogin(nameof(Index));
             }
 
             ListViewModel<CarViewModel> carListViewModel = new((await _carRepository.GetAllAsync()).Select(x => new CarViewModel(x)));
-            SaveRedirectBackInstructionsForDeleteCarAction(nameof(List));
+            SaveRedirectBackInstructionsForDeleteCarAction(nameof(Index));
 
             if (TempDataHelper.TryGet(TempData, DeletedCarIdTempDataKey, out int deletedCarId))
             {

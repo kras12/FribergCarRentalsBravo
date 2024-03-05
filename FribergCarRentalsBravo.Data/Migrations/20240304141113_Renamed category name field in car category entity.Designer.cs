@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FribergCarRentalsBravo.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240227143317_init")]
-    partial class init
+    [Migration("20240304141113_Renamed category name field in car category entity")]
+    partial class Renamedcategorynamefieldincarcategoryentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace FribergCarRentalsBravo.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.Admin", b =>
+            modelBuilder.Entity("FribergCarRentalsBravo.DataAccess.Entities.AdminUser", b =>
                 {
                     b.Property<int>("AdminId")
                         .ValueGeneratedOnAdd()

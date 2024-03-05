@@ -36,6 +36,11 @@ namespace FribergCarRentalsBravo.Models.Cars
         {
             #region Checks
 
+            if (car is null)
+            {
+                throw new ArgumentNullException(nameof(car), $"The value of parameter '{nameof(car)}' can't be null.");
+            }
+
             if (car.CarId < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(car.CarId), $"The value of property '{nameof(car.CarId)}' can't be negative.");
@@ -83,6 +88,8 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// <summary>
         /// The ID of the selected category.
         /// </summary>
+        [Required]
+        [Range(1, int.MaxValue)]
         public int SelectedCategoryId { get; set; }
 
         /// <summary>

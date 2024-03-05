@@ -13,9 +13,12 @@ using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.Helpers;
 using FribergCarRentals.Models.Orders;
 using FribergCarRentalsBravo.Models.Admin;
+using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Models.Orders;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
+    [Route($"Admin/Orders/[action]")]
     public class AdminOrderController : Controller
     {
         #region Fields
@@ -41,10 +44,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(await orderRepo.GetAllOrdersAsync());
+            return View(new ListViewModel<OrderViewModel>((await orderRepo.GetAllOrdersAsync()).Select(x => new OrderViewModel(x)).ToList()));
         }
 
         // GET: AdminOrder/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if(!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -52,9 +56,9 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Details));
             }
 
-            if (id == null)
+            if (id < 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
             var order = await orderRepo.GetOrderByIdAsync(id);
@@ -64,88 +68,81 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return NotFound();
             }
 
-            return View(order);
-        }
-
-        // GET: AdminOrder/Create
-        public async Task<IActionResult> Create()
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Create));
-            }
-
-            return View();
-        }
-
-        // POST: AdminOrder/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,OrderDate,PickupDate,ReturnDate,CostPerDay")] Order order)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Create));
-            }
-
-            if (ModelState.IsValid)
-            {
-                await orderRepo.CreateOrderAsync(order);
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(order);
+            return View(new OrderViewModel(order));
         }
 
         // GET: AdminOrder/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
             }
 
-            if (id == null)
+            if (id < 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
             var order = await orderRepo.GetOrderByIdAsync(id);
-            if (order == null)
+
+            if (order is not null)
             {
-                return NotFound();
+                return View(new EditOrderViewModel(order));
             }
-            return View(order);
+
+            throw new Exception($"Failed to find the order with id: {id}");
         }
 
         // POST: AdminOrder/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate,PickupDate,ReturnDate,CostPerDay")] Order order)
+        public async Task<IActionResult> Edit(EditOrderViewModel editOrderViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Index));
             }
 
-            if (id != order.OrderId)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
+                if (editOrderViewModel.PickupDate is null || editOrderViewModel.PickupDate <= DateTime.Now)
+                {
+                    ModelState.AddModelError($"{nameof(EditOrderViewModel.PickupDate)}",
+                        "The pickup date must be at least one day into the future.");
+                }
+                else if (editOrderViewModel.ReturnDate is null || editOrderViewModel.ReturnDate.Value.Date < editOrderViewModel.PickupDate.Value.Date)
+                {
+                    ModelState.AddModelError($"{nameof(EditOrderViewModel.ReturnDate)}",
+                        "The return date can't occur before the pickup date.");
+                }
+                else
+                {
+                    var order = await orderRepo.GetOrderByIdAsync(editOrderViewModel.OrderId);
+
+                    if (order is null)
+                    {
+                        throw new Exception($"Failed to retrieve order '{editOrderViewModel.OrderId}'.");
+                    }
+
+                    order.PickupDate = editOrderViewModel.PickupDate.Value;
+                    order.ReturnDate = editOrderViewModel.ReturnDate.Value;
+                    order.CostPerDay = editOrderViewModel.CostPerDay;
+                    await orderRepo.EditOrderAsync(order);
+                    //TODO - Add user message
+                    return View(editOrderViewModel);
+                }
             }
 
-            if (ModelState.IsValid)
-            {
-                orderRepo.EditOrderAsync(order);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
+            return View(editOrderViewModel);
         }
 
-        // GET: AdminOrder/Delete/5
+        // POST: AdminOrder/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -153,41 +150,24 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Delete));
             }
 
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
             var order = await orderRepo.GetOrderByIdAsync(id);
-            if (order == null)
+
+            if (order is null)
             {
-                return NotFound();
+                throw new Exception($"No order found with ID '{id}'.");
             }
 
-            return View(order);
-        }
-
-        // POST: AdminOrder/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(DeleteConfirmed));
-            }
-
-            var order = await orderRepo.GetOrderByIdAsync(id);
-            if (order != null)
-            {
-                await orderRepo.DeleteOrderAsync(order);
-            }
-
+            await orderRepo.DeleteOrderAsync(order);
             return RedirectToAction(nameof(Index));
         }
 
         // GET: CustomerOrderController/PendingCars
-        public async Task<IActionResult> PendingCars()
+        public IActionResult PendingCars()
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
@@ -211,8 +191,8 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             {
                 if (pendingCarsViewModel.EndDateFilter!.Value.Date < pendingCarsViewModel.StartDateFilter!.Value.Date)
                 {
-                    ModelState.AddModelError($"{nameof(BookCarViewModel.ReturnDate)}",
-                        "The return date can't occur before the pickup date.");
+                    ModelState.AddModelError($"{nameof(pendingCarsViewModel.EndDateFilter)}",
+                        "The end date can't occur before the start date.");
                 }
                 else
                 {
@@ -242,7 +222,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             RouteValueDictionary? routeValues = id is not null ? new RouteValueDictionary(new { id = id }) : null;
 
             TempDataHelper.Set(TempData, AdminController.RedirectToPageTempDataKey, new RedirectToActionData(
-                    action, ControllerHelper.GetControllerName<AdminCarCategoryController>(), routeValues: routeValues));
+                    action, ControllerHelper.GetControllerName<AdminOrderController>(), routeValues: routeValues));
 
             return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
         }
