@@ -1,4 +1,5 @@
 ﻿using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Attributes;
 using FribergCarRentalsBravo.DataAccess.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -103,6 +104,9 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// The brand for the car.
         /// </summary>
         [DisplayName("Brand")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
+        [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
+        [ServerSideRegularExpression(LettersNumbersAndSpacesRegexPattern, ErrorMessage = OnlyLettersNumbersAndSpacesValidationMessage)]
         public virtual string Brand { get; set; } = "";
 
         /// <summary>
@@ -135,12 +139,18 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// The color for the car.
         /// </summary>
         [DisplayName("Color")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
+        [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
+        [ServerSideRegularExpression(LettersAndSpacesRegexPattern, ErrorMessage = OnlyLettersAndSpacesValidationMessage)]
         public virtual string Color { get; set; } = "";
 
         /// <summary>
         /// The model for the car.
         /// </summary>
         [DisplayName("Model")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
+        [StringLength(maximumLength: DefaultMaxCharacterInput, ErrorMessage = InputTooLongValidationMessage)]
+        [ServerSideRegularExpression(LettersNumbersAndSpacesRegexPattern, ErrorMessage = OnlyLettersNumbersAndSpacesValidationMessage)]
         public virtual string Model { get; set; } = "";
 
         /// <summary>
@@ -148,13 +158,16 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// </summary>
         [DisplayName("Year")]
         [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
-        [Range(MinCarModelYear, MaxCarModelYear)]        
+        [Range(MinCarModelYear, MaxCarModelYear)]
         public virtual int ModelYear { get; set; }
 
         /// <summary>
         /// The registration number for the car.
         /// </summary>
         [DisplayName("Reg Nr")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
+        [StringLength(maximumLength: 6, ErrorMessage = RegistrationNumberValidationMessage)]
+        [RegularExpression(RegistrationNumberRegexPattern, ErrorMessage = RegistrationNumberValidationMessage)]
         public virtual string RegistrationNumber { get; set; } = "";
 
         /// <summary>
@@ -162,6 +175,8 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// </summary>
         [DisplayName("Cost per day")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = DefaultFloatNumberInputFormatString)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = MandatoryFieldValidationMessage)]
+        [Range(0, 20_000)]
         public virtual decimal RentalCostPerDay { get; set; }
 
         /// <summary>

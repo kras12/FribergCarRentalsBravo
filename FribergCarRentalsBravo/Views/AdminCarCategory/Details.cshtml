@@ -1,24 +1,24 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.CarCategory
+﻿@using FribergCarRentalsBravo.Models.Cars
+@model CarCategoryViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Car Category Details";
 }
 
-<h1>Details</h1>
+<h1>Category Details</h1>
 
 <div>
-    <h4>CarCategory</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.CategoryName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.CategoryName)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.CarCategoryId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.CategoryId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

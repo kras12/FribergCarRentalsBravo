@@ -11,9 +11,13 @@ using FribergCarRentalsBravo.DataAccess.Repositories;
 using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.Helpers;
 using FribergCarRentalsBravo.Sessions;
+using FribergCarRentalsBravo.Models.Cars;
+using FribergCarRentals.Models.Other;
+using System.Diagnostics;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
+    [Route($"Admin/Cars/Categories/[action]")]
     public class AdminCarCategoryController : Controller
     {
         #region Fields
@@ -41,10 +45,11 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(await carCategoryRepo.GetAllAsync());
+            return View(new ListViewModel<CarCategoryViewModel>((await carCategoryRepo.GetAllAsync()).Select(x => new CarCategoryViewModel(x)).ToList()));
         }
 
         // GET: CarCategory/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -52,9 +57,9 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Details));
             }
 
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound();
+                throw new Exception("Invalid category ID.");
             }
 
             var carCategory = await carCategoryRepo.GetByIdAsync(id);
@@ -64,7 +69,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return NotFound();
             }
 
-            return View(carCategory);
+            return View(new CarCategoryViewModel(carCategory));
         }
 
         // GET: CarCategory/Create
@@ -75,7 +80,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Create));
             }
 
-            return View();
+            return View(new CreateCarCategoryViewModel());
         }
 
         // POST: CarCategory/Create
@@ -83,23 +88,29 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CarCategoryId,Name")] CarCategory carCategory)
+        public async Task<IActionResult> Create(CreateCarCategoryViewModel createCarCategoryViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Create));
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
+                if (!DataTransferHelper.TryTransferData(createCarCategoryViewModel, out CarCategory carCategory))
+                {
+                    throw new Exception("Failed to transfer data from the view model to the entity");
+                }
+
                 await carCategoryRepo.CreateNewCarCategoryAsync(carCategory);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(carCategory);
+            return View(createCarCategoryViewModel);
         }
 
         // GET: CarCategory/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -107,45 +118,44 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var carCategory = await carCategoryRepo.GetByIdAsync(id);
             if (carCategory == null)
             {
-                return NotFound();
+                throw new Exception("Invalid category ID.");
             }
-            return View(carCategory);
+            return View(new EditCarCategoryViewModel(carCategory));
         }
 
         // POST: CarCategory/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarCategoryId,Name")] CarCategory carCategory)
+        public async Task<IActionResult> Edit(EditCarCategoryViewModel editCarCategoryViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
                 return RedirectToLogin(nameof(Edit));
             }
 
-            if (id != carCategory.CarCategoryId)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
+                if (!DataTransferHelper.TryTransferData(editCarCategoryViewModel, out CarCategory carCategory))
+                {
+                    throw new Exception("Failed to transfer data from view model to entity.");
+                }
+
+                await carCategoryRepo.UpdateCarCategoryAsync(carCategory);
+                // TODO - Add user message
+                return View(editCarCategoryViewModel);
             }
 
-            if (ModelState.IsValid)
-            {
-                carCategoryRepo.UpdateCarCategoryrAsync(carCategory);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(carCategory);
+            return View(editCarCategoryViewModel);
         }
 
-        // GET: CarCategory/Delete/5
+        // POST: CarCategory/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
@@ -153,36 +163,12 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Delete));
             }
 
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
-            var carCategory = await carCategoryRepo.GetByIdAsync(id);
-            if (carCategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(carCategory);
-        }
-
-        // POST: CarCategory/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(DeleteConfirmed));
-            }
-
-            var carCategory = await carCategoryRepo.GetByIdAsync(id);
-            if (carCategory != null)
-            {
-                await carCategoryRepo.DeleteCarCategoryAsync(carCategory);
-            }
-
+            await carCategoryRepo.DeleteCarCategoryByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

@@ -7,8 +7,9 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         Task<CarCategory?> GetByIdAsync(int id);
         Task<List<CarCategory>> GetAllAsync();
         Task CreateNewCarCategoryAsync(CarCategory carCategory);
-        Task UpdateCarCategoryrAsync(CarCategory carCategory);
+        Task UpdateCarCategoryAsync(CarCategory carCategory);
         Task DeleteCarCategoryAsync(CarCategory carCategory);
+        Task DeleteCarCategoryByIdAsync(int id);
         Task<int> GetAmountOfCarCategoriesAsync();
     }
 }

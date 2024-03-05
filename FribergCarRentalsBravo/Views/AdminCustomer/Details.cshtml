@@ -5,12 +5,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Customer</h4>
+
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Details</h1>
     <hr />
-    <dl class="row">
+    <dl class="row filled-container">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CustomerId)
         </dt>
@@ -42,8 +42,8 @@
             @Html.DisplayFor(model => model.Password)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a> |
-    <a asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a> |
+        <a asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
+    </div>
 </div>

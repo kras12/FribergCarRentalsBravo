@@ -8,7 +8,7 @@
 
         public int CarCategoryId { get; set; }
 
-        public string Name { get; set; } = "";
+        public string CategoryName { get; set; } = "";
 
         #endregion
     }

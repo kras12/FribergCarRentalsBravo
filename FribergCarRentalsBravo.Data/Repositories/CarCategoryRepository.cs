@@ -26,6 +26,13 @@ namespace FribergCarRentalsBravo.Data
             await applicationDbContext.SaveChangesAsync();
         }
 
+        public Task DeleteCarCategoryByIdAsync(int id)
+        {
+            var car = new CarCategory() { CarCategoryId = id };
+            applicationDbContext.CarCategories.Remove(car);
+            return applicationDbContext.SaveChangesAsync();
+        }
+
         public async Task<List<CarCategory>> GetAllAsync()
         {
             return await applicationDbContext.CarCategories.OrderBy(x => x.CarCategoryId).ToListAsync();
@@ -36,7 +43,7 @@ namespace FribergCarRentalsBravo.Data
             return await applicationDbContext.CarCategories.FirstOrDefaultAsync(x => x.CarCategoryId == id);
         }
 
-        public async Task UpdateCarCategoryrAsync(CarCategory carCategory)
+        public async Task UpdateCarCategoryAsync(CarCategory carCategory)
         {
             applicationDbContext.Attach(carCategory).State = EntityState.Modified;
             await applicationDbContext.SaveChangesAsync();
