@@ -1,4 +1,5 @@
 ﻿using FribergCarRentals.Models.Orders;
+using FribergCarRentals.Models.Other;
 using FribergCarRentalsBravo.Controllers.Admin;
 using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.DataAccess.Entities;
@@ -238,7 +239,15 @@ namespace FribergCarRentalsBravo.Controllers.Customers
 
             throw new Exception($"Failed to create an order for the car with id: {bookCarViewModel.CarId} - CustomerID: {UserSessionHandler.GetUserData(HttpContext.Session).UserId} - ModelState.Count: {ModelState.Count} - ModelState.IsValid: {ModelState.IsValid}");
         }
-
+        public async Task<IActionResult> Index()
+        {
+            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
+            {
+                return RedirectToLogin(nameof(Index));
+            }
+           var customerOrder = await _orderRepository.GetCustomerOrdersAsync(UserSessionHandler.GetUserData(HttpContext.Session).UserId);
+            return View(new ListViewModel<OrderViewModel>(customerOrder.Select(x=>new OrderViewModel(x))));
+        }
         #endregion
 
         #region OtherMethods
