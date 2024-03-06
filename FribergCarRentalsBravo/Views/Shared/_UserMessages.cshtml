@@ -1,0 +1,40 @@
+﻿@using FribergCarRentalsBravo.Models.Other
+@model List<MessageViewModel>
+
+@foreach (var message in Model)
+{
+    string messageTypeClass = "";
+
+    switch (message.MessageType)
+    {
+        case MessageType.Neutral:
+            messageTypeClass = "message-type__neutral";
+            break;
+
+        case MessageType.Error:
+            messageTypeClass = "message-type__error";
+            break;
+
+        case MessageType.Success:
+            messageTypeClass = "message-type__success";
+            break;
+
+        case MessageType.Warning:
+            messageTypeClass = "message-type__warning";
+            break;
+
+        default:
+            messageTypeClass = "";
+            break;
+    }
+
+    <div class="message @messageTypeClass">
+        <div class="d-flex flex-row justify-content-between">
+            <div class="message-title">@(message.Title ?? "")</div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" class="message-x-button">X</button>
+        </div>
+        <p>
+            @message.Body
+        </p>
+    </div>
+}

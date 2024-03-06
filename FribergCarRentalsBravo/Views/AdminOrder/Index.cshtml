@@ -8,6 +8,7 @@
 
 <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Orders</h1>
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     @if (Model.Count <= 0)
     {
         <p class="text-align-center">No orders found.</p>

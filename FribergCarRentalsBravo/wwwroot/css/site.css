@@ -42,6 +42,18 @@ body {
 }
 
 /*==================================================*/
+/* Containers                                       */
+/*==================================================*/
+
+header {
+    background-color: #68767b;
+}
+
+#nav-background {
+    background-color: #adadad !important;
+}
+
+/*==================================================*/
 /* Filled containers                                */
 /*==================================================*/
 
@@ -80,6 +92,10 @@ img.cover-image
 {
     border-radius: 10px;
     box-shadow: var(--default-box-shadow);
+}
+
+.side_image {
+    margin-top: 2em;
 }
 
 /*==================================================*/
@@ -250,22 +266,14 @@ img.cover-image
 }
 
 /* Tiled image gallery - Image size */
-.tiled-image-gallery.tiled-image-gallery__image-size_medium
+.tiled-image-gallery.tiled-image-gallery__image-size_medium 
 {
     grid-template-columns: repeat(auto-fit, minmax(180px, 400px));
 }
 
-.side_image {
-    margin-top: 2em;
-}
-
-header {
-    background-color: #68767b;
-}
-
-#nav-background {
-    background-color: #adadad !important;
-}
+/*==================================================*/
+/* Tables                                           */
+/*==================================================*/
 
 table {
     margin-left: auto;
@@ -331,6 +339,51 @@ td {
     color: #05344c;
 }
 
+/*==================================================*/
+/* Messages                                         */
+/*==================================================*/
+
+.message.message-type__success {
+    background-color: palegreen;
+    border: 2px dotted black;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    max-width: 400px;
+}
+
+.message-title, .message-x-button {
+    font-weight: bold;
+}
+
+.message-title {
+    float: left;
+    margin-top: 30px;
+    margin-left: 40px;
+    font-size: larger;
+}
+
+.message-x-button {
+    background-color: transparent;
+    border-color: transparent;
+    float: right;
+    margin: 10px;
+    margin-right: 15px;
+}
+
+.message-x-button:hover {
+    color: orangered;
+}
+
+.message p {
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+}
+
+/*==================================================*/
+/* Other                                            */
+/*==================================================*/
+
 .div-statistics-left {
     border-top: 0.2em solid;
     border-right: 0.2em solid;
@@ -370,7 +423,6 @@ td {
     border-bottom: 0.2em solid;
     border-bottom-color: #df540f;
     padding-top: 0.5rem;
-}
 }
 
 /*==================================================*/

@@ -12,6 +12,7 @@
     <p>
         <a class="route-links-table" asp-action="Create" asp-controller="AdminCustomer">Create Customer</a>
     </p>
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     @if (Model.Count <= 0)
     {
         <p class="text-align-center">No customers found.</p>
@@ -54,8 +55,8 @@
                             <a class="route-links-table" href="mailto:@(customer.Email)">@(customer.Email)</a>
                         </td>
                         <td>
-                            <a class="route-links-table" asp-action="Edit" asp-controller="AdminCustomer" asp-route-id="@customer.CustomerId">Ändra</a>
-                            <a class="route-links-table" asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@customer.CustomerId">Detaljer</a>
+                            <a class="route-links-table" asp-action="Edit" asp-controller="AdminCustomer" asp-route-id="@customer.CustomerId">Edit</a>
+                            <a class="route-links-table" asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@customer.CustomerId">Details</a>
                         </td>
                         <td class="td-end">
                             <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this customer?');">
