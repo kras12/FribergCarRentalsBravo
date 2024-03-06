@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FribergCarRentalsBravo.Components
 {
-    public class TodaysOrdersListViewComponent : ViewComponent
+    public class TodaysPickupsListViewComponent : ViewComponent
     {
         private readonly IOrderRepository orderRep;
 
-        public TodaysOrdersListViewComponent(IOrderRepository orderRep)
+        public TodaysPickupsListViewComponent(IOrderRepository orderRep)
         {
             this.orderRep = orderRep;
         }
