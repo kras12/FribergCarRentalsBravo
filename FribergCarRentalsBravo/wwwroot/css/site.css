@@ -115,3 +115,43 @@ body {
 {
     grid-template-columns: repeat(auto-fit, minmax(180px, 400px));
 }
+
+
+
+.message.message-type__success {
+    background-color: palegreen;
+    border: 2px dotted black;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    max-width: 400px;
+
+}
+
+.message-title, .message-x-button {
+    font-weight: bold;
+}
+
+.message-title {
+    float: left;
+    margin-top: 30px;
+    margin-left: 40px;
+    font-size: larger;
+}
+
+.message-x-button {
+    background-color: transparent;
+    border-color: transparent;
+    float: right;
+    margin: 10px;
+    margin-right: 15px;
+}
+
+.message-x-button:hover {
+    color: orangered;
+}
+
+.message p {
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+}
