@@ -80,7 +80,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             var customer = await customerRep.GetCustomerById(id);
@@ -135,7 +135,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
             }
 
             if (id <= 0)
@@ -143,7 +143,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Invalid ID: {id}");
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
+            var customer = await customerRep.GetCustomerById(id);
 
             if (customer is not null)
             {
@@ -157,11 +157,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // POST: CustomerController/Edit/5
         [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditCustomerViewModel editCustomerViewModel)
+        public async Task<IActionResult> Edit(int id, EditCustomerViewModel editCustomerViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
+            }
+
+            if (id <= 0 || id != editCustomerViewModel.CustomerId)
+            {
+                throw new Exception($"Invalid ID or ID mismatch - QueryParameter: {id} - ViewModel: {editCustomerViewModel.CustomerId}");
             }
 
             if (ModelState.Count > 0 && ModelState.IsValid)
@@ -188,7 +193,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Delete));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id <= 0)

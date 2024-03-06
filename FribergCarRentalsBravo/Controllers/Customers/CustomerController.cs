@@ -12,6 +12,7 @@ using FribergCarRentalsBravo.Data;
 using FribergCarRentalsBravo.Helpers;
 using FribergCarRentalsBravo.Sessions;
 using FribergCarRentalsBravo.Models.Customers;
+using FribergCarRentals.Models.Orders;
 
 namespace FribergCarRentalsBravo.Controllers.Customers
 {
@@ -145,11 +146,16 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         // POST: CustomerController/Edit/5
         [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditCustomerViewModel editCustomerViewModel)
+        public async Task<IActionResult> Edit(int id, EditCustomerViewModel editCustomerViewModel)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Index));
+                return RedirectToLogin(nameof(Edit), id);
+            }
+
+            if (id <= 0 || id != editCustomerViewModel.CustomerId)
+            {
+                throw new Exception($"Invalid ID or ID mismatch - QueryParameter: {id} - ViewModel: {editCustomerViewModel.CustomerId}");
             }
 
             if (ModelState.Count > 0 && ModelState.IsValid)
