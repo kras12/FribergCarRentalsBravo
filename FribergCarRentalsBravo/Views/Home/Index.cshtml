@@ -7,20 +7,19 @@
     ViewData["Title"] = "Home Page";
 }
 
-<header>
-    <h1 class="text-center">Browse our cars</h1>
-</header>
-@* <div class="vertical-flex-container flex-container__justify-content__center flex-container__align-items-center flex-container__row-gap__1-rem"> *@
-<div class="d-flex flex-column justify-content-center align-items-center">
-
-    @(await Component.InvokeAsync<CarImageSlideShow>(new
-    {
-        images = Model.Models
-    }))
-    <div>
-        <p class="text-align-center no-margin">We have a fine selection of cars that you can rent right away.</p>
-    </div>
-    
+<div class="vertical-page-container">
+    <h1>Browse our cars</h1>
+    <div class="d-flex flex-column justify-content-center align-items-center">
+     <div>
+            @(await Component.InvokeAsync<CarImageSlideShow>(new
+            {
+                images = Model.Models
+            }))
+            <div>
+                <p class="text-align-center no-margin">We have a fine selection of cars that you can rent right away.</p>
+            </div>
+     </div>    
     <a class="btn btn-primary" asp-action="Book" asp-controller="CustomerOrder">Find your car</a>
+    </div>
 </div>
 

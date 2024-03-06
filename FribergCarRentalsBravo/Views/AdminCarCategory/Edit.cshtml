@@ -5,12 +5,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="vertical-page-container">
     <h1>Edit Category</h1>
-    <hr />
     <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form class="vertical-form" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CarCategoryId" />
             <div class="vertical-form-group">
@@ -19,14 +18,15 @@
                     <input asp-for="CategoryName" class="form-control" />
                     <span asp-validation-for="CategoryName" class="text-danger"></span>
                 </div>
-                <div class="form-group d-flex justify-content-center">
+                <div class="form-buttons-container">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </div>
         </form>
     </div>
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 </div>
 
 @section Scripts {

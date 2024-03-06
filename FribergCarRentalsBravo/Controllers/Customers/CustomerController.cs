@@ -118,25 +118,6 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             throw new Exception($"Failed to delete the customer with id: {id}");
         }
 
-        // GET: CustomerController/Details/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int id)
-        {
-            if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Details), id);
-            }
-
-            var customer = await customerRep.GetCustomerById(id);
-
-            if (customer == null)
-            {
-                throw new Exception($"Failed to find the customer with id: {id}");
-            }
-
-            return View(new CustomerViewModel(customer));
-        }
-
         // GET: CustomerController/Edit/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)

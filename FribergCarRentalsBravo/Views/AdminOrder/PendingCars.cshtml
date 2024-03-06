@@ -2,30 +2,28 @@
 @model PendingCarsViewModel
 
 @{
-    ViewData["Title"] = "Cars";
+    ViewData["Title"] = "Pending Car Pickups";
 }
 
-<div class="d-flex flex-column gap-4 align-items-center">
-    <h1>Book Car</h1>
-    <div class="d-flex flex-row gap-2 align-items-center">
-        <form asp-action="PendingCars" class="vertical-form">
-            <div class="d-flex flex-row gap-3 align-items-center">
-                <div class="form-group">
-                    <div asp-validation-summary="ModelOnly" class="error-text"></div>
-                </div>
-                <div class="form-group d-flex flex-column">
-                    <label asp-for="StartDateFilter"></label>
-                    <input type="date" asp-for="StartDateFilter" />
-                    <span asp-validation-for="StartDateFilter" class="error-text"></span>
-                </div>
-                <div class="form-group d-flex flex-column">
-                    <label asp-for="EndDateFilter"></label>
-                    <input type="date" asp-for="EndDateFilter" />
-                    <span asp-validation-for="EndDateFilter" class="error-text"></span>
-                </div>
-                <div class="form-group d-flex flex-column align-self-end">
-                    <button class="btn btn-primary" type="submit">Find</button>
-                </div>
+<div class="vertical-page-container">
+    <h1>Pending Car Pickups</h1>
+    <div class="col-md-3">
+        <form class="vertical-form" asp-action="PendingCars" class="vertical-form">
+            <div class="form-group">
+                <div asp-validation-summary="ModelOnly" class="error-text"></div>
+            </div>
+            <div class="form-group d-flex flex-column">
+                <label asp-for="StartDateFilter"></label>
+                <input type="date" asp-for="StartDateFilter" />
+                <span asp-validation-for="StartDateFilter" class="error-text"></span>
+            </div>
+            <div class="form-group d-flex flex-column">
+                <label asp-for="EndDateFilter"></label>
+                <input type="date" asp-for="EndDateFilter" />
+                <span asp-validation-for="EndDateFilter" class="error-text"></span>
+            </div>
+            <div class="form-buttons-container">
+                <button class="btn btn-primary" type="submit">Find</button>
             </div>
         </form>
     </div>

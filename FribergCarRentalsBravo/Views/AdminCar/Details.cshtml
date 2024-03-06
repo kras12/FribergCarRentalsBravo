@@ -6,17 +6,18 @@
 }
 
 
-<div class="d-flex flex-column justify-content-center align-items-center">    
-    <h1>Details</h1>
-    <h4>@Model.CarInfo</h4>
-    <hr />    
+<div class="vertical-page-container">
+    <div>
+        <h1>Details</h1>
+        <h2>@Model.CarInfo</h2>
+    </div>    
     <dl class="row filled-container">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.IsActiveText)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.IsActiveText)
-            </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsActiveText)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsActiveText)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category.CategoryName)
         </dt>

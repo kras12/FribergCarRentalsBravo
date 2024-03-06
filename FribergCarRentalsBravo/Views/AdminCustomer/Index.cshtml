@@ -6,12 +6,9 @@
     ViewData["Title"] = "Customers";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="vertical-page-container">
     <h1>Customers</h1>
-
-    <p>
-        <a class="route-links-table" asp-action="Create" asp-controller="AdminCustomer">Create Customer</a>
-    </p>
+    <a class="route-links-table" asp-action="Create" asp-controller="AdminCustomer">Create Customer</a>
     <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     @if (Model.Count <= 0)
     {
