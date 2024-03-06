@@ -4,9 +4,10 @@
     ViewData["Title"] = "Back Office";
 }
 
-<h1>Hello @(Model.FirstName)!</h1>
+
 
 <div>
+    <h1>Hello @(Model.FirstName)!</h1>
     <p>You can see your account details below.</p>
     <hr />
     <dl class="row">
@@ -29,10 +30,11 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
+    <div>
+        <a class="route-links-table" asp-action="Edit" asp-route-id="@Model.CustomerId">Edit</a>
+    </div>
+    <div>
+        <a class="route-links-table" asp-action="Index" asp-controller="CustomerOrder">Orders</a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.CustomerId">Edit</a>
-</div>
-<div>
-    <a asp-action="Index" asp-controller="CustomerOrder">Orders</a>
-</div>
+

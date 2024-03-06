@@ -38,6 +38,7 @@ else
 
                 </th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -60,12 +61,12 @@ else
                         @Html.DisplayFor(modelItem => item.IsCancelled)
                     </td>
                     <td>
-                        @($"{item.Car.Brand} {item.Car.Model}");
+                        @($"{item.Car.Brand} {item.Car.Model}")
                     </td>
                     <td>
-
-                        <a asp-action="Details" asp-route-id="@item.CarOrderId">Details</a> |
-
+                        <a class="route-links-table" asp-action="Details" asp-route-id="@item.CarOrderId">Details</a>
+                    </td>
+                    <td>
                         @if (item.IsCancelable)
                         {
                             <form asp-action="Cancel" onsubmit="return confirm('Are you sure you want to cancel this order?');">
@@ -73,7 +74,6 @@ else
                                 <button type="submit" class="btn btn-danger">Cancel</button>
                             </form>
                         }
-
                     </td>
                 </tr>
             }
