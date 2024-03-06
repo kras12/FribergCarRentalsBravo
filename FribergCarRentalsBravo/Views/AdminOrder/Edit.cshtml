@@ -9,7 +9,7 @@
     <h1>Edit Order</h1>
     <hr />
     <div class="col-md-4">
-        <dl>
+        <dl class="form-information">
             <div class="d-flex flex-row gap-2">
                 <dt>
                     Order ID:
@@ -33,17 +33,17 @@
             <input type="hidden" asp-for="OrderDate" />
             <div class="form-group">
                 <label asp-for="PickupDate" class="control-label"></label>
-                <input type="date" asp-for="PickupDate" class="form-control" />
+                <input id="form-input-box" type="date" asp-for="PickupDate" class="form-control" />
                 <span asp-validation-for="PickupDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReturnDate" class="control-label"></label>
-                <input type="date" asp-for="ReturnDate" class="form-control" />
+                <input id="form-input-box" type="date" asp-for="ReturnDate" class="form-control" />
                 <span asp-validation-for="ReturnDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CostPerDay" class="control-label"></label>
-                <input type="number" asp-for="CostPerDay" class="form-control" />
+                <input id="form-input-box" type="number" asp-for="CostPerDay" class="form-control" />
                 <span asp-validation-for="CostPerDay" class="text-danger"></span>
             </div>
             <div class="form-group d-flex justify-content-center">
@@ -52,7 +52,7 @@
         </form>
     </div>
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a class="route-links-table" asp-action="Index">Back to List</a>
     </div>
 </div>
 

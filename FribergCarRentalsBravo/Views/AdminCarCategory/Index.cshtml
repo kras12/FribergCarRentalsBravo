@@ -9,7 +9,7 @@
 <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Car Categories</h1>
     <p>
-        <a asp-action="Create">Create Category</a>
+        <a class="route-links-table" asp-action="Create">Create Category</a>
     </p>
     @if (Model.Count <= 0)
     {
@@ -24,6 +24,7 @@
                         @Html.DisplayNameFor(model => model.Models[0].CategoryName)
                     </th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,14 +35,14 @@
                             @Html.DisplayFor(modelItem => category.CategoryName)
                         </td>
                         <td>
-                            <div class="d-flex gap-1">
-                                <a asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a>
-                                <a asp-action="Details" asp-route-id="@category.CategoryId">Details</a>
-                                <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this category?');">
-                                    <input type="hidden" name="id" value="@category.CategoryId" asp-for="@category.CategoryId" />
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </div>
+                            <a class="route-links-table" asp-action="Edit" asp-route-id="@category.CategoryId">Edit</a>
+                            <a class="route-links-table" asp-action="Details" asp-route-id="@category.CategoryId">Details</a>
+                        </td>
+                        <td class="td-end">
+                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                <input type="hidden" name="id" value="@category.CategoryId" asp-for="@category.CategoryId" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 }
