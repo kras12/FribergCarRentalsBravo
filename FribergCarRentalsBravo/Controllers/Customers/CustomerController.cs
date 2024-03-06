@@ -15,6 +15,7 @@ using FribergCarRentalsBravo.Models.Customers;
 
 namespace FribergCarRentalsBravo.Controllers.Customers
 {
+    [Route($"Customer/[action]")]
     public class CustomerController : Controller
     {
         #region Constants
@@ -118,6 +119,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         }
 
         // GET: CustomerController/Details/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Details(int id)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
@@ -125,10 +127,18 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Details), id);
             }
 
-            return View(await customerRep.GetCustomerById(id));
+            var customer = await customerRep.GetCustomerById(id);
+
+            if (customer == null)
+            {
+                throw new Exception($"Failed to find the customer with id: {id}");
+            }
+
+            return View(new CustomerViewModel(customer));
         }
 
         // GET: CustomerController/Edit/5
+        [HttpGet("{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
@@ -136,48 +146,45 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Edit), id);
             }
 
-            if (id == null || customerRep.GetAllCustomers == null)
+            if (id < 0)
             {
-                return NotFound();
+                throw new Exception($"Invalid ID: {id}");
             }
 
-            Customer customer = await customerRep.GetCustomerById(id);
+            var customer = await customerRep.GetCustomerById(id);
 
             if (customer == null)
             {
-                return NotFound();
+                throw new Exception($"Failed to find the customer with id: {id}");
             }
-            return View(customer);
+
+            return View(new EditCustomerViewModel(customer));
         }
 
         // POST: CustomerController/Edit/5
-        [HttpPost]
+        [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Customer customer)
+        public async Task<IActionResult> Edit(EditCustomerViewModel editCustomerViewModel)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit), id);
+                return RedirectToLogin(nameof(Index));
             }
 
-            if (id != customer.CustomerId)
+            if (ModelState.Count > 0 && ModelState.IsValid)
             {
-                return NotFound();
+                if (!DataTransferHelper.TryTransferData(editCustomerViewModel, out Customer customer))
+                {
+                    throw new Exception("Failed to transfer data from view model to entity.");
+                }
+
+                await customerRep.EditCustomer(customer);
+                EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerUpdateSuccessMessage(editCustomerViewModel.CustomerId));
+                return View(viewModel);
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await customerRep.EditCustomer(customer);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
+            return View(editCustomerViewModel);
         }
 
         // GET: CustomerController
@@ -188,7 +195,15 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(await customerRep.GetCustomerById(UserSessionHandler.GetUserData(HttpContext.Session).UserId));
+            var customerId = UserSessionHandler.GetUserData(HttpContext.Session).UserId;
+            var customer = await customerRep.GetCustomerById(customerId);
+
+            if (customer == null)
+            {
+                throw new Exception($"Failed to find the customer with id: {customerId}");
+            }
+
+            return View(new CustomerViewModel(customer));
         }
 
         // Post: CustomerController
@@ -259,7 +274,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             TempDataHelper.Set(TempData, RedirectToPageTempDataKey, new RedirectToActionData(
                     action, ControllerHelper.GetControllerName<CustomerController>(), routeValues: routeValues));
 
-            return RedirectToAction(nameof(Login), ControllerHelper.GetControllerName<CustomerController>());
+            return RedirectToAction(nameof(Authenticate), ControllerHelper.GetControllerName<CustomerController>());
         }
 
         /// <summary>

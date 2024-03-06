@@ -1,5 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
@@ -16,7 +17,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         {
             applicationDbContext.Add(customer);
             await applicationDbContext.SaveChangesAsync();
-            return customer;
+            return PasswordHelper.RemovePassword(customer)!;
         }
 
         public Task<bool> CustomerExists(string email)
@@ -39,43 +40,34 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         public async Task<Customer> EditCustomer(Customer customer)
         {
-            if (customer.Password is null)
+            if (string.IsNullOrEmpty(customer.Password))
             {
                 customer.Password = await applicationDbContext.Customers.Where(x => x.CustomerId == customer.CustomerId).Select(x => x.Password).SingleAsync();
             }
 
             applicationDbContext.Update(customer);
             await applicationDbContext.SaveChangesAsync();
-            return customer;
+            return PasswordHelper.RemovePassword(customer)!;
         }
 
         public async Task<List<Customer>> GetAllCustomers()
         {
-            return await applicationDbContext.Customers.OrderBy(x => x.LastName).ToListAsync();
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Customers.OrderBy(x => x.LastName).ToListAsync());
         }
 
-        public async Task<Customer> GetCustomerById(int id)
+        public async Task<Customer?> GetCustomerById(int id)
         {
-            return await applicationDbContext.Customers.FirstOrDefaultAsync(s => s.CustomerId == id);
+            return PasswordHelper.RemovePassword(await applicationDbContext.Customers.FirstOrDefaultAsync(s => s.CustomerId == id));
         }
 
         public async Task<Customer?> GetMatchingCustomerAsync(string email, string password)
         {
-            var customer = await applicationDbContext.Customers.AsNoTracking().Where(x => x.Email == email && x.Password == password).SingleOrDefaultAsync();
-
-            if (customer is not null)
-            {
-                customer.Password = "";
-                return customer;
-            }
-
-            return null;
+            return PasswordHelper.RemovePassword(await applicationDbContext.Customers.AsNoTracking().Where(x => x.Email == email && x.Password == password).SingleOrDefaultAsync());
         }
 
         public async Task<int> GetAmountOfCustomersAsync()
         {
-            return applicationDbContext.Customers.Count();
-        }
-
+            return await applicationDbContext.Customers.CountAsync();
+        }        
     }
 }

@@ -86,6 +86,8 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         Task<int> GetAmountOfCarsAsync();
 
+        Task<IEnumerable<Car>> GetFirstCarWithImagesByCategory();
+
         #endregion
     }
 }

@@ -8,6 +8,7 @@
 <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Edit Order</h1>
     <hr />
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     <div class="col-md-4">
         <dl class="form-information">
             <div class="d-flex flex-row gap-2">
@@ -26,7 +27,7 @@
                     @Html.DisplayFor(model => model.OrderDate)
                 </dd>
             </div>
-        </dl>
+        </dl>        
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />

@@ -6,16 +6,16 @@ using FribergCarRentalsBravo.DataAccess.Entities;
 using FribergCarRentals.Models.Other;
 using FribergCarRentalsBravo.Models.Users;
 
-namespace FribergCarRentalsBravo.Models.Customers
+namespace FribergCarRentalsBravo.Models.Admin
 {
     /// <summary>
     /// A view model class that handles data for a customer.
     /// </summary>
-    public class CustomerViewModel : UserViewModelBase
+    public class AdminViewModel : UserViewModelBase
     {
         #region Constructors
 
-        public CustomerViewModel()
+        public AdminViewModel()
         {
             
         }
@@ -23,13 +23,13 @@ namespace FribergCarRentalsBravo.Models.Customers
         /// <summary>
         /// A constructor.
         /// </summary>
-        /// <param name="customer">The customer to copy data from.</param>
+        /// <param name="admin">The admin to copy data from.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
-        public CustomerViewModel(Customer customer) 
-            : base(customer.FirstName, customer.LastName, customer.Email)
+        public AdminViewModel(AdminUser admin) 
+            : base(firstName: "", lastName: "", admin.Email)
         {
-            CustomerId = customer.CustomerId;
+            AdminId = admin.AdminId;
         }
 
         #endregion
@@ -37,11 +37,11 @@ namespace FribergCarRentalsBravo.Models.Customers
         #region Properties
 
         /// <summary>
-        /// The ID for the customer.
+        /// The ID for the admin.
         /// </summary>
-        [DisplayName("Customer ID")]
+        [DisplayName("Admin ID")]
         [BindNever]
-        public int CustomerId { get; set; }
+        public int AdminId { get; set; }
 
         #endregion
     }

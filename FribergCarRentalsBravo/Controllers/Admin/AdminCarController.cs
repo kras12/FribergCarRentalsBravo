@@ -9,6 +9,7 @@ using FribergCarRentalsBravo.Sessions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
@@ -74,7 +75,6 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         #endregion
 
         #region Actions
-
 
         // GET: AdminCarController/Create
         public async Task<IActionResult> Create()
@@ -308,7 +308,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             return View(carListViewModel);
-        }
+        }     
 
         #endregion
 
@@ -338,7 +338,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
                     redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
-        }
+        }                   
 
         #endregion
     }

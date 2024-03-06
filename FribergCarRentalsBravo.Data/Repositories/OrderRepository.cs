@@ -1,5 +1,6 @@
 ﻿using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.DataAccess.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             applicationDbContext.Attach(order.Customer);
             applicationDbContext.Add(order);
             await applicationDbContext.SaveChangesAsync();
-            return order;
+            return PasswordHelper.RemovePassword(order)!;
         }
 
         public async Task DeleteOrderAsync(Order order)
@@ -41,18 +42,21 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         public async Task<Order> EditOrderAsync(Order order)
         {
             applicationDbContext.Update(order);
-            await applicationDbContext.SaveChangesAsync();
-            return order;
+            await applicationDbContext.SaveChangesAsync();            
+            return PasswordHelper.RemovePassword(order)!;
         }
 
         public async Task<List<Order>> GetAllOrdersAsync()
         {
-            return await applicationDbContext.Orders.Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Orders
+                .Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync());            
         }
 
         public async Task<Order?> GetOrderByIdAsync(int id)
         {
-            return await applicationDbContext.Orders.Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).FirstOrDefaultAsync(o => o.OrderId == id);
+            return PasswordHelper.RemovePassword(await applicationDbContext.Orders
+                .Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images)
+                .FirstOrDefaultAsync(o => o.OrderId == id));
         }
 
         public async Task<bool> TryCancelOrderAsync(int id)
@@ -69,9 +73,9 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             return false;
         }
 
-        public async Task<int> GetAmountOfOrdersAsync()
+        public Task<int> GetAmountOfOrdersAsync()
         {
-            return applicationDbContext.Orders.Count();
+            return applicationDbContext.Orders.CountAsync();
         }
 
         /// <summary>
@@ -82,19 +86,24 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns></returns>
         public async Task<IEnumerable<Order>> GetPendingPickups(DateTime startDate, DateTime endDate)
         {
-            return await applicationDbContext.Orders.Where(x => x.PickupDate >= startDate && x.PickupDate <= endDate).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Orders
+                .Where(x => x.PickupDate >= startDate && x.PickupDate <= endDate)
+                .Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync());
         }
 
         public async Task<IEnumerable<Order>> GetAllTodaysPickupsAsync()
         {
-            return await applicationDbContext.Orders.Where(x => x.PickupDate == DateTime.Today && x.IsCanceled == false).Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync();
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Orders
+                .Where(x => x.PickupDate == DateTime.Today && x.IsCanceled == false)
+                .Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync());
         }
+
         public async Task<List<Order>> GetCustomerOrdersAsync(int customerId)
         {
-            return await applicationDbContext.Orders.
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Orders.
                 Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images)
                 .Where(x => x.Customer.CustomerId == customerId).
-                ToListAsync();
+                ToListAsync());
         }
     }
 }

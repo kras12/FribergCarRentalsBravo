@@ -9,6 +9,8 @@ using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading.Channels;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using FribergCarRentalsBravo.DataAccess.Helpers;
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
@@ -28,16 +30,17 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         #endregion
 
         #region Methods
+
         public async Task<AdminUser> EditAsync(AdminUser admin)
         {
             applicationDbContext.Update(admin);
             await applicationDbContext.SaveChangesAsync();
-            return admin;
+            return PasswordHelper.RemovePassword(admin)!;
         }
 
         public async Task<AdminUser?> GetAdminByIdAsync(int id)
         {
-            return await applicationDbContext.Admin.FirstOrDefaultAsync(a => a.AdminId == id);
+            return PasswordHelper.RemovePassword(await applicationDbContext.Admin.FirstOrDefaultAsync(a => a.AdminId == id));
         }
 
         /// <summary>
@@ -49,15 +52,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <returns>A <see cref="Task"/> object containing the admin if found or null if not found.</returns>
         public async Task<AdminUser?> GetMatchingAdminAsync(string email, string password)
         {
-            var admin = await applicationDbContext.Admin.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email && x.Password == password);
-
-            if (admin is not null)
-            {
-                admin.Password = "";
-                return admin;
-            }
-
-            return null;
+            return PasswordHelper.RemovePassword(await applicationDbContext.Admin.AsNoTracking().SingleOrDefaultAsync(x => x.Email == email && x.Password == password));
         }
 
         #endregion
