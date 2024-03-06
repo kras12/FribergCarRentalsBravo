@@ -27,5 +27,6 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         public Task<IEnumerable<Order>> GetPendingPickups(DateTime startDate, DateTime endDate);
 
         public Task<IEnumerable<Order>> GetAllTodaysPickupsAsync();
+        public Task<List<Order>> GetCustomerOrdersAsync(int customerId);
     }
 }
