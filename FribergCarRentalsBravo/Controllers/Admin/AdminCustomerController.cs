@@ -21,6 +21,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         /// </summary>
         public const string CreatedCustomerIdTempDataKey = "AdminCreatedCustomerId";
 
+        /// <summary>
+        /// The key for the ID of the car category that was deleted.
+        /// </summary>
+        public const string DeletedCustomerIdTempDataKey = "AdminDeletedOrderId"; 
+
+        /// <summary>
+        /// The key for the deleted customer redirect data stored in temp storage.
+        /// </summary>
+        public const string RedirectToPageAfterDeleteTempDataKey = "AdminDeletedCategoryRedirectToPage";
+
         #endregion
 
         #region Fields
@@ -48,7 +58,20 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 return RedirectToLogin(nameof(Index));
             }
 
-            return View(new ListViewModel<CustomerViewModel>((await customerRep.GetAllCustomers()).Select(x => new CustomerViewModel(x)).ToList()));
+            ListViewModel<CustomerViewModel> viewModel = new ((await customerRep.GetAllCustomers()).Select(x => new CustomerViewModel(x)).ToList());
+
+            if (TempDataHelper.TryGet(TempData, CreatedCustomerIdTempDataKey, out int customerId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerCreationSuccessMessage(customerId));
+                return View(viewModel);
+            }
+
+            if (TempDataHelper.TryGet(TempData, DeletedCustomerIdTempDataKey, out int deletedCustomerId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerDeletionSuccessMessage(deletedCustomerId));
+            }
+
+            return View(viewModel);
         }
 
         // GET: CustomerController/Details/5
@@ -149,8 +172,9 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 }
 
                 await customerRep.EditCustomer(customer);
-                // TODO - Create message
-                return View(editCustomerViewModel);
+                EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerUpdateSuccessMessage(editCustomerViewModel.CustomerId));
+                return View(viewModel);
             }
 
             return View(editCustomerViewModel);
@@ -173,7 +197,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             await customerRep.DeleteCustomerByIdAsync(id);
-            return RedirectToAction(nameof(Index));
+            TempDataHelper.Set(TempData, DeletedCustomerIdTempDataKey, id);
+
+            if (TempDataHelper.TryGet(TempData, RedirectToPageAfterDeleteTempDataKey, out RedirectToActionData? data))
+            {
+                return RedirectToAction(data.Action, data.Controller, data.RouteValues);
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         #endregion
@@ -194,6 +227,16 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     action, ControllerHelper.GetControllerName<AdminCustomerController>(), routeValues: routeValues));
 
             return RedirectToAction(nameof(AdminController.Login), ControllerHelper.GetControllerName<AdminController>());
+        }
+
+        /// <summary>
+        /// Saves data for redirecting back to an action after a customer has been deleted. 
+        /// </summary>
+        /// <param name="redirectToAction">The action to redirect to.</param>
+        private void SaveRedirectBackInstructionsForDeleteCustomerAction(string redirectToAction)
+        {
+            TempDataHelper.Set(TempData, RedirectToPageAfterDeleteTempDataKey, new RedirectToActionData(
+                    redirectToAction, ControllerHelper.GetControllerName<AdminCarController>()));
         }
 
         #endregion

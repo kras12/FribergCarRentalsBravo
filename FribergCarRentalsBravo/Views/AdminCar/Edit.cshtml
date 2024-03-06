@@ -16,7 +16,8 @@
         <h2>@($"#{Model.CarId} - {Model.CarInfo}")</h2>
     }
     <hr />
-    <div class="col-md-4">
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
+    <div class="col-md-4">        
         <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="CarId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

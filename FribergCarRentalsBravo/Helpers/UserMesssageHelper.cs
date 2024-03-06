@@ -1,4 +1,5 @@
-﻿using FribergCarRentalsBravo.Models.Other;
+﻿using FribergCarRentalsBravo.DataAccess.Entities;
+using FribergCarRentalsBravo.Models.Other;
 
 namespace FribergCarRentalsBravo.Helpers
 {
@@ -50,6 +51,46 @@ namespace FribergCarRentalsBravo.Helpers
         }
 
         /// <summary>
+        /// Creates a car category creation success message.
+        /// </summary>
+        /// <param name="categoryId">The car category ID that was created.</param>
+        /// <returns>A <see cref="MessageViewModel"/>.</returns>
+        public static MessageViewModel CreateCarCategoryCreationSuccessMessage(int categoryId)
+        {
+            return new MessageViewModel(MessageType.Success, $"Car category #{categoryId} was created successfully", "Created");
+        }
+
+        /// <summary>
+        /// Creates a car category creation success message.
+        /// </summary>
+        /// <param name="categoryId">The car category ID that was created.</param>
+        /// <returns>A <see cref="MessageViewModel"/>.</returns>
+        public static MessageViewModel CreateCarCategoryUpdateSuccessMessage(int categoryId)
+        {
+            return new MessageViewModel(MessageType.Success, $"Car category #{categoryId} was updated successfully", "Created");
+        }
+
+        /// <summary>
+        /// Creates a car category deletion success message.
+        /// </summary>
+        /// <param name="categoryId">The ID of the car category that was deleted.</param>
+        /// <returns>A <see cref="MessageViewModel"/>.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static MessageViewModel CreateCarCategoryDeletionSuccessMessage(int categoryId)
+        {
+            #region Checks
+
+            if (categoryId < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(categoryId), $"The value of parameter '{nameof(categoryId)}' can't be negative.");
+            }
+
+            #endregion
+
+            return new MessageViewModel(MessageType.Success, $"Car category #{categoryId} was deleted successfully.", "Deleted");
+        }
+
+        /// <summary>
         /// Creates a customer creation success message.
         /// </summary>
         /// <param name="customerId">The ID of the customer that was created.</param>
@@ -87,6 +128,17 @@ namespace FribergCarRentalsBravo.Helpers
         public static MessageViewModel CreateCustomerUpdateSuccessMessage(int customerId)
         {
             return new MessageViewModel(MessageType.Success, $"Customer #{customerId} was updated successfully.", "Saved");
+        }
+
+
+        /// <summary>
+        /// Creates a customer update success message.
+        /// </summary>
+        /// <param name="orderId">The ID of the order that was updated.</param>
+        /// <returns>A <see cref="MessageViewModel"/>.</returns>
+        public static MessageViewModel CreateOrderUpdateSuccessMessage(int orderId)
+        {
+            return new MessageViewModel(MessageType.Success, $"Order #{orderId} was updated successfully.", "Saved");
         }
 
         /// <summary>

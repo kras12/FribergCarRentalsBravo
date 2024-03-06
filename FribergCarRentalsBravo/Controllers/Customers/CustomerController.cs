@@ -177,14 +177,15 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                 {
                     throw new Exception("Failed to transfer data from view model to entity.");
                 }
-                
+
                 await customerRep.EditCustomer(customer);
-                // TODO - Add user message
-                return View(editCustomerViewModel);
+                EditCustomerViewModel viewModel = new EditCustomerViewModel(customer);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerUpdateSuccessMessage(editCustomerViewModel.CustomerId));
+                return View(viewModel);
             }
 
-                return View(editCustomerViewModel);
-            }
+            return View(editCustomerViewModel);
+        }
 
         // GET: CustomerController
         public async Task<IActionResult> Index()
