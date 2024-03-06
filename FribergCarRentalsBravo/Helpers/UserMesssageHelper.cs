@@ -67,7 +67,7 @@ namespace FribergCarRentalsBravo.Helpers
         /// <returns>A <see cref="MessageViewModel"/>.</returns>
         public static MessageViewModel CreateCarCategoryUpdateSuccessMessage(int categoryId)
         {
-            return new MessageViewModel(MessageType.Success, $"Car category #{categoryId} was updated successfully", "Created");
+            return new MessageViewModel(MessageType.Success, $"Car category #{categoryId} was updated successfully", "Saved");
         }
 
         /// <summary>
