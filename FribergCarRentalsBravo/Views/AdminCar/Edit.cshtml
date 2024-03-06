@@ -16,48 +16,51 @@
         <h2>@($"#{Model.CarId} - {Model.CarInfo}")</h2>
     }
     <hr />
-    <div class="col-md-4">
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
+    <div class="col-md-4">        
         <form asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="CarId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="SelectedCategoryId" class="control-label">Category</label>
-                <select asp-for="SelectedCategoryId" asp-items="@(new SelectList(Model.Categories, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCategoryId))"></select>
-                <span asp-validation-for="SelectedCategoryId" class="text-danger"></span>
+            <div class="form-information">
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SelectedCategoryId" class="control-label">Category</label>
+                    <select asp-for="SelectedCategoryId" asp-items="@(new SelectList(Model.Categories, nameof(CarCategoryViewModel.CategoryId), nameof(CarCategoryViewModel.CategoryName), Model.SelectedCategoryId))"></select>
+                    <span asp-validation-for="SelectedCategoryId" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
-                <input asp-for="Brand" class="form-control" />
+                <input class="form-input-box form-control" asp-for="Brand" />
                 <span asp-validation-for="Brand" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
+                <input class="form-input-box form-control" asp-for="Model" />
                 <span asp-validation-for="Model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ModelYear" class="control-label"></label>
-                <input asp-for="ModelYear" class="form-control" />
+                <input class="form-input-box form-control" asp-for="ModelYear" />
                 <span asp-validation-for="ModelYear" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Color" class="control-label"></label>
-                <input asp-for="Color" class="form-control" />
+                <input class="form-input-box form-control" asp-for="Color" />
                 <span asp-validation-for="Color" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RegistrationNumber" class="control-label"></label>
-                <input asp-for="RegistrationNumber" class="form-control" />
+                <input class="form-input-box form-control" asp-for="RegistrationNumber" />
                 <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RentalCostPerDay" class="control-label"></label>
-                <input type="number" asp-for="RentalCostPerDay" class="form-control" />
+                <input class="form-input-box form-control" type="number" asp-for="RentalCostPerDay" />
                 <span asp-validation-for="RentalCostPerDay" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -92,7 +95,7 @@
 </div>
 
 <div class="form-group d-flex justify-content-center">
-    <a asp-action="Index">Back to List</a>
+    <a class="route-links-table" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -54,66 +54,6 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
         #region Actions
 
-        // GET: AdminController/Details/5
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Details), id);
-            }
-
-            return View(await adminRep.GetAdminByIdAsync(id));
-        }
-
-        // GET: AdminController/Edit/5
-        [HttpGet]
-        public async Task<IActionResult> EditAsync(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Edit), id);
-            }
-
-            var admin = await adminRep.GetAdminByIdAsync(id);
-
-            if (admin == null)
-            {
-                return NotFound();
-            }
-            return View(admin);
-        }
-
-        // POST: AdminController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, AdminUser admin)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Edit), id);
-            }
-
-            if (id != admin.AdminId)
-            {
-                throw new Exception($"Invalid ID: {id}");
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await adminRep.EditAsync(admin);
-                }
-                catch (Exception)
-                {
-                    return View();
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
-        }
-
         // GET: AdminController
         public async Task<IActionResult> Index()
         {
@@ -139,7 +79,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 var orderAmount = await orderRep.GetAmountOfOrdersAsync();
                 ViewBag.OrderAmount = orderAmount.ToString();
 
-                return View(admin);
+                return View(new AdminViewModel(admin));
             }
 
             throw new Exception("Failed to find the admin in the database.");

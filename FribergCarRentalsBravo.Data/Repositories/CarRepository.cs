@@ -223,6 +223,16 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
             _databaseContext.Entry(entity.Category!).State = EntityState.Unchanged;        
         }
 
+        public async Task<IEnumerable<Car>> GetFirstCarWithImagesByCategory()
+        {
+            return await _databaseContext.Cars
+                .Include(x => x.Category).Include(x => x.Images)
+                .Where(x => x.Images.Count > 0)
+                .GroupBy(x => x.Category!.CarCategoryId)
+                .Select(x => x.First())
+                .ToListAsync();
+        }
+
         #endregion
     }
 }

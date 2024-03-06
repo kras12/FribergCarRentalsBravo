@@ -1,11 +1,9 @@
-﻿@using FribergCarRentalsBravo.DataAccess.Entities
-@model Customer
+﻿@using FribergCarRentalsBravo.Models.Customers
+@model CustomerViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
-
-
 
 <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Details</h1>
@@ -34,12 +32,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
         </dd>
     </dl>
     <div>

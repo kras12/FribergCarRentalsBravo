@@ -1,0 +1,103 @@
+﻿@using FribergCarRentals.Models.Other
+@using FribergCarRentalsBravo.Models.Other
+@model ListViewModel<SlideShowImageViewModel>
+
+<div class="image-slideshow-container">
+	@foreach (var image in Model.Models)
+	{
+		<div class="image-slide image-fade">
+			@if (image.LinksToAction is not null)
+			{
+				Dictionary<string, string> routeDictionary = new Dictionary<string, string>();
+				string? urlFragment = image.LinksToAction.UrlFragment ?? null;
+
+				if ( image.LinksToAction.RouteValues is not null)
+				{
+					routeDictionary = image.LinksToAction.RouteValues.Select(x => new KeyValuePair<string, string>(x.Key, x.Value?.ToString() ?? "")).ToDictionary();
+				}
+
+				// An empty string or null would have caused a hashtag (#) to be included at the end of the url.
+				if (string.IsNullOrEmpty(urlFragment))
+				{
+					<a asp-action="@image.LinksToAction.Action" asp-controller="@image.LinksToAction.Controller" asp-all-route-data="@routeDictionary">
+						<img src="@image.Url" class="full-width max-height__50vh" />
+					</a>
+				}
+				else
+				{
+					<a asp-action="@image.LinksToAction.Action" asp-controller="@image.LinksToAction.Controller" asp-all-route-data="@routeDictionary" asp-fragment="@urlFragment">
+						<img src="@image.Url" class="full-width max-height__50vh" />
+					</a>
+				}
+			}
+			else
+			{
+				<img src="@image.Url" class="full-width max-height__50vh" />
+			}	
+			@if (image.HaveCaption)
+			{
+				<div class="image-slide-caption">@image.ImageCaption</div>
+			}			
+		</div>
+	}
+	<a class="previous-slider-button" onclick="ShowNextSlide(-1)">&#10094;</a>
+	<a class="next-slider-button" onclick="ShowNextSlide(1)">&#10095;</a>
+	<div class="text-center">
+		@for (int i = 0; i < Model.Models.Count; i++)
+		{
+			<span class="navigation-dot" onclick="SetNextSlide(@i)"></span>
+		}
+	</div>
+</div>
+<script defer type="text/javascript">
+
+	let imageSlideIndex = 0;
+	let imageSlides = document.getElementsByClassName("image-slide");
+	let navigationDots = document.getElementsByClassName("navigation-dot");
+
+	ShowSlide();
+
+	function SetSlideIndex(index)
+	{
+		imageSlideIndex = index;
+
+		if (imageSlideIndex >= imageSlides.length) 
+		{
+			imageSlideIndex = 0;
+		}
+		else if (imageSlideIndex < 0)
+		{
+			imageSlideIndex = imageSlides.length - 1;
+		}
+	}
+
+	function ShowNextSlide(offset)
+	{
+		SetSlideIndex(imageSlideIndex + offset);
+		ShowSlide();
+	}
+
+	function SetNextSlide(index)
+	{
+		SetSlideIndex(index);
+		ShowSlide();
+	}
+
+	function ShowSlide() 
+	{
+		for (let i = 0; i < imageSlides.length; i++) 
+		{
+			imageSlides[i].classList.remove("active");
+		}
+
+		for (i = 0; i < navigationDots.length; i++) 
+		{
+			navigationDots[i].classList.remove("active");
+		}
+
+		imageSlides[imageSlideIndex].classList.add("active");
+		navigationDots[imageSlideIndex].classList.add("active");
+
+		console.log(navigationDots[imageSlideIndex]);
+	}
+</script>

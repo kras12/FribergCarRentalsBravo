@@ -83,14 +83,21 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         #region Actions
 
         // GET: CustomerOrderController/BookAsync
-        public async Task<IActionResult> Book()
+        public async Task<IActionResult> Book(int? carCategoryId)
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Book));
+                return RedirectToLogin(nameof(Book), new KeyValuePair<string, object?>(nameof(carCategoryId), carCategoryId));
             }
 
-            return View(new BookCarViewModel(availableCarCategoryFilters: (await _carCategoryRepository.GetAllAsync()).ToList(), havePerformedCarSearch: false));
+            var viewModel = new BookCarViewModel(availableCarCategoryFilters: (await _carCategoryRepository.GetAllAsync()).ToList(), havePerformedCarSearch: false);
+
+            if (carCategoryId != null)
+            {
+                viewModel.SelectedCarCategoryFilter = carCategoryId.Value;
+            }
+
+            return View(viewModel);
         }
 
         // POST: CustomerOrderController/Book
@@ -151,7 +158,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details), id);
+                return RedirectToLogin(nameof(Details), new KeyValuePair<string, object?>(nameof(id), id));
             }
 
             if (ModelState.Count > 0 && ModelState.IsValid)
@@ -175,7 +182,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         {
             if (!UserSessionHandler.IsCustomerLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Cancel), id);
+                return RedirectToLogin(nameof(Details), new KeyValuePair<string, object?>(nameof(id), id));
             }
 
             if (id <= 0)
@@ -256,14 +263,20 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         /// Redirects to the login page and request a redirect back afterwards. 
         /// </summary>
         /// <param name="action">The action to redirect to.</param>
-        /// <param name="id">An optional ID for the order.</param>
+        /// <param name="routeValue">An optional route value.</param>
         /// <returns><see cref="IActionResult"/>.</returns>
-        private IActionResult RedirectToLogin(string action, int? id = null)
+        private IActionResult RedirectToLogin(string action, KeyValuePair<string, object?>? routeValue = null)
         {
-            RouteValueDictionary? routeValues = id is not null ? new RouteValueDictionary(new { id = id }) : null;
+            RouteValueDictionary? routevalues = null;
+
+            if (routeValue != null)
+            {
+                routevalues = new RouteValueDictionary();
+                routevalues.Add(routeValue.Value.Key, routeValue.Value.Value);
+            }
 
             TempDataHelper.Set(TempData, CustomerController.RedirectToPageTempDataKey, new RedirectToActionData(
-                    action, ControllerHelper.GetControllerName<CustomerOrderController>(), routeValues: routeValues));
+                    action, ControllerHelper.GetControllerName<CustomerOrderController>(), routeValues: routevalues));
 
             return RedirectToAction(nameof(CustomerController.Authenticate), ControllerHelper.GetControllerName<CustomerController>());
         }

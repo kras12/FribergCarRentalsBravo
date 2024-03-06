@@ -12,68 +12,81 @@
 <body>
     <header>
         <div style="text-align:center; margin-bottom: 0">
-            <img class="side_image" src="/Images/FireSideLeft.webp" alt="SideFire" width="200" height="70">
-            <img class="image" src="/Images/friberg_logo.webp" alt="Logo" width="100" height="125">
-            <img class="side_image" src="/Images/FireSideRight.webp" alt="SideFire" width="200" height="70">
+            <img class="side_image" src="/Graphics/FireSideLeft.webp" alt="SideFire" width="200" height="70">
+            <img class="image" src="/Graphics/friberg_logo.webp" alt="Logo" width="100" height="125">
+            <img class="side_image" src="/Graphics/FireSideRight.webp" alt="SideFire" width="200" height="70">
         </div>
         <nav id="nav-background" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FribergCarRentalsBravo</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (UserSessionHandler.IsAdminLoggedIn(ViewContext.HttpContext.Session))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Admin Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminCar" asp-action="Index">Admin Cars</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminCarCategory" asp-action="Index">Admin Car Categories</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminCustomer" asp-action="Index">Customers</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminOrder" asp-action="Index">Admin Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminOrder" asp-action="PendingCars">Pending Cars</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CustomerOrder" asp-action="Book">Find Car</a>
-                            </li>
-                            @if (UserSessionHandler.IsCustomerLoggedIn(ViewContext.HttpContext.Session))
+                    <div></div>
+                    <div>
+                        <ul class="navbar-nav flex-grow-1 justify-content-between">
+                            @if (UserSessionHandler.IsAdminLoggedIn(ViewContext.HttpContext.Session))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Account</a>
+                                    <a class="nav-link text-dark" asp-controller="Admin" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminCustomer" asp-action="Index">Customers</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminCarCategory" asp-action="Index">Car Categories</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminCar" asp-action="Index">Cars</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminOrder" asp-action="PendingCars">Pending Cars</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="AdminOrder" asp-action="Index">Orders</a>
+                                </li>                            
                             }
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Authenticate">Register/Login</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="CustomerOrder" asp-action="Book">Find Car</a>
                                 </li>
                             }
-                        }
-                    </ul>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="navbar-nav flex-grow-1 justify-content-between">
+                            @if (UserSessionHandler.IsAdminLoggedIn(ViewContext.HttpContext.Session))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+
+                                @if (UserSessionHandler.IsCustomerLoggedIn(ViewContext.HttpContext.Session))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Account</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Authenticate">Register/Login</a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -85,8 +98,12 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - FribergCarRentalsBravo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container d-flex justify-content-between">
+            <div></div>
+            <div>
+                &copy; 2024 - FribergCarRentalsBravo
+            </div>
+            <div></div>            
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
