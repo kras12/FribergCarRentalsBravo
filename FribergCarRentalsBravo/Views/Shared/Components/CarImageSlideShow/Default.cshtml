@@ -55,6 +55,10 @@
 	let imageSlides = document.getElementsByClassName("image-slide");
 	let navigationDots = document.getElementsByClassName("navigation-dot");
 
+	setInterval(() => (
+		ShowNextSlide(1)
+	), 5000);
+
 	ShowSlide();
 
 	function SetSlideIndex(index)
