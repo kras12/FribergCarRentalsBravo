@@ -410,11 +410,12 @@ td {
     height: 6em
 }
 
-#form-input-box {
+.form-input-box {
     border-top: 0.2em solid;
     border-top-color: #fdc53e;
     border-bottom: 0.2em solid;
     border-bottom-color: #df540f;
+    margin: 0.2em;
 }
 
 .form-information {
@@ -423,6 +424,7 @@ td {
     border-bottom: 0.2em solid;
     border-bottom-color: #df540f;
     padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 
 /*==================================================*/
