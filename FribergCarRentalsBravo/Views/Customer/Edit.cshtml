@@ -1,4 +1,5 @@
-﻿@model FribergCarRentalsBravo.DataAccess.Entities.Customer
+﻿@using FribergCarRentalsBravo.Models.Customers
+@model EditCustomerViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,43 +7,39 @@
 
 <h1>Edit your details</h1>
 <hr />
+<partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CustomerId" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="vertical-form-group">
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group d-flex justify-content-center">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete your account?');">
-        <input type="hidden" name="id" value="@Model.CustomerId" asp-for="CustomerId" />
-        <button type="submit" class="btn btn-danger">Delete your account</button>
-    </form>
 </div>
 
 @section Scripts {

@@ -6,95 +6,96 @@
     ViewData["Title"] = "Cars";
 }
 
-<h1>Cars</h1>
-
-<p>
-    <a class="route-links-table" asp-action="Create">Create Car</a>
-</p>
-@if (Model.Count <= 0)
-{
-    <p class="text-align-center">No cars found.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].CarId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].IsActiveText)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Category.CategoryName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Brand)
-                </th>
-                 <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Model)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].ModelYear)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].Color)
-                </th>                
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].RegistrationNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var car in Model.Models)
-            {
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Cars</h1>
+    <p>
+        <a class="route-links-table" asp-action="Create">Create Car</a>
+    </p>
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
+    @if (Model.Count <= 0)
+    {
+        <p class="text-align-center">No cars found.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.CarId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.IsActiveText)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.Category.CategoryName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.Brand)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.Model)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.ModelYear)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.Color)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.RegistrationNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => car.RentalCostPerDay)
-                    </td>
-                    <td>
-                        <a class="route-links-table" asp-action="Edit" asp-route-id="@car.CarId">Edit</a>
-                        <a class="route-links-table" asp-action="Details" asp-route-id="@car.CarId">Details</a>
-                     </td>
-                     <td>
-                        <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this car?');">
-                            <input type="hidden" name="id" value="@car.CarId" asp-for="@car.CarId" />
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].CarId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].IsActiveText)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].Category.CategoryName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].Brand)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.Models[0].Model)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].ModelYear)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].Color)
+                    </th>                
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].RegistrationNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
+                    </th>
+                    <th></th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-
+            </thead>
+            <tbody>
+                @foreach (var car in Model.Models)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.CarId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.IsActiveText)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Category.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Brand)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.ModelYear)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.Color)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.RegistrationNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => car.RentalCostPerDay)
+                        </td>
+                        <td>
+                            <a class="route-links-table" asp-action="Edit" asp-route-id="@car.CarId">Edit</a>
+                            <a class="route-links-table" asp-action="Details" asp-route-id="@car.CarId">Details</a>
+                         </td>
+                         <td>
+                            <form asp-action="Delete" onsubmit="return confirm('Are you sure you want to delete this car?');">
+                                <input type="hidden" name="id" value="@car.CarId" asp-for="@car.CarId" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

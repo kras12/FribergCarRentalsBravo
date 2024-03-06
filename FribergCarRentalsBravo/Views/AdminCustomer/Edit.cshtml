@@ -8,6 +8,7 @@
 <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Edit Customer</h1>
     <hr />
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

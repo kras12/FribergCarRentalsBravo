@@ -1,3 +1,8 @@
+using FribergCarRentals.Models.Other;
+using FribergCarRentalsBravo.Controllers.Customers;
+using FribergCarRentalsBravo.Data;
+using FribergCarRentalsBravo.DataAccess.Repositories;
+using FribergCarRentalsBravo.Helpers;
 using FribergCarRentalsBravo.Models;
 using FribergCarRentalsBravo.Models.Other;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +12,42 @@ namespace FribergCarRentalsBravo.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        #region Fields
 
-        public HomeController(ILogger<HomeController> logger)
+        ICarRepository _carRepository;
+
+        #endregion
+
+        #region Constructors
+
+        public HomeController(ICarRepository carRepository)
         {
-            _logger = logger;
+            _carRepository = carRepository;
         }
 
-        public IActionResult Index()
+        #endregion
+
+
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<SlideShowImageViewModel> images = new();
+
+            var cars = (await _carRepository.GetFirstCarWithImagesByCategory()).ToList();
+
+            foreach (var car in cars)
+            {
+                var image = car.Images.First();
+
+                images.Add(new SlideShowImageViewModel(
+                    ImageHelper.GetImageFileUrl(image), image.FileName, image.ImageId,
+                    imageCaption: car.Category!.CategoryName,
+					linksToAction: new RedirectToActionData(
+                        action: nameof(CustomerOrderController.Book),
+                        controller: ControllerHelper.GetControllerName<CustomerOrderController>(),
+                        routeValues: new RouteValueDictionary(new { CarCategoryId = car.Category!.CarCategoryId }))));
+            }
+
+            return View(new ListViewModel<SlideShowImageViewModel>(images));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -27,7 +27,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// <remarks>Returned admin will not be tracked by EF Core.</remarks>
         /// <param name="id">The ID of the admin.</param>
         /// <returns>A <see cref="Task"/> object containg the admin.</returns>
-        public Task<AdminUser> GetAdminByIdAsync(int id);
+        public Task<AdminUser?> GetAdminByIdAsync(int id);
 
         /// <summary>
         /// Attempts to fetch an admin with matching email and password.
