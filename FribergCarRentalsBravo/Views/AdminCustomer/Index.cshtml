@@ -50,7 +50,7 @@ else
                         @Html.DisplayFor(modelItem => customer.LastName)
                     </td>
                     <td>
-                        <a class="route-links-table" @Html.DisplayFor(modelItem => customer.Email)></a>
+                        <a class="route-links-table" href="mailto:@(customer.Email)">@(customer.Email)</a>
                     </td>
                     <td>
                         <a class="route-links-table" asp-action="Edit" asp-controller="AdminCustomer" asp-route-id="@customer.CustomerId">Ändra</a>
