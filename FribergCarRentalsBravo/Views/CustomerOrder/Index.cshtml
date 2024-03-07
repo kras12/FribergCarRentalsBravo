@@ -6,80 +6,82 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Orders</h1>
-@if (Model.Count == 0)
-{
-    <p>
-        No orders found.
-    </p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].OrderDate)
-                </th>
-                 <th>
-                        Car
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].CarPickupDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].CarReturnDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Models[0].IsCancelled)
-                </th>
-               
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Models)
-            {
+<div class="vertical-page-container">
+    <h1>Orders</h1>
+    @if (Model.Count == 0)
+    {
+        <p>
+            No orders found.
+        </p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OrderDate)
-                    </td>
-                    <td>
-                           @($"{item.Car.Brand} {item.Car.Model}")
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CarPickupDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CarReturnDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RentalCostPerDay)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsCancelled)
-                    </td>
-                  
-                    <td>
-                        <a class="route-links-table" asp-action="Details" asp-route-id="@item.CarOrderId">Details</a>
-                    </td>
-                    <td>
-                        @if (item.IsCancelable)
-                        {
-                            <form asp-action="Cancel" onsubmit="return confirm('Are you sure you want to cancel this order?');">
-                                <input type="hidden" name="id" value="@item.CarOrderId" asp-for="@item.CarOrderId" />
-                                <button type="submit" class="btn btn-danger">Cancel</button>
-                            </form>
-                        }
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].OrderDate)
+                    </th>
+                     <th>
+                            Car
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].CarPickupDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].CarReturnDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].RentalCostPerDay)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Models[0].IsCancelled)
+                    </th>
+               
+                    <th></th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Models)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderDate)
+                        </td>
+                        <td>
+                               @($"{item.Car.Brand} {item.Car.Model}")
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CarPickupDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CarReturnDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RentalCostPerDay)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsCancelled)
+                        </td>
+                  
+                        <td>
+                            <a class="route-links-table" asp-action="Details" asp-route-id="@item.CarOrderId">Details</a>
+                        </td>
+                        <td>
+                            @if (item.IsCancelable)
+                            {
+                                <form asp-action="Cancel" onsubmit="return confirm('Are you sure you want to cancel this order?');">
+                                    <input type="hidden" name="id" value="@item.CarOrderId" asp-for="@item.CarOrderId" />
+                                    <button type="submit" class="btn btn-danger">Cancel</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
 
