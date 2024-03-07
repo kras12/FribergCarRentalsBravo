@@ -18,8 +18,8 @@
     --header-background-color: #68767b;
     --navigation-menu-header-background-color: #adadad;
     
-    /*--action-element-hover-background-color: #999;*/
-    --action-element-hover-background-color: #cc805b;
+    --action-element-hover-background-color: #999;
+   /* --action-element-hover-background-color: #cc805b;*/
 
     
 
@@ -94,6 +94,15 @@ body {
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
+    padding: 0.5rem;
+}
+
+.vertical-page-section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    width: 100%;
 }
 
 /*==================================================*/
