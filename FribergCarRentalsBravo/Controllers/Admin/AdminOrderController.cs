@@ -159,7 +159,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                     order.ReturnDate = editOrderViewModel.ReturnDate.Value;
                     order.CostPerDay = editOrderViewModel.CostPerDay;
                     await orderRepo.EditOrderAsync(order);
-                    EditOrderViewModel viewModel = new EditOrderViewModel();
+                    EditOrderViewModel viewModel = new EditOrderViewModel(order);
                     viewModel.Messages.Add(UserMesssageHelper.CreateOrderUpdateSuccessMessage(editOrderViewModel.OrderId));
                     return View(viewModel);
                 }
