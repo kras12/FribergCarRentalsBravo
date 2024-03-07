@@ -5,9 +5,8 @@
     ViewData["Title"] = "Edit Order";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="vertical-page-container">
     <h1>Edit Order</h1>
-    <hr />
     <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     <div class="col-md-4">
         <dl class="form-information">
@@ -28,7 +27,7 @@
                 </dd>
             </div>
         </dl>        
-        <form asp-action="Edit">
+        <form class="vertical-form" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />
             <input type="hidden" asp-for="OrderDate" />
@@ -47,7 +46,7 @@
                 <input class="form-input-box form-control" type="number" asp-for="CostPerDay" />
                 <span asp-validation-for="CostPerDay" class="text-danger"></span>
             </div>
-            <div class="form-group d-flex justify-content-center">
+            <div class="form-buttons-container">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

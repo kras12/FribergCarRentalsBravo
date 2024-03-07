@@ -135,7 +135,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Delete));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id <= 0)
@@ -174,7 +174,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id < 0)
@@ -205,7 +205,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Edit), id);
             }
 
             if (id < 0)
@@ -233,7 +233,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Edit));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id <= 0 || id != editCarViewModel.CarId)

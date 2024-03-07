@@ -5,12 +5,11 @@
     ViewData["Title"] = "Order";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="vertical-page-container">
     <h1>Order</h1>
-    <hr />
-    <dl class="row">
+    <dl class="row filled-container">
         <dt>
-            @Html.DisplayNameFor(model => model.OrderDate):
+            @Html.DisplayNameFor(model => model.OrderDate)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.OrderDate)

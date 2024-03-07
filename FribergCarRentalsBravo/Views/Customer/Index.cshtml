@@ -5,12 +5,13 @@
     ViewData["Title"] = "Back Office";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
-    <h1>Hello @(Model.FirstName)!</h1>
-    <p class="form-information">You can see your account details below.</p>
-    <hr />
-    <dl class="row">
-        <dt>
+<div class="vertical-page-container">
+    <div>
+        <h1>Hello @(Model.FirstName)!</h1>
+        <p class="form-information">You can see your account details below.</p>
+    </div>
+    <dl class="d-flex flex-row flex-wrap">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
         <dd>
