@@ -6,19 +6,38 @@
     /* The default box shadow */
     --default-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
 
+    /* The box shadow for hovered elements (navigation menu, buttons, etc) */
+    --box-shadow-hover: 0px 0px 2px 1px #ff5600;
+
     /* The background color for filled boxes */
     --filled-box-background-color: #ddd;
 
-    --image-slider-button-color: black;
-    --image-slider-button-hover-color: grey;
-    --image-slider-nav-dot-color: black;
-    --image-slider-nav-dot-hover-color: grey;
+    --default-orange-color: #df540f;
+    --navigation-link-text-color: fff;
+
+    --header-background-color: #68767b;
+    --navigation-menu-header-background-color: #adadad;
+    
+    /*--action-element-hover-background-color: #999;*/
+    --action-element-hover-background-color: #cc805b;
+
+    
+
+    --image-slider-button-color: var(--default-orange-color);
+    --image-slider-button-hover-background-color: var(--navigation-menu-header-background-color);
+    --image-slider-nav-dot-color:var(--default-orange-color);
+    --image-slider-nav-dot-hover-color: var(--header-background-color);
     --image-slider-slide-caption-color: white;
-    --image-slider-slide-caption-background-color: black;
+    --image-slider-slide-caption-background-color: var(--default-orange-color);   
 }
 
+/*==================================================*/
+/* Font                                             */
+/*==================================================*/
+
 html {
-  font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -27,9 +46,30 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+:is(h1, h2, h3, h4, h5, h6) {
+    text-align: center;
 }
+
+/*==================================================*/
+/* Links                                            */
+/*==================================================*/
+
+.nav-link
+{
+    color: var(--navigation-link-text-color);
+    font-size: 1.1rem;
+    border-radius: 10px;
+}
+
+nav a:hover, .btn:hover
+{
+  background-color: var(--action-element-hover-background-color);
+  box-shadow: var(--box-shadow-hover);
+}
+
+/*==================================================*/
+/* Containers                                       */
+/*==================================================*/
 
 html {
   position: relative;
@@ -41,22 +81,24 @@ body {
     background-color: #e3e3e3;
 }
 
-/*==================================================*/
-/* Containers                                       */
-/*==================================================*/
-
-header {
-    background-color: #68767b;
+.main-header {
+    background-color: var(--header-background-color);
 }
 
 #nav-background {
-    background-color: #adadad !important;
+    background-color: var(--navigation-menu-header-background-color);
+}
+
+.vertical-page-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
 }
 
 /*==================================================*/
 /* Filled containers                                */
 /*==================================================*/
-
 
 /* Filled container */
 .filled-container
@@ -65,17 +107,47 @@ header {
   box-shadow: var(--default-box-shadow);  
 }
 
+/*==================================================*/
+/* Elements                                         */
+/*==================================================*/
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
 
 /*==================================================*/
 /* Forms                                            */
 /*==================================================*/
 
-.vertical-form-group
+.vertical-form
+{
+    display: flex;
+    flex-direction: column;  
+    row-gap: 0.5rem;
+}
+
+.vertical-form .form-buttons-container
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/*.vertical-form label
+{
+    margin-bottom: 0.3rem;
+}*/
+
+.vertical-form .form-group
 {
     display: flex;
     flex-direction: column;
-    row-gap: 0.25rem;
-}  
+    row-gap: 0.2rem;
+}
+
+select.form-control {
+    appearance: revert;
+}
 
 /*==================================================*/
 /* Images                                           */
@@ -118,7 +190,7 @@ img.cover-image
 }
 
 /* Slideshow container - Image animation */
-.image-slideshow-container .image-fade 
+.image-slideshow-container .image-fade
 {
   animation-name: fade;
   animation-duration: 1.5s;
@@ -182,7 +254,7 @@ img.cover-image
 /* Slideshow container - Image slide - Buttons - Hover */
 .image-slideshow-container :is(.previous-slider-button, .next-slider-button):hover
 {
-   background-color: var(--image-slider-button-hover-color);
+   background-color: var(--image-slider-button-hover-background-color);
 }
 
 /* Slideshow container - Image slide - Next button */
@@ -283,22 +355,17 @@ table {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: black;
+    caption-side: bottom;
 }
 
 .table tr:nth-child(odd) {
     background-color: #e3e3e3;
-    color: black;
-    /*border-collapse: collapse;*/
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    caption-side: bottom;
 }
 
 .table tr:nth-child(even) {
     background-color: #bbb9b9;
-    color: black;
-    /*border-collapse: collapse;*/
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    caption-side: bottom;
 }
 
 th {
@@ -306,7 +373,7 @@ th {
     border-top: 0.2em solid;
     border-top-color: #fdc53e;
     border-bottom: 0.2em solid;
-    border-bottom-color: #df540f;
+    border-bottom-color: var(--default-orange-color);
     font-weight: bolder;
     padding: 0.5em;
 }
@@ -314,7 +381,7 @@ th {
 tr {
     border-top: 0.2em solid;
     border-bottom: 0.2em solid;
-    border-bottom-color: #df540f;
+    border-bottom-color: var(--default-orange-color);
     padding: 0.5em;
 }
 
@@ -387,8 +454,8 @@ td {
 .div-statistics-left {
     border-top: 0.2em solid;
     border-right: 0.2em solid;
-    border-top-color: #df540f;
-    border-right-color: #df540f;
+    border-top-color: var(--default-orange-color);
+    border-right-color: var(--default-orange-color);
    /* border-left-color: #df540f;*/
     /*border-right-color: #df540f;*/
     /*border-width: 2px;*/
@@ -400,8 +467,8 @@ td {
 .div-statistics-right {
     border-top: 0.2em solid;
     border-left: 0.2em solid;
-    border-top-color: #df540f;
-    border-left-color: #df540f;
+    border-top-color: var(--default-orange-color);
+    border-left-color: var(--default-orange-color);
     /* border-left-color: #df540f;*/
     /*border-right-color: #df540f;*/
     /*border-width: 2px;*/
@@ -414,7 +481,7 @@ td {
     border-top: 0.2em solid;
     border-top-color: #fdc53e;
     border-bottom: 0.2em solid;
-    border-bottom-color: #df540f;
+    border-bottom-color: var(--default-orange-color);
     margin: 0.2em;
 }
 
@@ -422,14 +489,39 @@ td {
     border-top: 0.2em solid;
     border-top-color: #fdc53e;
     border-bottom: 0.2em solid;
-    border-bottom-color: #df540f;
+    border-bottom-color: var(--default-orange-color);
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+}
+
+.colored-border-bottom
+{
+    border-bottom: 0.2em solid;
+    border-bottom-color: #fdc53e;
+    margin-bottom: 0
+}
+
+.colored-border-top
+{
+    border-top: 0.2em solid;
+    border-top-color: var(--default-orange-color);
 }
 
 /*==================================================*/
 /* Universal modifiers                              */
 /*==================================================*/
+
+/* Font size - Large */
+.font-size_large
+{
+    font-size: large;
+}
+
+/* Font size - XLarge */
+.font-size_x-large
+{
+    font-size: x-large;
+}
 
 /* Full width */
 .full-width

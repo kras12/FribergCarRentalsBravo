@@ -15,6 +15,7 @@ using FribergCarRentals.Models.Orders;
 using FribergCarRentalsBravo.Models.Admin;
 using FribergCarRentals.Models.Other;
 using FribergCarRentalsBravo.Models.Orders;
+using FribergCarRentalsBravo.Models.Customers;
 
 namespace FribergCarRentalsBravo.Controllers.Admin
 {
@@ -74,7 +75,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if(!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id < 0)
@@ -121,13 +122,18 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditOrderViewModel editOrderViewModel)
+        public async Task<IActionResult> Edit(int id, EditOrderViewModel editOrderViewModel)
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Index));
+                return RedirectToLogin(nameof(Edit), id);
             }
-            
+
+            if (id <= 0 || id != editOrderViewModel.OrderId)
+            {
+                throw new Exception($"Invalid ID or ID mismatch - QueryParameter: {id} - ViewModel: {editOrderViewModel.OrderId}");
+            }
+
             if (ModelState.Count > 0 && ModelState.IsValid)
             {
                 if (editOrderViewModel.PickupDate is null || editOrderViewModel.PickupDate <= DateTime.Now)
@@ -168,7 +174,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Delete));
+                return RedirectToLogin(nameof(Details), id);
             }
 
             if (id <= 0)

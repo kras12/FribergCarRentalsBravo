@@ -6,11 +6,9 @@
     ViewData["Title"] = "Car Categories";
 }
 
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="vertical-page-container">
     <h1>Car Categories</h1>
-    <p>
-        <a class="route-links-table" asp-action="Create">Create Category</a>
-    </p>
+    <a class="route-links-table" asp-action="Create">Create Category</a>
     @if (Model.Count <= 0)
     {
         <p class="text-align-center">No categories found.</p>
