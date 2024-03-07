@@ -6,63 +6,60 @@
 }
 
 
-<div class="vertical-page-container">
-    <div>
-        <h1>Details</h1>
-        <h2>@Model.CarInfo</h2>
-    </div>    
+<div class="vertical-page-container"">
+    <h1>Details</h1>    
     <dl class="row filled-container">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActiveText)
+            <dt>
+                @Html.DisplayNameFor(model => model.IsActiveText):
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.IsActiveText)
+            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Category.CategoryName):
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsActiveText)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
-        </dt>
-        <dd class="col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Brand)
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand):
         </dt>
-        <dd class = "col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.Brand)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Model)
+        <dt>
+            @Html.DisplayNameFor(model => model.Model):
         </dt>
-        <dd class="col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.Model)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ModelYear)
+        <dt>
+            @Html.DisplayNameFor(model => model.ModelYear):
         </dt>
-        <dd class="col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.ModelYear)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
+        <dt>
+            @Html.DisplayNameFor(model => model.Color):
         </dt>
-        <dd class = "col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.Color)
         </dd>        
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegistrationNumber)
+        <dt>
+            @Html.DisplayNameFor(model => model.RegistrationNumber):
         </dt>
-        <dd class = "col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.RegistrationNumber)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RentalCostPerDay)
+        <dt>
+            @Html.DisplayNameFor(model => model.RentalCostPerDay):
         </dt>
-        <dd class = "col-sm-10">
+        <dd>
             @Html.DisplayFor(model => model.RentalCostPerDay)
         </dd>
     </dl>
 </div>
 <div class="d-flex flex-row justify-content-center align-items-center gap-1">
-    <a asp-action="Edit" asp-route-id="@Model?.CarId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="route-links-table" asp-action="Edit" asp-route-id="@Model?.CarId">Edit</a>
+    <a class="route-links-table" asp-action="Index">Back to List</a>
 </div>
