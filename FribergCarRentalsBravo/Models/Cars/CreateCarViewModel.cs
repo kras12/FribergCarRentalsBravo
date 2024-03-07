@@ -47,6 +47,7 @@ namespace FribergCarRentalsBravo.Models.Cars
         /// </summary>
         [Required]
         [Range(1, int.MaxValue)]
+        [DisplayName("Category")]
         public int SelectedCategoryId { get; set; } 
 
         /// <summary>
