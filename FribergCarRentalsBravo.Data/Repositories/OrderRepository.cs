@@ -41,8 +41,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         public async Task<Order> EditOrderAsync(Order order)
         {
+            applicationDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            applicationDbContext.Customers.Attach(order.Customer);
+            applicationDbContext.Cars.Attach(order.Car);
             applicationDbContext.Update(order);
-            await applicationDbContext.SaveChangesAsync();            
+            await applicationDbContext.SaveChangesAsync();
             return PasswordHelper.RemovePassword(order)!;
         }
 
