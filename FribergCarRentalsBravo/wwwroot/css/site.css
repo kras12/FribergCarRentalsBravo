@@ -407,6 +407,38 @@ td {
 }
 
 /*==================================================*/
+/* Lists                                            */
+/*==================================================*/
+
+dl {
+    display: flex;
+    max-width: 21em;
+}
+
+dt {
+    flex-basis: 40%;
+    text-align: center;
+    border-bottom: 0.15em solid;
+    border-bottom-color: #df540f;
+    border-top: 0.15em solid;
+    border-top-color: #df540f;
+    padding: 0.4em;
+    background-color: #bbb9b9;
+}
+
+dd {
+    flex-basis: 60%;
+    text-align: center;
+    margin-bottom: 0;
+    border-bottom: 0.15em solid;
+    border-top: 0.15em solid;
+    border-top-color: #df540f;
+    border-bottom-color: #df540f;
+    padding: 0.4em;
+    background-color: #e3e3e3;
+}
+
+/*==================================================*/
 /* Messages                                         */
 /*==================================================*/
 
