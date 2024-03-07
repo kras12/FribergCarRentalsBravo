@@ -1,17 +1,17 @@
-﻿@using FribergCarRentalsBravo.DataAccess.Entities
-@model IEnumerable<FribergCarRentalsBravo.DataAccess.Entities.Order>
+﻿@using FribergCarRentalsBravo.Models.Orders
+@model IEnumerable<OrderViewModel>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderId)
+                @Html.DisplayNameFor(model => model.CarOrderId)
             </th>
             
             <th>
-                @Html.DisplayNameFor(model => model.PickupDate)
+                @Html.DisplayNameFor(model => model.CarPickupDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReturnDate)
+                @Html.DisplayNameFor(model => model.CarReturnDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Car)
@@ -27,13 +27,13 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.OrderId)
+                    @Html.DisplayFor(modelItem => item.CarOrderId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.PickupDate)
+                    @Html.DisplayFor(modelItem => item.CarPickupDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                    @Html.DisplayFor(modelItem => item.CarReturnDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Car.Brand) @Html.DisplayFor(modelItem => item.Car.Model)

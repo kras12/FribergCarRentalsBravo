@@ -17,35 +17,51 @@
         <h3 class="colored-border-top">Total amount of:</h3>
 
         <div class="d-flex flex-row gap-5">
-            <div class="text-center">
-                <div class="div-statistics-left">
-                    <h5>Registered customers</h5>
-                    <p class="font-size_x-large">@ViewBag.CustomerAmount</p>
+            <div class="text-center div-statistics-left">
+                <div class="div-statistics-title">
+                    <h5>Customers</h5>
                 </div>
-                <a class="route-links-table" asp-controller="AdminCustomer" asp-action="Index">-List of all customers-</a>
+                <div>
+                   <p class="font-size_x-large">@ViewBag.CustomerAmount</p>
+                </div>
+                <div>
+                    <a class="btn btn-primary" asp-controller="AdminCustomer" asp-action="Index">List customers</a>
+                </div>                
             </div>
-            <div class="text-center">
-                <div class="div-statistics-right">
-                    <h5>Cars in the fleet</h5>
-                    <p class="font-size_x-large">@ViewBag.CarAmount</p>
+            <div class="text-center div-statistics-right">
+                <div class="div-statistics-title">
+                    <h5>Cars</h5>
                 </div>
-                <a class="route-links-table" asp-controller="AdminCar" asp-action="Index">-List of all cars-</a>
+                <div>
+                    <p class="font-size_x-large">@ViewBag.CarAmount</p>
+                </div>                    
+                <div>
+                    <a class="btn btn-primary" asp-controller="AdminCar" asp-action="Index">List cars</a>
+                </div>                
             </div>
         </div>
         <div class="d-flex flex-row gap-5">
-            <div class="text-center">
-                <div class="div-statistics-left">
+            <div class="text-center div-statistics-left">
+                <div class="div-statistics-title">
                     <h5>Car categories</h5>
+                </div>
+                <div>
                     <p class="font-size_x-large">@ViewBag.CarCategoryAmount</p>
                 </div>
-                <a class="route-links-table" asp-controller="AdminCarCategory" asp-action="Index">-List of all car categories-</a>
+                <div>
+                    <a class="btn btn-primary" asp-controller="AdminCarCategory" asp-action="Index">List car categories</a>
+                </div>                
             </div>
-            <div class="text-center">
-                <div class="div-statistics-right">
-                    <h5>Orders in the system</h5>
+            <div class="text-center div-statistics-right">
+                <div class="div-statistics-title">
+                    <h5>Orders</h5>                    
+                </div>
+                <div>
                     <p class="font-size_x-large">@ViewBag.OrderAmount</p>
                 </div>
-                <a class="route-links-table" asp-controller="AdminOrder" asp-action="Index">-List of all orders-</a>
+                <div>
+                    <a class="btn btn-primary" asp-controller="AdminOrder" asp-action="Index">List orders</a>
+                </div>                
             </div>
         </div>
     </div>

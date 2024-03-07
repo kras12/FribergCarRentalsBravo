@@ -67,31 +67,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             return View(viewModel);
-        }
-
-        // GET: AdminOrder/Details/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int id)
-        {
-            if(!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Details), id);
-            }
-
-            if (id < 0)
-            {
-                throw new Exception($"Invalid ID: {id}");
-            }
-
-            var order = await orderRepo.GetOrderByIdAsync(id);
-
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(new OrderViewModel(order));
-        }
+        }       
 
         // GET: AdminOrder/Edit/5
         [HttpGet("{id}")]
@@ -174,7 +150,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details), id);
+                return RedirectToLogin(nameof(Index));
             }
 
             if (id <= 0)

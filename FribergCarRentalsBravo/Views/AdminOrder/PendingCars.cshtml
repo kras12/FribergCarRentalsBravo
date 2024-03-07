@@ -33,7 +33,7 @@
         {
             @foreach (var order in Model.Orders)
             {
-                <div id="@order.Car.CarId" class="d-flex flex-column gap-2 align-items-center filled-container">
+                <div id="@order.Car.CarId" class="d-flex flex-column gap-2 align-items-center filled-container py-2">
                     <h2>@($"{order.Car.CarInfo}")</h2>
                     <dl class="row">
                         <dt>

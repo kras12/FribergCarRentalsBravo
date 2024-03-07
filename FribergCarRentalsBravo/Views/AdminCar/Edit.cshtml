@@ -22,12 +22,10 @@
         <form class="vertical-form" asp-action="Edit" enctype="multipart/form-data">
             <input type="hidden" asp-for="CarId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-information d-flex flex-row flex-wrap gap-5">
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                    </label>
-                </div>
+            <div class="form-group">
+                <label class="form-check-label">
+                    <input asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
+                </label>
             </div>
             <div class="form-group d-flex flex-column">
                 <label asp-for="SelectedCategoryId" class="control-label">Category</label>
@@ -94,7 +92,7 @@
         </form>
     </div>
     <div>
-        <a class="route-links-table" asp-action="Index">Back to List</a>
+        <a class="btn btn-primary" asp-action="Index">Back to List</a>
     </div>
 </div>
 

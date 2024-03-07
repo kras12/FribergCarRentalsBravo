@@ -1,4 +1,5 @@
 ﻿using FribergCarRentalsBravo.DataAccess.Repositories;
+using FribergCarRentalsBravo.Models.Orders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FribergCarRentalsBravo.Components
@@ -14,7 +15,7 @@ namespace FribergCarRentalsBravo.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var orders = await orderRep.GetAllTodaysPickupsAsync();
+            var orders = (await orderRep.GetAllTodaysPickupsAsync()).Select(x => new OrderViewModel(x)).ToList();
             return View(orders);
         }
     }
