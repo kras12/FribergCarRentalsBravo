@@ -8,7 +8,7 @@
 <div class="vertical-page-container">
     <h1>Edit Order</h1>
     <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
-    <dl class="row form-information">
+    <dl class="row">
         <div class="d-flex flex-row">
             <dt>
                 Order ID:
@@ -26,7 +26,7 @@
             </dd>
         </div>
     </dl>
-    <div class="col-md-4">             
+    <div class="col-md-4">        
         <form class="vertical-form" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />
