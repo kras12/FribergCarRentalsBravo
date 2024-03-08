@@ -31,11 +31,11 @@
             @Html.DisplayNameFor(model => model.Email):
         </dt>
         <dd>
-            <a class="route-links-table" href="mailto:@(Model.Email)">@(Model.Email)</a>
+            <a href="mailto:@(Model.Email)">@(Model.Email)</a>
         </dd>
     </dl>
     <div>
-        <a class="route-links-table" asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a>
-        <a class="route-links-table" asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
+        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.CustomerId">Edit</a>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="AdminCustomer">Back to List</a>
     </div>
 </div>

@@ -42,7 +42,7 @@
         {
             @foreach (var car in Model.AvailableCars)
             {
-                <div id="@car.CarId" class="d-flex flex-column gap-2 align-items-center filled-container">
+                <div id="@car.CarId" class="d-flex flex-column gap-3 align-items-center filled-container full-width py-2">
                     <h2>@($"{car.CarInfo}")</h2>
                     <div class="horizontal-flex-container flex-container__justify-content__center flex-container__column-gap__0-5-rem">
                         <form asp-action="Create" asp-controller="CustomerOrder" method="post">

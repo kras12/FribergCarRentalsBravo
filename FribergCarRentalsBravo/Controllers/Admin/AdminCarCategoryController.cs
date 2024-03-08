@@ -79,31 +79,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             }
 
             return View(viewModel);
-        }
-
-        // GET: CarCategory/Details/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int id)
-        {
-            if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
-            {
-                return RedirectToLogin(nameof(Details), id);
-            }
-
-            if (id <= 0)
-            {
-                throw new Exception("Invalid category ID.");
-            }
-
-            var carCategory = await carCategoryRepo.GetByIdAsync(id);
-
-            if (carCategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(new CarCategoryViewModel(carCategory));
-        }
+        }       
 
         // GET: CarCategory/Create
         public async Task<IActionResult> Create()
@@ -200,7 +176,7 @@ namespace FribergCarRentalsBravo.Controllers.Admin
         {
             if (!UserSessionHandler.IsAdminLoggedIn(HttpContext.Session))
             {
-                return RedirectToLogin(nameof(Details), id);
+                return RedirectToLogin(nameof(Index));
             }
 
             if (id <= 0)
