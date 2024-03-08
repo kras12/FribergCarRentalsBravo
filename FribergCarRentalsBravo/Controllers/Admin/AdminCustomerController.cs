@@ -60,12 +60,6 @@ namespace FribergCarRentalsBravo.Controllers.Admin
 
             ListViewModel<CustomerViewModel> viewModel = new ((await customerRep.GetAllCustomers()).Select(x => new CustomerViewModel(x)).ToList());
 
-            if (TempDataHelper.TryGet(TempData, CreatedCustomerIdTempDataKey, out int customerId))
-            {
-                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerCreationSuccessMessage(customerId));
-                return View(viewModel);
-            }
-
             if (TempDataHelper.TryGet(TempData, DeletedCustomerIdTempDataKey, out int deletedCustomerId))
             {
                 viewModel.Messages.Add(UserMesssageHelper.CreateCustomerDeletionSuccessMessage(deletedCustomerId));
@@ -90,6 +84,12 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Failed to find customer with id '{id}'.");
             }
 
+            if (TempDataHelper.TryGet(TempData, CreatedCustomerIdTempDataKey, out int customerId))
+            {
+                CustomerViewModel viewModel = new CustomerViewModel(customer);
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerCreationSuccessMessage(customerId));
+                return View(viewModel);
+            }
             return View(new CustomerViewModel(customer));
         }
 

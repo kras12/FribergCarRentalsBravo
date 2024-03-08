@@ -8,6 +8,7 @@
 
 <div class="vertical-page-container">
     <h1>Car Categories</h1>
+    <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     <a class="route-links-table" asp-action="Create">Create Category</a>
     @if (Model.Count <= 0)
     {
