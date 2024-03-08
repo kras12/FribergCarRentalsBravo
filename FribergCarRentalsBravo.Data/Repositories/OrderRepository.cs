@@ -26,6 +26,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
                 throw new Exception("Can't create an order for an inactive car.");
             }
 
+            applicationDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
             applicationDbContext.Attach(order.Car);
             applicationDbContext.Attach(order.Customer);
             applicationDbContext.Add(order);
