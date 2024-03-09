@@ -72,10 +72,11 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// Returns all the cars that matches the specified category and that are available to be rented out within the desired timespan. 
         /// </summary>
         /// <param name="pickupDate">The pickup date for the car.</param>
+        /// /// <param name="returnDate">The return date for the car.</param>
         /// <remarks>Returned cars will not be tracked by EF Core.</remarks>
         /// <param name="category">The category of the car.</param>
         /// <returns>A <see cref="Task{TResult}"/> containing a collection of matching cars.</returns>
-        public Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, CarCategory? category = null);
+        public Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, DateTime returnDate, CarCategory? category = null);
 
         /// <summary>
         /// Updates a car in the database.

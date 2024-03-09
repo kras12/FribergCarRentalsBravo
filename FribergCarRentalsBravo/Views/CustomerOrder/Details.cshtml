@@ -6,21 +6,19 @@
 }
 
 
-<div class="d-flex flex-column gap-4 align-items-center">
+<div class="vertical-page-container">
     @if (Model.IsNewOrder)
     {
         <h1>Thank you for your order!</h1>
-        <p class="text-align-center">Details of your order can be found below.</p>
+        <div class="text-align-center">Details of your order can be found below.</div>
     }
     else
     {
         <h1>@($"Order - #{Model.CarOrderId}")</h1>
+        <partial name="/Views/Shared/_UserMessages.cshtml" for="Messages" />
     }
-    <div class="horizontal-flex-container flex-container__justify-content__center flex-container__column-gap__0-5-rem">
-        @{ 
-            // TODO -  Implement button to order list 
-        }
-        @* <a asp-action="List" class="button navigational-button">View Orders</a> *@
+    <div class="d-flex flex-row justify-content-center gap-2">
+        <a class="btn btn-primary" asp-action="Index">View Orders</a>
         @if (Model.IsCancelable)
         {
             <form asp-action="Cancel" onsubmit="return confirm('Are you sure you want to cancel this order?');">
@@ -29,9 +27,6 @@
             </form>
         }
     </div>
-    @{
-        // TODO -  Create message to confirm delete?
-    }
     <div class="d-flex flex-column gap-2 align-items-center container-fluid filled-container">
         <div class="d-flex flex-column gap-2 align-items-center">
             @if (Model.IsCancelled)

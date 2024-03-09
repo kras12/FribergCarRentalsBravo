@@ -106,7 +106,7 @@ namespace FribergCarRentalsBravo.Models.Orders
         /// </summary>
         [DisplayName("New Order")]
         [BindNever]
-        public bool IsNewOrder { get; private set; }
+        public bool IsNewOrder { get; set; }
 
         /// <summary>
         /// The order date.

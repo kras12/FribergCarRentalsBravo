@@ -9,6 +9,7 @@ using FribergCarRentalsBravo.DataAccess.DatabaseContexts;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading.Channels;
 using System.Linq.Expressions;
+using System.Data;
 
 namespace FribergCarRentalsBravo.DataAccess.Repositories
 {
@@ -127,37 +128,33 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         /// Returns all the cars that matches the specified category and that are available to be rented out within the desired timespan. 
         /// </summary>
         /// <param name="pickupDate">The pickup date for the car.</param>
+        /// /// <param name="returnDate">The return date for the car.</param>
         /// <remarks>Returned cars will not be tracked by EF Core.</remarks>
         /// <param name="category">The category of the car.</param>
         /// <returns>A <see cref="Task{TResult}"/> containing a collection of matching cars.</returns>
-        public async Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, CarCategory? category = null)
+        public async Task<IEnumerable<Car>> GetRentableCarsAsync(DateTime pickupDate, DateTime returnDate, CarCategory? category = null)
         {
+            IQueryable<Car> carQuery;
+
             if (category is not null)
             {
-                return await _databaseContext.Cars
-                .Include(car => car.Category)
-                .Include(car => car.Images)
-                .GroupJoin(
-                    _databaseContext.Orders,
-                    car => car.CarId,
-                    order => order.Car.CarId,
-                    (car, orders) => new
-                    {
-                        car,
-                        orders
-                    }
-                )
-                .Where(orderGroup => (!orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate)) && orderGroup.car.Category == category)
-                .Select(orderGroup => orderGroup.car)
-                .ToListAsync();
+                carQuery = _databaseContext.Cars.Where(car => car.Category == category);
             }
             else
             {
-                return await _databaseContext.Cars
+                carQuery = _databaseContext.Cars.AsQueryable();
+            }
+
+            return await carQuery
                 .Include(car => car.Category)
                 .Include(car => car.Images)
                 .GroupJoin(
-                    _databaseContext.Orders,
+                    _databaseContext.Orders.Where(order => order.IsCanceled == false &&
+                    (
+                        (pickupDate >= order.PickupDate && pickupDate <= order.ReturnDate) ||
+                        (returnDate >= order.PickupDate && returnDate <= order.ReturnDate) ||
+                        (pickupDate < order.PickupDate && returnDate > order.ReturnDate)
+                    )),
                     car => car.CarId,
                     order => order.Car.CarId,
                     (car, orders) => new
@@ -166,10 +163,9 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
                         orders
                     }
                 )
-                .Where(orderGroup => !orderGroup.orders.Any() || !orderGroup.orders.Any(order => order.ReturnDate >= pickupDate))
+                .Where(orderGroup => !orderGroup.orders.Any())
                 .Select(orderGroup => orderGroup.car)
-                .ToListAsync();
-            }            
+                .ToListAsync();            
         }
 
         /// <summary>

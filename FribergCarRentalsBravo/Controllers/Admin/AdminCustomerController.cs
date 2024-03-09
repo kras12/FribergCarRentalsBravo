@@ -90,7 +90,14 @@ namespace FribergCarRentalsBravo.Controllers.Admin
                 throw new Exception($"Failed to find customer with id '{id}'.");
             }
 
-            return View(new CustomerViewModel(customer));
+            var viewModel = new CustomerViewModel(customer);
+
+            if (TempDataHelper.TryGet(TempData, CreatedCustomerIdTempDataKey, out int customerId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateCustomerCreationSuccessMessage(customerId));
+            }
+
+            return View(viewModel);
         }
 
         // GET: CustomerController/Create
