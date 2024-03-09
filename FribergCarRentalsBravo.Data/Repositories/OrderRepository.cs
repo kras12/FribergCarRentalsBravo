@@ -36,6 +36,9 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         public async Task DeleteOrderAsync(Order order)
         {
+            applicationDbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            applicationDbContext.Attach(order.Car);
+            applicationDbContext.Attach(order.Customer);
             applicationDbContext.Remove(order);
             await applicationDbContext.SaveChangesAsync();
         }
