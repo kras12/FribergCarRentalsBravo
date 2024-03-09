@@ -70,7 +70,6 @@ namespace FribergCarRentalsBravo.Controllers.Admin
             if (TempDataHelper.TryGet(TempData, CreatedCategoryIdTempDataKey, out int categoryId))
             {
                 viewModel.Messages.Add(UserMesssageHelper.CreateCarCategoryCreationSuccessMessage(categoryId));
-                return View(viewModel);
             }
 
             if (TempDataHelper.TryGet(TempData, DeletedCategoryIdTempDataKey, out int deletedCategoryId))
