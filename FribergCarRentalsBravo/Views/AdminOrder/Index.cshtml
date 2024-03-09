@@ -22,6 +22,9 @@
                         @Html.DisplayNameFor(model => model.Models[0].OrderDate)
                     </th>
                     <th>
+                        @Html.DisplayNameFor(model => model.Models[0].IsCancelled)
+                    </th>
+                    <th>
                         Customer
                     </th>
                     <th>
@@ -48,6 +51,9 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => order.OrderDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => order.IsCancelled)
                         </td>
                         <td>
                             <a asp-action="Details" asp-controller="AdminCustomer" asp-route-id="@order.Customer.CustomerId">
