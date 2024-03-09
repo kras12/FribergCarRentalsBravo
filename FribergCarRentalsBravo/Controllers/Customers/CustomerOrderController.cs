@@ -136,7 +136,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                         }
                     }
 
-                    var cars = (await _carRepository.GetRentableCarsAsync(bookCarViewModel.PickupDate.Value, carCategoryFilter)).ToList();
+                    var cars = (await _carRepository.GetRentableCarsAsync(bookCarViewModel.PickupDate.Value, bookCarViewModel.ReturnDate.Value, carCategoryFilter)).ToList();
 
                     return View(new BookCarViewModel(
                         availableCarCategoryFilters: (await _carCategoryRepository.GetAllAsync()).ToList(),
@@ -272,7 +272,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             if (TempDataHelper.TryGet(TempData, CanceledOrderIdTempDataKey, out int canceledOrderId))
             {
                 viewModel.Messages.Add(UserMesssageHelper.CreateOrderCancellationSuccessMessage(canceledOrderId));
-        }
+            }
 
             return View(viewModel);
         }
