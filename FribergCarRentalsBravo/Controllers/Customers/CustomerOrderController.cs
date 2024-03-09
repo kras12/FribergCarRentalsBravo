@@ -32,9 +32,9 @@ namespace FribergCarRentalsBravo.Controllers.Customers
         public const string CanceledOrderRedirectToPageTempDataKey = "CustomerCanceledOrderRedirectToPage";
 
         /// <summary>
-        /// The key for the created order flag stored in temp storage.
+        /// The key for the ID of the order that was created.
         /// </summary>
-        public const string IsNewOrderTempDataKey = "CustomerOrderControllerIsNewOrder";
+        public const string CreatedOrderIdTempDataKey = "CustomerCreatedOrderId";
 
         #endregion
 
@@ -167,8 +167,20 @@ namespace FribergCarRentalsBravo.Controllers.Customers
 
                 if (order is not null)
                 {
-                    TempDataHelper.TryGet(TempData, IsNewOrderTempDataKey, out bool orderWasCreated);
-                    return View(new OrderViewModel(order, isNewOrder: orderWasCreated));
+                    var viewModel = new OrderViewModel(order);
+                    SaveRedirectBackInstructionsForCancelOrderAction(nameof(Details), new KeyValuePair<string, object?>(nameof(id), id));
+
+                    if (TempDataHelper.TryGet(TempData, CreatedOrderIdTempDataKey, out int createdOrderId))
+                    {
+                        viewModel.IsNewOrder = true;
+                    }
+
+                    if (TempDataHelper.TryGet(TempData, CanceledOrderIdTempDataKey, out int canceledOrderId))
+                    {
+                        viewModel.Messages.Add(UserMesssageHelper.CreateOrderCancellationSuccessMessage(canceledOrderId));
+                    }
+
+                    return View(viewModel);
                 }
             }
 
@@ -236,7 +248,7 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                     {
                         var order = new Order(DateTime.Now, car, customer, bookCarViewModel.PickupDate.Value, bookCarViewModel.ReturnDate.Value, car.RentalCostPerDay);
                         await _orderRepository.CreateOrderAsync(order);
-                        TempDataHelper.Set(TempData, IsNewOrderTempDataKey, true);
+                        TempDataHelper.Set(TempData, CreatedOrderIdTempDataKey, order.OrderId);
                         return RedirectToAction(nameof(Details), new { id = order.OrderId });
                     }
 
@@ -252,9 +264,19 @@ namespace FribergCarRentalsBravo.Controllers.Customers
             {
                 return RedirectToLogin(nameof(Index));
             }
-           var customerOrder = await _orderRepository.GetCustomerOrdersAsync(UserSessionHandler.GetUserData(HttpContext.Session).UserId);
-            return View(new ListViewModel<OrderViewModel>(customerOrder.Select(x=>new OrderViewModel(x))));
+
+            var customerOrders = await _orderRepository.GetCustomerOrdersAsync(UserSessionHandler.GetUserData(HttpContext.Session).UserId);
+            var viewModel = new ListViewModel<OrderViewModel>(customerOrders.Select(x => new OrderViewModel(x)));
+            SaveRedirectBackInstructionsForCancelOrderAction(nameof(Index));
+
+            if (TempDataHelper.TryGet(TempData, CanceledOrderIdTempDataKey, out int canceledOrderId))
+            {
+                viewModel.Messages.Add(UserMesssageHelper.CreateOrderCancellationSuccessMessage(canceledOrderId));
         }
+
+            return View(viewModel);
+        }
+
         #endregion
 
         #region OtherMethods
@@ -279,6 +301,25 @@ namespace FribergCarRentalsBravo.Controllers.Customers
                     action, ControllerHelper.GetControllerName<CustomerOrderController>(), routeValues: routevalues));
 
             return RedirectToAction(nameof(CustomerController.Authenticate), ControllerHelper.GetControllerName<CustomerController>());
+        }
+
+        /// <summary>
+        /// Saves data for redirecting back to an action after an order has been canceled. 
+        /// </summary>
+        /// <param name="action">The action to redirect to.</param>
+        /// <param name="routeValue">An optional route value.</param>
+        private void SaveRedirectBackInstructionsForCancelOrderAction(string action, KeyValuePair<string, object?>? routeValue = null)
+        {
+            RouteValueDictionary? routevalues = null;
+
+            if (routeValue != null)
+            {
+                routevalues = new RouteValueDictionary();
+                routevalues.Add(routeValue.Value.Key, routeValue.Value.Value);
+            }
+
+            TempDataHelper.Set(TempData, CanceledOrderRedirectToPageTempDataKey, new RedirectToActionData(
+                            action, ControllerHelper.GetControllerName<CustomerOrderController>(), routeValues: routevalues));
         }
 
         #endregion
