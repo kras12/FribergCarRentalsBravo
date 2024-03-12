@@ -94,7 +94,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
         public async Task<IEnumerable<Order>> GetPendingPickups(DateTime startDate, DateTime endDate)
         {
             return PasswordHelper.RemovePasswords(await applicationDbContext.Orders
-                .Where(x => x.PickupDate >= startDate && x.PickupDate <= endDate)
+                .Where(order => !order.IsCanceled && order.PickupDate >= startDate && order.PickupDate <= endDate)
                 .Include(x => x.Customer).Include(x => x.Car).Include(x => x.Car.Category).Include(x => x.Car.Images).ToListAsync());
         }
 

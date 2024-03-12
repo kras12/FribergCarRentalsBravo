@@ -52,7 +52,7 @@ namespace FribergCarRentalsBravo.DataAccess.Repositories
 
         public async Task<List<Customer>> GetAllCustomers()
         {
-            return PasswordHelper.RemovePasswords(await applicationDbContext.Customers.OrderBy(x => x.LastName).ToListAsync());
+            return PasswordHelper.RemovePasswords(await applicationDbContext.Customers.ToListAsync());
         }
 
         public async Task<Customer?> GetCustomerById(int id)
